@@ -24,8 +24,12 @@
           "core.summary" = {
             config.strategy = "default";
           };
-          "core.export".config = {};
-          "core.export.markdown".config = {};
+          "core.export".config = {
+            __empty = null;
+          };
+          "core.export.markdown".config = {
+            __empty = null;
+          };
           "core.dirman" = {
             config = {
               default_workspace = "notes";
