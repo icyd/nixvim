@@ -15,7 +15,11 @@
             config.engine = "nvim-cmp";
           };
           "core.esupports.metagen" = {
-            config.author = "Alberto Vázquez";
+            config = {
+              author = "Alberto Vázquez";
+              # BUG: https://github.com/nvim-neorg/neorg/issues/1579
+              update_date = false;
+            };
           };
           "core.summary" = {
             config.strategy = "default";

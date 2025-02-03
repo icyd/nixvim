@@ -403,6 +403,7 @@ in
         bdelete = "<localleader>q";
         bwipeout = "<localleader>Q";
       };
+      keymapsSilent = true;
     };
     web-devicons.enable = true;
     which-key.enable = true;

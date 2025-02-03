@@ -184,7 +184,7 @@
       adapters = {
         executables = {
           haskell.command = "haskell-debug-adapter";
-          gdb = {
+          gdb = lib.mkIf pkgs.stdenv.isLinux {
             command = lib.getExe pkgs.gdb;
             args = [
               "-i"
