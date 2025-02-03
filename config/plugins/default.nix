@@ -29,6 +29,7 @@ in
     })
 
     require("maximize").setup()
+    require("unimpaired").setup()
   '';
   extraPlugins = with pkgs.vimPlugins; [
     dial-nvim
@@ -38,6 +39,9 @@ in
     unimpaired-nvim
     vim-gnupg
   ];
+  extraFiles = {
+    "lua/snippets/utils.lua".source = ../../lua/snippets/utils.lua;
+  };
   globals = {
     # rooter_cd_cmd = "lcd";
     # rooter_resolve_links = 1;
@@ -47,6 +51,7 @@ in
   imports = [
     ./core.nix
     ./completion.nix
+    ./debugging.nix
     ./format.nix
     ./git.nix
     ./lint.nix
@@ -362,6 +367,7 @@ in
         };
       };
     };
+    lz-n.enable = true;
     navic = {
       enable = true;
       settings.lsp.auto_attach = true;
@@ -372,7 +378,10 @@ in
     };
     nvim-bqf.enable = true;
     oil.enable = true;
-    otter.enable = true;
+    otter = {
+      enable = true;
+      settings.buffers.set_filetype = true;
+    };
     sqlite-lua.enable = true;
     todo-comments.enable = true;
     toggleterm = {
@@ -397,5 +406,13 @@ in
     };
     web-devicons.enable = true;
     which-key.enable = true;
+  };
+   performance = {
+    byteCompileLua = {
+      enable = true;
+      nvimRuntime = true;
+      configs = true;
+      plugins = true;
+    };
   };
 }

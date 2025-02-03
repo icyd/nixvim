@@ -1,7 +1,7 @@
 -- Requires {{{
 local fmta = require("luasnip.extras.fmt").fmta
 local rep = require("luasnip.extras").rep
-local utils = require("plugins.snippets.utils")
+local utils = require("snippets.utils")
 local partial = require("luasnip.extras").partial
 --}}}
 

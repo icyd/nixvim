@@ -34,8 +34,8 @@
             module = { inherit imports; };
           };
           nvimMod = nixvimModule [ ./config ];
-          nviminMod = nixvimModule [ 
-              ./config/core.nix 
+          nviminMod = nixvimModule [
+              ./config/core.nix
               {
                 wrapRc = true;
                 impureRtp = false;

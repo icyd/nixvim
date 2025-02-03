@@ -1,4 +1,21 @@
-{
+{ pkgs, ...}: {
+  extraPackages = with pkgs; [
+    clang-tools
+    stylelint
+    hadolint
+    golangci-lint
+    hlint
+    nodePackages.jsonlint
+    texlivePackages.chktex
+    luajitPackages.luacheck
+    vale
+    shellcheck
+    yamllint
+  ] ++ (with pkgs.python312Packages; [
+    flake8
+    mypy
+    pylint
+  ]);
   plugins = {
     lint = {
       enable = true;

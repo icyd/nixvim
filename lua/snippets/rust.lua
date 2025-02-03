@@ -1,5 +1,5 @@
 -- Requires {{{
-local utils = require("plugins.snippets.utils")
+local utils = require("snippets.utils")
 local rep = require('luasnip.extras').rep
 --}}}
 --
