@@ -307,7 +307,13 @@ in
     }
   ];
   plugins = {
-    colorizer.enable = true;
+    colorizer = {
+      enable = true;
+      settings.user_default_options = {
+        mode = "virtualtext";
+        names = false;
+      };
+    };
     direnv.enable = true;
     flash = {
       enable = true;
