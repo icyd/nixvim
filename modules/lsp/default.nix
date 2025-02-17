@@ -3,14 +3,33 @@
   config,
   pkgs,
   ...
-}:
-{
+}: let
+  inherit (config.my.mkKey) keymap2mkKeyMap;
+in {
   extraPlugins = with pkgs.vimPlugins; [
     haskell-tools-nvim
   ];
   globals = {
     haskell_tools.tools.repl.handler = lib.mkIf config.plugins.toggleterm.enable "toggleterm";
   };
+  keymaps = keymap2mkKeyMap [
+    {
+      action = "<cmd>Navbuddy<CR>";
+      key = "<leader>xn";
+      mode = "n";
+      options.desc = "Navbuddy toggle";
+    }
+    {
+      action.__raw = ''
+        function()
+          require("otter").activate()
+        end
+      '';
+      key = "<leader>lO";
+      mode = "n";
+      options.desc = "Activate Otter";
+    }
+  ];
   plugins = {
     fidget.enable = true;
     inc-rename.enable = true;
@@ -104,6 +123,7 @@
         nixd.enable = true;
         nushell.enable = true;
         pylsp.enable = true;
+        rust_analyzer.enable = !config.plugins.rustaceanvim.enable;
         terraformls.enable = true;
         yamlls.enable = true;
         zls.enable = true;
@@ -111,5 +131,21 @@
     };
     crates.enable = true;
     rustaceanvim.enable = true;
+    navic = {
+      enable = true;
+      lazyLoad.settings.event = "DeferredUIEnter";
+      settings.lsp.auto_attach = true;
+    };
+    navbuddy = {
+      enable = true;
+      lsp.autoAttach = true;
+    };
   };
+  imports = with builtins;
+    map (fn: ./${fn})
+    (filter
+      (fn: (
+        fn != "default.nix"
+      ))
+      (attrNames (readDir ./.)));
 }

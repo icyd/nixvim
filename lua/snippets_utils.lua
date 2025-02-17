@@ -102,7 +102,7 @@ local handlers = { --{{{
     end,
 } --}}}
 
-vim.treesitter.query.set(--{{{
+vim.treesitter.query.set( --{{{
     "go",
     "LuaSnip_Result",
     [[
@@ -120,7 +120,8 @@ local function return_value_nodes(info) --{{{
 
     local function_node
     for _, scope in ipairs(scope_tree) do
-        if scope:type() == "function_declaration"
+        if
+            scope:type() == "function_declaration"
             or scope:type() == "method_declaration"
             or scope:type() == "func_literal"
         then
@@ -247,15 +248,15 @@ M.snake_case = function(titlecase) --{{{
 end --}}}
 
 M.capitalize = function(str)
-    return string.gsub(str, '^%l', string.upper)
+    return string.gsub(str, "^%l", string.upper)
 end
 
 M.camel_case = function(str)
-    return string.gsub(str, '%W+(%w+)', M.capitalize)
+    return string.gsub(str, "%W+(%w+)", M.capitalize)
 end
 
 M.upper_camel_case = function(str)
-    return string.gsub(str, '%W*(%w+)', M.capitalize)
+    return string.gsub(str, "%W*(%w+)", M.capitalize)
 end
 
 M.create_t_run = function(args) --{{{
@@ -289,10 +290,10 @@ M.mirror_t_run_funcs = function(args) --{{{
     return sn(nil, fmt(str, {}))
 end --}}}
 
-M.same = function(index)
-    return f(function(args)
-        return args[1]
-    end, { index })
-end
+-- M.same = function(index)
+--     return f(function(args)
+--         return args[1]
+--     end, { index })
+-- end
 
 return M

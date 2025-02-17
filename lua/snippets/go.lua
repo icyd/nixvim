@@ -49,7 +49,7 @@ return {
       	return {}
       }}
       {}
-    ]]       ,
+    ]],
             {
                 i(1, { "val" }),
                 i(2, { "err" }),
@@ -72,7 +72,7 @@ return {
         func {}{}({}) {} {{
         	{}
         }}
-      ]]     ,
+      ]],
             {
                 rep(2),
                 i(5, "description"),
@@ -138,7 +138,7 @@ return {
         type {} interface {{
           {}
         }}
-      ]]     ,
+      ]],
             {
                 rep(1),
                 rep(2),
@@ -193,7 +193,7 @@ return {
         		<>
         	})
         }
-      ]]     ,
+      ]],
             { i(1), i(2) }
         ),
         in_test_func
@@ -207,7 +207,7 @@ return {
         if diff := cmp.Diff({}, {}); diff != "" {{
         	t.Errorf("(-want +got):\\n%s", diff)
         }}
-      ]]     ,
+      ]],
             {
                 i(1, "want"),
                 i(2, "got"),
@@ -292,7 +292,7 @@ return {
       	return errors.Wrap(<>.Err(), "iterating rows")
       })
       return <>, <>
-      ]]     ,
+      ]],
             {
                 i(1, "query"),
                 i(2, "SELECT 1"),
@@ -336,19 +336,22 @@ return {
     -- Constructor {{{
     s(
         { trig = "ctor", name = "Constructor", dscr = "Create new function for struct" },
-        fmt([[
+        fmt(
+            [[
 func new{}({}) *{} {{
     return &{}{{
         {}
     }}
 }}
-]]       , {
-            i(1, "name"),
-            i(2, "args"),
-            rep(1),
-            rep(1),
-            i(0),
-        })
+]],
+            {
+                i(1, "name"),
+                i(2, "args"),
+                rep(1),
+                rep(1),
+                i(0),
+            }
+        )
     ),
     -- }}}
 

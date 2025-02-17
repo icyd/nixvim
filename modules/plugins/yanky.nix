@@ -1,27 +1,33 @@
-{ config, ... }: {
-  keymaps = [
+{
+  lib,
+  config,
+  ...
+}: let
+  inherit (config.my.mkKey) keymap2mkKeyMap keymapUnlazy keymap2Lazy;
+  cfg = config.plugins.yanky;
+  keymaps = keymap2mkKeyMap (lib.optionals cfg.enable [
     {
       action = "<Plug>(YankyPutAfter)<CR>";
       key = "p";
-      mode = [ "n" "x" ];
+      mode = ["n" "x"];
       options.desc = "Yanky put after";
     }
     {
       action = "<Plug>(YankyPutBefore)<CR>";
       key = "P";
-      mode = [ "n" "x" ];
+      mode = ["n" "x"];
       options.desc = "Yanky put before";
     }
     {
       action = "<Plug>(YankyGPutAfter)<CR>";
       key = "gp";
-      mode = [ "n" "x" ];
+      mode = ["n" "x"];
       options.desc = "Yanky put after and move cursor after text";
     }
     {
       action = "<Plug>(YankyGPutBefore)<CR>";
       key = "gP";
-      mode = [ "n" "x" ];
+      mode = ["n" "x"];
       options.desc = "Yanky put before and move cursor after text";
     }
     {
@@ -96,11 +102,15 @@
       mode = "n";
       options.desc = "Yanky put before and indent";
     }
-  ];
+  ]);
+in {
+  keymaps = keymapUnlazy keymaps;
   plugins = {
+    sqlite-lua.enable = cfg.enable;
     yanky = {
       enable = true;
       enableTelescope = config.plugins.telescope.enable;
+      lazyLoad.settings.keys = keymap2Lazy keymaps;
       settings = {
         ring.storage = "sqlite";
       };

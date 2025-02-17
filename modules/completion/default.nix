@@ -1,5 +1,13 @@
-{ pkgs, ... }:
 {
+  config,
+  pkgs,
+  ...
+}: let
+  cfg = config.plugins.cmp;
+in {
+  extraFiles = {
+    "lua/snippets/utils.lua".source = ../../lua/snippets_utils.lua;
+  };
   extraPlugins = with pkgs.vimPlugins; [
     haskell-snippets-nvim
   ];
@@ -7,61 +15,70 @@
     cmp = {
       enable = true;
       autoEnableSources = false;
-      cmdline = {
-        ":" = {
+      cmdline = let
+        base_cfg = {
           completion.autocomplete = false;
-          mapping.__raw = "cmp.mapping.preset.cmdline()";
-          sources = [
-            {
-              name = "path";
-            }
-            {
-              name = "cmdline";
-              option.ignore_cmds = [
-                "Man"
-                "!"
-              ];
-            }
-            {
-              name = "cmdline-history";
-            }
-          ];
+          mapping.__raw = ''cmp.mapping.preset.cmdline()'';
         };
-        "/" = {
-          completion.autocomplete = false;
-          mapping.__raw = "cmp.mapping.preset.cmdline()";
-          sources.__raw = ''
-            cmp.config.sources({
-                        {
-                          name = "nvim_lsp_document_symbol";
-                        },
-                        {
-                          name = "cmdline-history";
-                        },
-                      }, {
-                        {
-                          name = "buffer";
-                        },
-                      })'';
-        };
-        "?" = {
-          completion.autocomplete = false;
-          mapping.__raw = "cmp.mapping.preset.cmdline()";
-          sources = [
-            {
-              name = "cmdline-history";
-            }
-          ];
-        };
-        "@" = {
-          completion.autocomplete = false;
-          mapping.__raw = "cmp.mapping.preset.cmdline()";
-          sources = [
-            {
-              name = "cmdline-history";
-            }
-          ];
-        };
+      in {
+        ":" =
+          base_cfg
+          // {
+            sources = [
+              {
+                name = "path";
+                priority = 500;
+              }
+              {
+                name = "cmdline";
+                option.ignore_cmds = [
+                  "Man"
+                  "!"
+                ];
+                priority = 300;
+              }
+              {
+                name = "cmdline-history";
+                priority = 100;
+              }
+            ];
+          };
+        "/" =
+          base_cfg
+          // {
+            sources = [
+              {
+                name = "nvim_lsp_document_symbol";
+                priority = 500;
+              }
+              {
+                name = "cmdline-history";
+                priority = 300;
+              }
+              {
+                name = "buffer";
+                priority = 100;
+              }
+            ];
+          };
+        "?" =
+          base_cfg
+          // {
+            sources = [
+              {
+                name = "cmdline-history";
+              }
+            ];
+          };
+        "@" =
+          base_cfg
+          // {
+            sources = [
+              {
+                name = "cmdline-history";
+              }
+            ];
+          };
       };
       luaConfig.pre = ''
         local ls = require("luasnip")
@@ -186,36 +203,64 @@
             ls.lsp_expand(args.body)
           end
         '';
-        sources.__raw = ''
-          cmp.config.sources({
-            { name = 'nvim_lsp_signature_help' },
-            { name = 'nvim_lua' },
-            { name = 'luasnip' },
-            { name = 'nvim_lsp' },
-            { name = 'neorg' },
-          }, {
-            { name = 'buffer' },
-            { name = 'path' },
-          })'';
+        sources = [
+          {
+            name = "nvim_lsp";
+            priority = 1000;
+          }
+          {
+            name = "nvim_lsp_signature_help";
+            priority = 1000;
+          }
+          {
+            name = "nvim_lsp_document_symbol";
+            priority = 1000;
+          }
+          {
+            name = "treesitter";
+            priority = 850;
+          }
+          {
+            name = "luasnip";
+            priority = 750;
+          }
+          {
+            name = "buffer";
+            priority = 500;
+          }
+          {
+            name = "path";
+            priority = 300;
+          }
+          {
+            name = "nvim_lua";
+            priority = 300;
+          }
+          {
+            name = "neorg";
+            priority = 300;
+          }
+        ];
       };
     };
-    cmp-buffer.enable = true;
-    cmp-cmdline.enable = true;
-    cmp-cmdline-history.enable = true;
-    cmp_luasnip.enable = true;
-    cmp-nvim-lsp.enable = true;
-    cmp-nvim-lsp-document-symbol.enable = true;
-    cmp-nvim-lsp-signature-help.enable = true;
-    cmp-nvim-lua.enable = true;
-    cmp-path.enable = true;
-    friendly-snippets.enable = true;
+    cmp-buffer.enable = cfg.enable;
+    cmp-cmdline.enable = cfg.enable;
+    cmp-cmdline-history.enable = cfg.enable;
+    cmp_luasnip.enable = cfg.enable && config.plugins.luasnip.enable;
+    cmp-nvim-lsp.enable = cfg.enable && config.plugins.lsp.enable;
+    cmp-nvim-lsp-document-symbol.enable = cfg.enable && config.plugins.lsp.enable;
+    cmp-nvim-lsp-signature-help.enable = cfg.enable && config.plugins.lsp.enable;
+    cmp-nvim-lua.enable = cfg.enable;
+    cmp-treesitter.enable = cfg.enable && config.plugins.treesitter.enable;
+    cmp-path.enable = cfg.enable;
+    friendly-snippets.enable = config.plugins.luasnip.enable;
     luasnip = {
       enable = true;
       filetypeExtend = {
-        typescriptreact = [ "typescript" ];
+        typescriptreact = ["typescript"];
       };
-      fromLua = [ { paths = ../../lua/snippets; } ];
-      fromVscode = [ { } ];
+      fromLua = [{paths = ../../lua/snippets;}];
+      fromVscode = [{}];
       luaConfig.post = ''
         local ok, haskell_snippets = pcall(require, "haskell_snippets")
         if ok then
@@ -224,7 +269,7 @@
       '';
     };
     lspkind = {
-      enable = true;
+      enable = cfg.enable && config.plugins.lsp.enable;
       mode = "symbol_text";
       extraOptions = {
         show_labelDetails = true;

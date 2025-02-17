@@ -27,9 +27,9 @@ if ok then
 
     _G.luasnip = {}
     _G.luasnip.vars = {
-        username = 'username',
-        email = 'email',
-        real_name = 'realname',
+        username = "username",
+        email = "email",
+        real_name = "realname",
     }
 
     --- Options for marks to be used in a TODO comment

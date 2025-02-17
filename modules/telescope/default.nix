@@ -1,6 +1,9 @@
-{ config, ... }:
 {
-  keymaps = [
+  lib,
+  config,
+  ...
+}: {
+  keymaps = lib.mkIf config.plugins.telescope.enable [
     {
       action.__raw = ''
         function()
@@ -80,6 +83,7 @@
   plugins = {
     telescope = {
       enable = true;
+      lazyLoad.settings.cmd = "Telescope";
       extensions = {
         file-browser.enable = true;
         frecency = {
@@ -91,18 +95,18 @@
           settings.case_mode = "smart_case";
         };
         manix.enable = true;
-        # project = {
-        #   enable = true;
-        #   settings = {
-        #     base_dirs = [
-        #       {
-        #         path = "~/Projects/";
-        #         max_depth = 3;
-        #       }
-        #     ];
-        #     hidden_files = false;
-        #   };
-        # };
+        project = {
+          enable = true;
+          settings = {
+            base_dirs = [
+              {
+                path = "~/Projects/";
+                max_depth = 3;
+              }
+            ];
+            hidden_files = false;
+          };
+        };
         ui-select.enable = true;
         undo.enable = true;
       };
@@ -128,11 +132,15 @@
           i = {
             "<C-x>" = false;
             "<C-q>" = ''require("telescope.actions").sent_to_qlist'';
-            "<C-t>" = if config.plugins.trouble.enable then ''require("trouble.sources.telescope").open'' else "";
+            "<C-t>" =
+              if config.plugins.trouble.enable
+              then ''require("trouble.sources.telescope").open''
+              else "";
           };
           n = i;
         };
       };
     };
+    web-devicons.enable = true;
   };
 }

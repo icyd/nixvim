@@ -1,5 +1,9 @@
-{ pkgs, ...}: {
+{pkgs, ...}: {
   plugins = {
+    ts-comments = {
+      enable = true;
+      lazyLoad.settings.event = "BufReadPre";
+    };
     treesitter = {
       enable = true;
       grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [

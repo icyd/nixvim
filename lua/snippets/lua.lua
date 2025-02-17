@@ -36,27 +36,30 @@ local function lines(args, parent, old_state, initial_text)
 end
 
 return {
-    s("localreq",
+    s(
+        "localreq",
         fmt([[local {} = require('{}')]], {
             l(l._1:match("[^.]*$"):gsub("[^%a]+", "_"), 1),
             i(1, "module"),
         })
     ),
     s("trig", {
-        t "text: ", i(1), t { "", "copy: " },
+        t("text: "),
+        i(1),
+        t({ "", "copy: " }),
         d(2, function(args)
-                -- the returned snippetNode doesn't need a position; it's inserted
-                -- "inside" the dynamicNode.
-                return sn(nil, {
-                    -- jump-indices are local to each snippetNode, so restart at 1.
-                    i(1, args[1])
-                })
-            end,
-            { 1 })
+            -- the returned snippetNode doesn't need a position; it's inserted
+            -- "inside" the dynamicNode.
+            return sn(nil, {
+                -- jump-indices are local to each snippetNode, so restart at 1.
+                i(1, args[1]),
+            })
+        end, { 1 }),
     }),
     s("trig2", {
         i(1, "1"),
         -- pos, function, argnodes, opts (containing the user_arg).
-        d(2, lines, { 1 }, { user_args = { "\\nSample Text" } })
-    })
-}, nil
+        d(2, lines, { 1 }, { user_args = { "\\nSample Text" } }),
+    }),
+},
+    nil
