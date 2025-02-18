@@ -1,3 +1,5 @@
+default: check
+
 update:
 	nix flake update
 

@@ -6,9 +6,13 @@
 }: let
   inherit (config.my.mkKey) keymap2mkKeyMap;
 in {
-  extraPlugins = with pkgs.vimPlugins; [
-    haskell-tools-nvim
-  ];
+  extraPlugins = with pkgs;
+    [
+      helm-ls
+    ]
+    ++ (with pkgs.vimPlugins; [
+      haskell-tools-nvim
+    ]);
   globals = {
     haskell_tools.tools.repl.handler = lib.mkIf config.plugins.toggleterm.enable "toggleterm";
   };

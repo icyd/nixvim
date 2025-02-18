@@ -3,7 +3,7 @@
     utils
     general
     completion
-    # debugging
+    debugging
     git
     lsp
     neorg

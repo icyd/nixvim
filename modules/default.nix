@@ -3,7 +3,7 @@
     utils = ./utils;
     general = ./general;
     completion = ./completion;
-    # debugging = ./debugging;
+    debugging = ./debugging;
     git = ./git;
     lsp = ./lsp;
     neorg = ./neorg;

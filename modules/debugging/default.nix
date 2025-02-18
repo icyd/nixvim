@@ -46,7 +46,9 @@
     }
     {
       action.__raw = ''
-        require("dap").goto_
+        function()
+          require("dap").goto_()
+        end
       '';
       key = "<leader>dg";
       mode = "n";
@@ -190,7 +192,7 @@ in {
     ++ (lib.optionals pkgs.stdenv.isLinux [
       gdb
     ]);
-  keymaps = keymapUnlazy;
+  keymaps = keymapUnlazy keymaps;
   plugins = {
     lz-n.plugins = lib.optionals (cfg.enable && config.plugins.cmp.enable) [
       {
@@ -326,9 +328,9 @@ in {
       enable = cfg.enable;
       lazyLoad.settings.before.__raw = lazyLoadTrigDAP;
     };
-    dap-go.enable = cfg.enable;
-    dap-lldb.enable = cfg.enable;
-    dap-python.enable = cfg.enable;
+    dap-go.enable = true;
+    dap-lldb.enable = true;
+    dap-python.enable = true;
   };
   my.wKeyList = lib.optionals cfg.enable [
     (wKeyObj ["<leader>d" "󰃤" "Debug"])

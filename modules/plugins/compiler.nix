@@ -37,7 +37,9 @@ in {
       enable = true;
       lazyLoad.settings = {
         before.__raw = ''
-          require("lz.n").trigger_load("overseer.nvim")
+          function()
+            require("lz.n").trigger_load("overseer.nvim")
+          end
         '';
         cmd = [
           "CompilerOpen"
