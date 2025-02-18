@@ -1,5 +1,5 @@
 {config, ...}: let
-  inherit (config.my.mkKey) mkKeyMap' mkKeyMapWithOpts keymap2mkKeyMap wKeyObj;
+  inherit (config.my.mkKey) mkKeyMapWithOpts keymap2mkKeyMap wKeyObj;
 in {
   globals = {
     mapleader = " ";
@@ -341,41 +341,41 @@ in {
           options.desc = "Open relative to current file";
         }
       ])
-    ++ (builtins.map (i: mkKeyMap' i.mode i.key i.action)
-      [
-        {
-          action = ''"_x'';
-          key = "x";
-          mode = [
-            "n"
-            "v"
-          ];
-        }
-        {
-          action = ''"_X'';
-          key = "X";
-          mode = [
-            "n"
-            "v"
-          ];
-        }
-        {
-          action = ''"_c'';
-          key = "c";
-          mode = [
-            "n"
-            "v"
-          ];
-        }
-        {
-          action = ''"_C'';
-          key = "C";
-          mode = [
-            "n"
-            "v"
-          ];
-        }
-      ])
+    # ++ (builtins.map (i: mkKeyMap' i.mode i.key i.action)
+    #   [
+    #     {
+    #       action = ''"_x'';
+    #       key = "x";
+    #       mode = [
+    #         "n"
+    #         "v"
+    #       ];
+    #     }
+    #     {
+    #       action = ''"_X'';
+    #       key = "X";
+    #       mode = [
+    #         "n"
+    #         "v"
+    #       ];
+    #     }
+    #     {
+    #       action = ''"_c'';
+    #       key = "c";
+    #       mode = [
+    #         "n"
+    #         "v"
+    #       ];
+    #     }
+    #     {
+    #       action = ''"_C'';
+    #       key = "C";
+    #       mode = [
+    #         "n"
+    #         "v"
+    #       ];
+    #     }
+    #   ])
     ++ (builtins.map (i: mkKeyMapWithOpts i.mode i.key i.action i.options.desc (builtins.removeAttrs i.options ["desc"]))
       [
         {
