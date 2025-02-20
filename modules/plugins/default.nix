@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  inherit (config.my.mkKey) keymap2mkKeyMap keymapUnlazy keymap2Lazy;
+  inherit (config.my.mkKey) mkKeyMap keymapUnlazy keymap2Lazy;
   maximize-nvim = pkgs.vimUtils.buildVimPlugin {
     name = "maximize-nvim";
     src = pkgs.fetchFromGitHub {
@@ -14,7 +14,7 @@
       hash = "sha256-rwnvX+Sul+bwESZtpqbvaDJuk49SV9tLUnvgiAH4VMs=";
     };
   };
-  keymapsCzr = keymap2mkKeyMap (lib.optionals config.plugins.colorizer.enable [
+  keymapsCzr = builtins.map mkKeyMap (lib.optionals config.plugins.colorizer.enable [
     {
       action.__raw = ''
         function()
@@ -29,7 +29,7 @@
       options.silent = true;
     }
   ]);
-  keymapsOil = keymap2mkKeyMap (lib.optionals config.plugins.oil.enable [
+  keymapsOil = builtins.map mkKeyMap (lib.optionals config.plugins.oil.enable [
     {
       action = "<cmd>Oil<CR>";
       key = "<leader>o";
@@ -37,7 +37,7 @@
       options.desc = "Open Oil file browser";
     }
   ]);
-  keymapsMax = keymap2mkKeyMap [
+  keymapsMax = builtins.map mkKeyMap [
     {
       action.__raw = ''
         function()
@@ -73,7 +73,7 @@
       options.expr = true;
     }
   ];
-  keymapsFsh = keymap2mkKeyMap (lib.optionals config.plugins.flash.enable [
+  keymapsFsh = builtins.map mkKeyMap (lib.optionals config.plugins.flash.enable [
       {
         action.__raw = ''
           function()
@@ -152,7 +152,7 @@
         options.desc = "Flash Tressiter Search";
       }
     ]));
-  keymapsAS = keymap2mkKeyMap (lib.optionals config.plugins.auto-session.enable [
+  keymapsAS = builtins.map mkKeyMap (lib.optionals config.plugins.auto-session.enable [
     {
       action = "<cmd>SessionRestore<CR>";
       key = "<leader>q.";
@@ -284,7 +284,6 @@ in {
       lazyLoad.settings.keys = keymap2Lazy keymapsFsh;
       settings = {
         jump.autojump = true;
-        # modes.char.jump_labels = true;
         modes.char.multi_line = false;
       };
     };
@@ -307,7 +306,11 @@ in {
     project-nvim = {
       enable = true;
       enableTelescope = config.plugins.telescope.enable;
-      settings.show_hidden = true;
+      settings = {
+        detection_methods = ["pattern" "lsp"];
+        scope_chdir = "win";
+        show_hidden = true;
+      };
     };
     twilight = {
       enable = true;
@@ -332,7 +335,11 @@ in {
       lazyLoad.settings = {
         cmd = "ToggleTerm";
         keys = [
-          map
+          {
+            __unkeyed-1 = map;
+            __unkeyed-2 = "<cmd>ToggleTerm<CR>";
+            desc = "ToggleTerm";
+          }
         ];
       };
       settings = {

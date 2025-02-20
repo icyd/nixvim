@@ -3,9 +3,9 @@
   config,
   ...
 }: let
-  inherit (config.my.mkKey) keymap2mkKeyMap keymapUnlazy keymap2Lazy;
+  inherit (config.my.mkKey) mkKeyMap keymapUnlazy keymap2Lazy;
   cfg = config.plugins.yanky;
-  keymaps = keymap2mkKeyMap (lib.optionals cfg.enable [
+  keymaps = builtins.map mkKeyMap (lib.optionals cfg.enable [
     {
       action = "<Plug>(YankyPutAfter)<CR>";
       key = "p";

@@ -13,25 +13,34 @@
     };
   };
   config.my.mkKey = rec {
-    mkKeyMap = mode: key: action: desc: {
+    mkKeyMap = {
+      mode ? "n",
+      key,
+      action,
+      options,
+    }: {
       inherit mode key action;
-      options = {
-        inherit desc;
-        silent = true;
-        noremap = true;
-        remap = true;
-      };
+      options =
+        {
+          silent = true;
+          noremap = true;
+          remap = true;
+        }
+        // options;
     };
-    mkKeyMap' = mode: key: action: mkKeyMap mode key action null;
-    mkKeyMapWithOpts = mode: key: action: desc: opts: (mkKeyMap mode key action desc) // {options = opts;};
-    lazyKeyMap = key: action: desc: {
-      inherit desc;
+    lazyKeyMap = {
+      mode ? "n",
+      key,
+      action,
+      options,
+    }: {
+      inherit mode;
       __unkeyed-1 = key;
       __unkeyed-2 = action;
+      __unkeyed-3 = options;
     };
-    keymap2mkKeyMap = list: builtins.map (i: mkKeyMap i.mode i.key i.action i.options.desc) list;
     keymapUnlazy = list: lib.optionals (!config.plugins.lz-n.enable) list;
-    keymap2Lazy = list: lib.optionals config.plugins.lz-n.enable (builtins.map (i: lazyKeyMap i.key i.action i.options.desc) list);
+    keymap2Lazy = list: lib.optionals config.plugins.lz-n.enable (builtins.map lazyKeyMap list);
     wKeyObj = with builtins;
       list:
         {

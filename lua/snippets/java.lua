@@ -15,7 +15,7 @@ public interface {} {}{{
         )
     ),
     s(
-        "clas",
+        "clas", -- typos:disable-line
         fmt(
             [[
 public class {} {}{{

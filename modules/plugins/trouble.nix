@@ -3,9 +3,9 @@
   config,
   ...
 }: let
-  inherit (config.my.mkKey) keymap2mkKeyMap keymapUnlazy keymap2Lazy wKeyObj;
+  inherit (config.my.mkKey) mkKeyMap keymapUnlazy keymap2Lazy wKeyObj;
   cfg = config.plugins.trouble;
-  keymaps = keymap2mkKeyMap (lib.optionals cfg.enable [
+  keymaps = builtins.map mkKeyMap (lib.optionals cfg.enable [
     {
       mode = "n";
       key = "<leader>xx";

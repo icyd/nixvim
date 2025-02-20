@@ -39,7 +39,8 @@
       options.desc = "Git conflict refresh";
     }
   ];
-  keymaps = builtins.map (i: mkKeyMap i.mode i.key i.action i.options.desc) ([
+  keymaps =
+    builtins.map mkKeyMap [
       {
         action.__raw = ''
           function()
@@ -197,8 +198,7 @@
         options.desc = "Git diff get right";
       }
     ]
-    ++ (keymapUnlazy keymapsGW)
-    ++ (keymapUnlazy keymapsGC));
+    ++ (keymapUnlazy (keymapsGW ++ keymapsGC));
 in {
   inherit keymaps;
   autoGroups = {

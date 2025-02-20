@@ -92,6 +92,7 @@
               package = pkgs.alejandra;
             };
             stylua.enable = true;
+            typos.enable = true;
           };
           settings.global.excludes = [
             ".envrc"

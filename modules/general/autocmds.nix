@@ -57,7 +57,7 @@
     }
     {
       command = "setlocal nonumber norelativenumber nocursorline signcolumn=no";
-      desc = "Set terminal witout numbers, cursorline or sign columns";
+      desc = "Set terminal without numbers, cursorline or sign columns";
       event = [
         "TermOpen"
         "TermEnter"

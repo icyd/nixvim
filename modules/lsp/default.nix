@@ -1,10 +1,11 @@
 {
   lib,
   config,
+  helpers,
   pkgs,
   ...
 }: let
-  inherit (config.my.mkKey) keymap2mkKeyMap;
+  inherit (config.my.mkKey) mkKeyMap;
 in {
   extraPlugins = with pkgs;
     [
@@ -16,7 +17,7 @@ in {
   globals = {
     haskell_tools.tools.repl.handler = lib.mkIf config.plugins.toggleterm.enable "toggleterm";
   };
-  keymaps = keymap2mkKeyMap [
+  keymaps = builtins.map mkKeyMap [
     {
       action = "<cmd>Navbuddy<CR>";
       key = "<leader>xn";
@@ -119,7 +120,16 @@ in {
         gopls.enable = true;
         jdtls.enable = true;
         jsonls.enable = true;
-        helm_ls.enable = true;
+        helm_ls = {
+          enable = true;
+          extraOptions.settings = helpers.mkRaw ''            {
+                        ["helm-ls"] = {
+                          yamlls = {
+                            path = "yaml-language-server"
+                          }
+                        }
+                      }'';
+        };
         html.enable = true;
         lemminx.enable = true;
         ltex.enable = true;

@@ -4,8 +4,8 @@
   ...
 }: let
   cfg = config.plugins.compiler;
-  inherit (config.my.mkKey) keymap2mkKeyMap keymapUnlazy keymap2Lazy wKeyObj;
-  keymaps = keymap2mkKeyMap (lib.optionals cfg.enable [
+  inherit (config.my.mkKey) mkKeyMap keymapUnlazy keymap2Lazy wKeyObj;
+  keymaps = builtins.map mkKeyMap (lib.optionals cfg.enable [
     {
       action = "<cmd>CompilerOpen<CR>";
       key = "<leader>Ro";

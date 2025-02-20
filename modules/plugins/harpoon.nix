@@ -3,10 +3,10 @@
   config,
   ...
 }: let
-  inherit (config.my.mkKey) keymap2mkKeyMap wKeyObj;
+  inherit (config.my.mkKey) mkKeyMap wKeyObj;
   cfg = config.plugins.harpoon;
 in {
-  keymaps = keymap2mkKeyMap (lib.optionals cfg.enable [
+  keymaps = builtins.map mkKeyMap (lib.optionals cfg.enable [
       {
         action.__raw = ''
           function()

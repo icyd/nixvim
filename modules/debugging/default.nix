@@ -5,17 +5,17 @@
   ...
 }: let
   cfg = config.plugins.dap;
-  inherit (config.my.mkKey) keymap2mkKeyMap keymapUnlazy keymap2Lazy wKeyObj;
+  inherit (config.my.mkKey) mkKeyMap keymapUnlazy keymap2Lazy wKeyObj;
   lazyLoadTrigDAP = ''
     function()
       require("lz.n").trigger_load("nvim-dap")
     end
   '';
-  keymaps = keymap2mkKeyMap (lib.optionals cfg.enable [
+  keymaps = builtins.map mkKeyMap (lib.optionals cfg.enable [
     {
       action.__raw = ''
         function()
-          require("dap").set_breakpoint(vim.fn.intput("[Breakpoint condition] > "))
+          require("dap").set_breakpoint(vim.fn.input("[Breakpoint condition] > "))
         end
       '';
       key = "<leader>dB";
@@ -267,7 +267,7 @@ in {
         haskell-config = rec {
           type = "haskell";
           request = "launch";
-          name = "Lauch (Haskell)";
+          name = "Launch (Haskell)";
           workspace = "\${workspaceFolder}";
           stopOnEntry = true;
           logFile.__raw = ''

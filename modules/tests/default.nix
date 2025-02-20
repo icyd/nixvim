@@ -4,8 +4,8 @@
   ...
 }: let
   cfg = config.plugins.neotest;
-  inherit (config.my.mkKey) keymap2mkKeyMap keymapUnlazy keymap2Lazy wKeyObj;
-  keymaps = keymap2mkKeyMap (lib.optionals cfg.enable ([
+  inherit (config.my.mkKey) mkKeyMap keymapUnlazy keymap2Lazy wKeyObj;
+  keymaps = builtins.map mkKeyMap (lib.optionals cfg.enable ([
       {
         action.__raw = ''
           function()

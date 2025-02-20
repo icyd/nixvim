@@ -1,12 +1,12 @@
 {config, ...}: let
-  inherit (config.my.mkKey) mkKeyMapWithOpts keymap2mkKeyMap wKeyObj;
+  inherit (config.my.mkKey) mkKeyMap wKeyObj;
 in {
   globals = {
     mapleader = " ";
     maplocalleader = "\\";
   };
   keymaps =
-    (keymap2mkKeyMap
+    (builtins.map mkKeyMap
       [
         {
           action = "<Nop>";
@@ -341,42 +341,7 @@ in {
           options.desc = "Open relative to current file";
         }
       ])
-    # ++ (builtins.map (i: mkKeyMap' i.mode i.key i.action)
-    #   [
-    #     {
-    #       action = ''"_x'';
-    #       key = "x";
-    #       mode = [
-    #         "n"
-    #         "v"
-    #       ];
-    #     }
-    #     {
-    #       action = ''"_X'';
-    #       key = "X";
-    #       mode = [
-    #         "n"
-    #         "v"
-    #       ];
-    #     }
-    #     {
-    #       action = ''"_c'';
-    #       key = "c";
-    #       mode = [
-    #         "n"
-    #         "v"
-    #       ];
-    #     }
-    #     {
-    #       action = ''"_C'';
-    #       key = "C";
-    #       mode = [
-    #         "n"
-    #         "v"
-    #       ];
-    #     }
-    #   ])
-    ++ (builtins.map (i: mkKeyMapWithOpts i.mode i.key i.action i.options.desc (builtins.removeAttrs i.options ["desc"]))
+    ++ (builtins.map mkKeyMap
       [
         {
           action = ''(v:count > 5 ? "m'" . v:count : "") . "k"'';
@@ -430,9 +395,9 @@ in {
           };
         }
       ]);
-  my.wKeyList = [
-    (wKeyObj ["[" "" "next"])
-    (wKeyObj ["]" "" "prev"])
-    (wKeyObj ["z" "" "fold"])
+  my.wKeyList = builtins.map wKeyObj [
+    ["[" "" "next"]
+    ["]" "" "prev"]
+    ["z" "" "fold"]
   ];
 }

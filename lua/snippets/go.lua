@@ -157,7 +157,7 @@ return {
         { trig = "nolint", dscr = "ignore linter" },
         fmt([[// nolint:{} // {}]], {
             i(1, "names"),
-            i(2, "explaination"),
+            i(2, "explanation"),
         })
     ), --}}}
 
@@ -218,7 +218,7 @@ return {
 
     -- Create Mocks {{{
     s(
-        { trig = "mock", name = "Mocks", dscr = "Create a mock with defering assertion" },
+        { trig = "mock", name = "Mocks", dscr = "Create a mock with deferring assertion" },
         fmt("{} := &mocks.{}{{}}\ndefer {}.AssertExpectations(t)\n{}", {
             i(1, "m"),
             i(2, "Mocked"),
