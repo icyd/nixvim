@@ -296,6 +296,19 @@ in {
       };
     };
     helm.enable = true;
+    indent-blankline = {
+      enable = true;
+      lazyLoad.settings.event = "BufReadPre";
+      settings.indent = {
+        char = [
+          "|"
+          "¦"
+          "┆"
+          "┊"
+        ];
+        priority = 50;
+      };
+    };
     nvim-bqf.enable = true;
     oil = {
       enable = true;
