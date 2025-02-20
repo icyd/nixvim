@@ -295,6 +295,7 @@ in {
         toggleQuickMenu = "<leader>hu";
       };
     };
+    helm.enable = true;
     nvim-bqf.enable = true;
     oil = {
       enable = true;
