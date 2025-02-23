@@ -37,7 +37,7 @@
       inherit mode;
       __unkeyed-1 = key;
       __unkeyed-2 = action;
-      __unkeyed-3 = options;
+      desc = lib.mkIf (lib.hasAttr "desc" options) options.desc;
     };
     keymapUnlazy = list: lib.optionals (!config.plugins.lz-n.enable) list;
     keymap2Lazy = list: lib.optionals config.plugins.lz-n.enable (builtins.map lazyKeyMap list);

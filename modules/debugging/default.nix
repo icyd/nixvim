@@ -5,7 +5,7 @@
   ...
 }: let
   cfg = config.plugins.dap;
-  inherit (config.my.mkKey) mkKeyMap keymapUnlazy keymap2Lazy wKeyObj;
+  inherit (config.my.mkKey) mkKeyMap keymap2Lazy wKeyObj;
   lazyLoadTrigDAP = ''
     function()
       require("lz.n").trigger_load("nvim-dap")
@@ -192,7 +192,10 @@ in {
     ++ (lib.optionals pkgs.stdenv.isLinux [
       gdb
     ]);
-  keymaps = keymapUnlazy keymaps;
+  keymaps =
+    if config.plugins.dap.lazyLoad.enable
+    then keymap2Lazy keymaps
+    else keymaps;
   plugins = {
     lz-n.plugins = lib.optionals (cfg.enable && config.plugins.cmp.enable) [
       {
@@ -206,6 +209,7 @@ in {
     };
     dap = {
       enable = true;
+      lazyLoad.enable = false;
       lazyLoad.settings = {
         cmd = [
           "DapNew"
@@ -216,6 +220,7 @@ in {
       adapters = {
         executables = {
           haskell.command = "haskell-debug-adapter";
+          codelldb.command = "${pkgs.vscode-extensions.vadimcn.vscode-lldb}/share/vscode/extensions/vadimcn.vscode-lldb/adapter/codelldb";
           gdb = lib.mkIf pkgs.stdenv.isLinux {
             command = lib.getExe pkgs.gdb;
             args = [
@@ -224,18 +229,6 @@ in {
             ];
           };
           lldb.command = lib.getExe' pkgs.lldb "lldb-dap";
-        };
-        servers = {
-          codelldb = {
-            port = "\${port}";
-            executable = {
-              command = "${pkgs.vscode-extensions.vadimcn.vscode-lldb}/share/vscode/extensions/vadimcn.vscode-lldb/adapter/codelldb";
-              args = [
-                "--port"
-                "\${port}"
-              ];
-            };
-          };
         };
       };
       configurations = let

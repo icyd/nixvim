@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  inherit (config.my.mkKey) mkKeyMap keymapUnlazy keymap2Lazy;
+  inherit (config.my.mkKey) mkKeyMap keymapUnlazy keymap2Lazy wKeyObj;
   maximize-nvim = pkgs.vimUtils.buildVimPlugin {
     name = "maximize-nvim";
     src = pkgs.fetchFromGitHub {
@@ -362,4 +362,7 @@ in {
       };
     };
   };
+  my.wKeyList = lib.optionals config.plugins.telescope.enable [
+    (wKeyObj ["<leader>q" "" "Session"])
+  ];
 }

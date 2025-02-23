@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  inherit (config.my.mkKey) mkKeyMap;
+  inherit (config.my.mkKey) mkKeyMap wKeyObj;
 in {
   extraPlugins = with pkgs;
     [
@@ -155,6 +155,9 @@ in {
       lsp.autoAttach = true;
     };
   };
+  my.wKeyList = lib.optionals config.plugins.telescope.enable [
+    (wKeyObj ["<leader>l" "" "Lsp"])
+  ];
   imports = with builtins;
     map (fn: ./${fn})
     (filter

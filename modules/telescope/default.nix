@@ -2,7 +2,9 @@
   lib,
   config,
   ...
-}: {
+}: let
+  inherit (config.my.mkKey) wKeyObj;
+in {
   keymaps = lib.mkIf config.plugins.telescope.enable [
     {
       action.__raw = ''
@@ -143,4 +145,8 @@
     };
     web-devicons.enable = true;
   };
+  my.wKeyList = lib.optionals config.plugins.telescope.enable [
+    (wKeyObj ["<leader>f" "" "Telescope"])
+    (wKeyObj ["<localleader>f" "" "Telescope"])
+  ];
 }

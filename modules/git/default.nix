@@ -242,12 +242,12 @@ in {
   };
   my.wKeyList =
     [
-      (wKeyObj ["<leader>g" "" "git"])
+      (wKeyObj ["<leader>g" "" "Git"])
     ]
     ++ (lib.optionals (cfgGW.enable && cfgGW.enableTelescope) [
-      (wKeyObj ["<leader>gW" "󰙅 " "git worktree"])
+      (wKeyObj ["<leader>gW" "󰙅 " "Git worktree"])
     ])
     ++ (lib.optionals config.plugins.git-conflict.enable [
-      (wKeyObj ["<leader>gc" "" "git conflict"])
+      (wKeyObj ["<leader>gc" "" "Git conflict"])
     ]);
 }
