@@ -1,8 +1,20 @@
-{pkgs, ...}: {
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}: {
   plugins = {
     ts-comments = {
       enable = true;
       lazyLoad.settings.event = "BufReadPre";
+    };
+    ts-context-commentstring = {
+      enable = true;
+      lazyLoad.settings.event = "BufReadPost";
+      extraOptions = lib.mkIf config.plugins.comment.enable {
+        enable_autocmd = false;
+      };
     };
     treesitter = {
       enable = true;

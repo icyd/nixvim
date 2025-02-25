@@ -184,6 +184,20 @@
       options.desc = "Purge orphaned sessions";
     }
   ]);
+  keymapsCom = builtins.map mkKeyMap (lib.optionals config.plugins.comment.enable [
+    {
+      action = "yy<Plug>(comment_toggle_linewise_current)p";
+      key = "<localleader>cc";
+      mode = "n";
+      options.desc = "Duplicate and comment line";
+    }
+    {
+      action = "ygv<Plug>(comment_toggle_linewise_visual)`>p";
+      key = "<localleader>cc";
+      mode = "x";
+      options.desc = "Duplicate and comment visual block";
+    }
+  ]);
 in {
   extraPlugins = with pkgs.vimPlugins; [
     dial-nvim
@@ -210,6 +224,7 @@ in {
     ++ keymapsDial
     ++ keymapsMax
     ++ keymapsOil
+    ++ keymapsCom
     ++ [
       {
         action = "<cmd>UndotreeToggle<CR>";
@@ -269,6 +284,13 @@ in {
         auto_save = true;
         auto_restore = false;
       };
+    };
+    comment = {
+      enable = true;
+      lazyLoad.settings.event = "BufReadPost";
+      settings.pre_hook = lib.optionalString config.plugins.ts-context-commentstring.enable ''
+        require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook()
+      '';
     };
     colorizer = {
       enable = true;
