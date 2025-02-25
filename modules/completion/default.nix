@@ -195,8 +195,8 @@ in {
                         i = ctrl_l_func,
                       })
           '';
-          "<Tab>" = "cmp.mapping(tab_func(1), { 'i', 'c' })";
-          "<S-Tab>" = "cmp.mapping(tab_func(-1), { 'i', 'c' })";
+          "<Tab>" = "cmp.mapping(tab_func(1), { 'i', 'c', 's' })";
+          "<S-Tab>" = "cmp.mapping(tab_func(-1), { 'i', 'c', 's' })";
         };
         snippet.expand = ''
           function(args)
