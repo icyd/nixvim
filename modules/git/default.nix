@@ -39,6 +39,28 @@
       options.desc = "Git conflict refresh";
     }
   ];
+  keymapsGI = lib.optionals config.plugins.gitignore.enable [
+    {
+      action.__raw = ''
+        function()
+          require("gitignore").generate()
+        end
+      '';
+      key = "<leader>gi";
+      mode = "n";
+      options.desc = "Generate .gitignore file";
+    }
+  ];
+  keymapsGL = lib.optionals config.plugins.gitlinker.enable (builtins.map (mode: {
+    inherit mode;
+    action.__raw = ''
+      function()
+        require("gitlinker").get_buf_range_url("${mode}")
+      end
+    '';
+    key = "<leader>gy";
+    options.desc = "Generate git url";
+  }) ["n" "v"]);
   keymaps =
     builtins.map mkKeyMap [
       {
@@ -198,6 +220,8 @@
         options.desc = "Git diff get right";
       }
     ]
+    ++ keymapsGI
+    ++ keymapsGL
     ++ (keymapUnlazy (keymapsGW ++ keymapsGC));
 in {
   inherit keymaps;
@@ -221,9 +245,7 @@ in {
     }
   ];
   plugins = {
-    fugitive = {
-      enable = true;
-    };
+    fugitive.enable = true;
     gitignore.enable = true;
     gitsigns = {
       enable = true;

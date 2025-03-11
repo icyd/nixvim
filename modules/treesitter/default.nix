@@ -1,98 +1,13 @@
 {
-  lib,
-  config,
-  pkgs,
-  ...
-}: {
   plugins = {
     ts-comments = {
       enable = true;
       lazyLoad.settings.event = "BufReadPre";
     };
-    ts-context-commentstring = {
-      enable = true;
-      extraOptions = lib.mkIf config.plugins.comment.enable {
-        enable_autocmd = false;
-      };
-    };
     treesitter = {
       enable = true;
-      grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
-        awk
-        bash
-        bibtex
-        c
-        c_sharp
-        cmake
-        comment
-        commonlisp
-        cpp
-        css
-        csv
-        diff
-        dockerfile
-        dot
-        editorconfig
-        git_config
-        git_rebase
-        gitattributes
-        gitcommit
-        gitignore
-        go
-        gomod
-        gosum
-        gpg
-        graphql
-        groovy
-        haskell
-        hcl
-        helm
-        html
-        http
-        hyprlang
-        ini
-        java
-        javascript
-        jq
-        json
-        json5
-        jsonc
-        jsonnet
-        latex
-        ledger
-        lua
-        luadoc
-        luap
-        luau
-        make
-        markdown
-        markdown_inline
-        nginx
-        nix
-        norg
-        nu
-        org
-        perl
-        php
-        proto
-        python
-        regex
-        rego
-        ruby
-        rust
-        scss
-        terraform
-        toml
-        tsv
-        tsx
-        typescript
-        vim
-        vimdoc
-        xml
-        yaml
-        zig
-      ];
       settings = {
+        auto_install = true;
         highlight.enable = true;
       };
     };

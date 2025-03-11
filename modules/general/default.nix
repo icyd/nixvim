@@ -15,14 +15,14 @@
   ];
   withPython3 = false;
   withRuby = false;
-  #  performance = {
-  #   byteCompileLua = {
-  #     enable = true;
-  #     nvimRuntime = true;
-  #     configs = true;
-  #     plugins = true;
-  #   };
-  # };
+  performance = {
+    byteCompileLua = {
+      enable = true;
+      nvimRuntime = true;
+      configs = true;
+      plugins = true;
+    };
+  };
   imports = with builtins;
     map (fn: ./${fn})
     (filter

@@ -64,30 +64,30 @@ in {
         mode = "n";
         options.desc = "Remove search highlight";
       }
-      {
-        action = "g^";
-        key = "^";
-        mode = "n";
-        options.desc = "Linewrap go to init";
-      }
-      {
-        action = "g$";
-        key = "$";
-        mode = "n";
-        options.desc = "Linewrap go to end";
-      }
-      {
-        action = "gj";
-        key = "j";
-        mode = "n";
-        options.desc = "Linewrap down";
-      }
-      {
-        action = "gk";
-        key = "k";
-        mode = "n";
-        options.desc = "Linewrap up";
-      }
+      # {
+      #   action = "g^";
+      #   key = "^";
+      #   mode = "n";
+      #   options.desc = "Linewrap go to init";
+      # }
+      # {
+      #   action = "g$";
+      #   key = "$";
+      #   mode = "n";
+      #   options.desc = "Linewrap go to end";
+      # }
+      # {
+      #   action = "gj";
+      #   key = "j";
+      #   mode = "n";
+      #   options.desc = "Linewrap down";
+      # }
+      # {
+      #   action = "gk";
+      #   key = "k";
+      #   mode = "n";
+      #   options.desc = "Linewrap up";
+      # }
       {
         action = "y$";
         key = "Y";
@@ -118,12 +118,12 @@ in {
         mode = "n";
         options.desc = "Center on prev match";
       }
-      {
-        action = "mzJ`z";
-        key = "J";
-        mode = "n";
-        options.desc = "Center when wrapping lines";
-      }
+      # {
+      #   action = "mzJ`z";
+      #   key = "J";
+      #   mode = "n";
+      #   options.desc = "Center when wrapping lines";
+      # }
       {
         action = "<cmd>split<CR>";
         key = "<leader>-";

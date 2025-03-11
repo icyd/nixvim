@@ -1,139 +1,16 @@
 {
   lib,
   config,
+  helpers,
   pkgs,
   ...
 }: let
   cfg = config.plugins.dap;
   inherit (config.my.mkKey) mkKeyMap keymap2Lazy wKeyObj;
-  lazyLoadTrigDAP = ''
-    function()
-      require("lz.n").trigger_load("nvim-dap")
-    end
+  lazyLoadTrigDAP = helpers.mkRaw ''
+    require("lz.n").trigger_load("nvim-dap")
   '';
-  keymaps = builtins.map mkKeyMap (lib.optionals cfg.enable [
-    {
-      action.__raw = ''
-        function()
-          require("dap").set_breakpoint(vim.fn.input("[Breakpoint condition] > "))
-        end
-      '';
-      key = "<leader>dB";
-      mode = "n";
-      options.desc = "Breakpoint condition";
-    }
-    {
-      action = "<cmd>DapToggleBreakpoint<CR>";
-      key = "<leader>db";
-      mode = "n";
-      options.desc = "Toggle breakpoint";
-    }
-    {
-      action = "<cmd>DapContinue<CR>";
-      key = "<leader>dc";
-      mode = "n";
-      options.desc = "Continue";
-    }
-    {
-      action.__raw = ''
-        function()
-          require("dap").run_to_cursor()
-        end
-      '';
-      key = "<leader>dC";
-      mode = "n";
-      options.desc = "Run to cursor";
-    }
-    {
-      action.__raw = ''
-        function()
-          require("dap").goto_()
-        end
-      '';
-      key = "<leader>dg";
-      mode = "n";
-      options.desc = "Go to line (no execute)";
-    }
-    {
-      action = "<cmd>DapStepInto<CR>";
-      key = "<leader>di";
-      mode = "n";
-      options.desc = "Step into";
-    }
-    {
-      action = "<cmd>DapStepOut<CR>";
-      key = "<leader>do";
-      mode = "n";
-      options.desc = "Step out";
-    }
-    {
-      action = "<cmd>DapStepOver<CR>";
-      key = "<leader>dO";
-      mode = "n";
-      options.desc = "Step over";
-    }
-    {
-      action.__raw = ''
-        function()
-          require("dap").up()
-        end
-      '';
-      key = "<leader>dk";
-      mode = "n";
-      options.desc = "Go up";
-    }
-    {
-      action.__raw = ''
-        function()
-          require("dap").down()
-        end
-      '';
-      key = "<leader>dj";
-      mode = "n";
-      options.desc = "Go down";
-    }
-    {
-      action.__raw = ''
-        function()
-          require("dap").run_last()
-        end
-      '';
-      key = "<leader>dl";
-      mode = "n";
-      options.desc = "Re-run last";
-    }
-    {
-      action.__raw = ''
-        function()
-          require("dap").pause()
-        end
-      '';
-      key = "<leader>dp";
-      mode = "n";
-      options.desc = "Pause";
-    }
-    {
-      action = "<cmd>DapTerminate<CR>";
-      key = "<leader>dq";
-      mode = "n";
-      options.desc = "Terminate";
-    }
-    {
-      action.__raw = ''
-        function()
-          require("dap").session()
-        end
-      '';
-      key = "<leader>ds";
-      mode = "n";
-      options.desc = "Session";
-    }
-    {
-      action = "<cmd>DapToggleRepl<CR>";
-      key = "<leader>dr";
-      mode = "n";
-      options.desc = "Toggle REPL";
-    }
+  keymapDAPUI = lib.optionals config.plugins.dap-ui.enable [
     {
       action.__raw = ''
         function()
@@ -144,37 +21,162 @@
       mode = "n";
       options.desc = "Toggle UI";
     }
-    {
-      action.__raw = ''
-        function()
-          require("dapui").eval()
-        end
-      '';
-      key = "<leader>de";
-      mode = "n";
-      options.desc = "Eval";
-    }
-    {
-      action.__raw = ''
-        function()
-          require("dapui").eval(vim.fn.input("[Expression] > "))
-        end
-      '';
-      key = "<leader>dE";
-      mode = "n";
-      options.desc = "Eval expression";
-    }
-    {
-      action.__raw = ''
-        function()
-          require("dap.ui.widgets").hover()
-        end
-      '';
-      key = "<leader>dw";
-      mode = "n";
-      options.desc = "Widgets";
-    }
-  ]);
+  ];
+  keymaps = builtins.map mkKeyMap (lib.optionals cfg.enable [
+      {
+        action.__raw = ''
+          function()
+            require("dap").set_breakpoint(vim.fn.input("[Breakpoint condition] > "))
+          end
+        '';
+        key = "<leader>dB";
+        mode = "n";
+        options.desc = "Breakpoint condition";
+      }
+      {
+        action = "<cmd>DapToggleBreakpoint<CR>";
+        key = "<leader>db";
+        mode = "n";
+        options.desc = "Toggle breakpoint";
+      }
+      {
+        action = "<cmd>DapContinue<CR>";
+        key = "<leader>dc";
+        mode = "n";
+        options.desc = "Continue";
+      }
+      {
+        action.__raw = ''
+          function()
+            require("dap").run_to_cursor()
+          end
+        '';
+        key = "<leader>dC";
+        mode = "n";
+        options.desc = "Run to cursor";
+      }
+      {
+        action.__raw = ''
+          function()
+            require("dap").goto_()
+          end
+        '';
+        key = "<leader>dg";
+        mode = "n";
+        options.desc = "Go to line (no execute)";
+      }
+      {
+        action = "<cmd>DapStepInto<CR>";
+        key = "<leader>di";
+        mode = "n";
+        options.desc = "Step into";
+      }
+      {
+        action = "<cmd>DapStepOut<CR>";
+        key = "<leader>do";
+        mode = "n";
+        options.desc = "Step out";
+      }
+      {
+        action = "<cmd>DapStepOver<CR>";
+        key = "<leader>dO";
+        mode = "n";
+        options.desc = "Step over";
+      }
+      {
+        action.__raw = ''
+          function()
+            require("dap").up()
+          end
+        '';
+        key = "<leader>dk";
+        mode = "n";
+        options.desc = "Go up";
+      }
+      {
+        action.__raw = ''
+          function()
+            require("dap").down()
+          end
+        '';
+        key = "<leader>dj";
+        mode = "n";
+        options.desc = "Go down";
+      }
+      {
+        action.__raw = ''
+          function()
+            require("dap").run_last()
+          end
+        '';
+        key = "<leader>dl";
+        mode = "n";
+        options.desc = "Re-run last";
+      }
+      {
+        action.__raw = ''
+          function()
+            require("dap").pause()
+          end
+        '';
+        key = "<leader>dp";
+        mode = "n";
+        options.desc = "Pause";
+      }
+      {
+        action = "<cmd>DapTerminate<CR>";
+        key = "<leader>dq";
+        mode = "n";
+        options.desc = "Terminate";
+      }
+      {
+        action.__raw = ''
+          function()
+            require("dap").session()
+          end
+        '';
+        key = "<leader>ds";
+        mode = "n";
+        options.desc = "Session";
+      }
+      {
+        action = "<cmd>DapToggleRepl<CR>";
+        key = "<leader>dr";
+        mode = "n";
+        options.desc = "Toggle REPL";
+      }
+      {
+        action.__raw = ''
+          function()
+            require("dapui").eval()
+          end
+        '';
+        key = "<leader>de";
+        mode = "n";
+        options.desc = "Eval";
+      }
+      {
+        action.__raw = ''
+          function()
+            require("dapui").eval(vim.fn.input("[Expression] > "))
+          end
+        '';
+        key = "<leader>dE";
+        mode = "n";
+        options.desc = "Eval expression";
+      }
+      {
+        action.__raw = ''
+          function()
+            require("dap.ui.widgets").hover()
+          end
+        '';
+        key = "<leader>dw";
+        mode = "n";
+        options.desc = "Widgets";
+      }
+    ]
+    ++ keymapDAPUI);
 in {
   extraPackages = with pkgs;
     [
@@ -192,31 +194,19 @@ in {
     ++ (lib.optionals pkgs.stdenv.isLinux [
       gdb
     ]);
-  keymaps =
-    if config.plugins.dap.lazyLoad.enable
-    then keymap2Lazy keymaps
-    else keymaps;
+  # keymaps = keymapUnlazy keymaps;
+  inherit keymaps;
   plugins = {
-    lz-n.plugins = lib.optionals (cfg.enable && config.plugins.cmp.enable) [
-      {
-        __unkeyed-1 = "cmp-dap";
-        event = "BufReadPre";
-      }
-    ];
     cmp-dap = {
       enable = cfg.enable && config.plugins.cmp.enable;
       autoLoad = false;
     };
     dap = {
       enable = true;
-      lazyLoad.enable = false;
-      lazyLoad.settings = {
-        cmd = [
-          "DapNew"
-          "DapContinue"
-        ];
-        keys = keymap2Lazy keymaps;
-      };
+      # lazyLoad.settings.cmd = [
+      #   "DapNew"
+      #   "DapContinue"
+      # ];
       adapters = {
         executables = {
           haskell.command = "haskell-debug-adapter";
@@ -315,11 +305,20 @@ in {
     };
     dap-ui = {
       enable = cfg.enable;
-      lazyLoad.settings.before.__raw = lazyLoadTrigDAP;
+      lazyLoad.settings = {
+        before = lazyLoadTrigDAP;
+        keys = keymap2Lazy keymapDAPUI;
+      };
     };
     dap-virtual-text = {
       enable = cfg.enable;
-      lazyLoad.settings.before.__raw = lazyLoadTrigDAP;
+      lazyLoad.settings = {
+        before = lazyLoadTrigDAP;
+        cmd = [
+          "DapVirtualTextToggle"
+          "DapVirtualTextEnable"
+        ];
+      };
     };
     dap-go.enable = true;
     dap-lldb.enable = true;

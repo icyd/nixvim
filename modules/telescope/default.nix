@@ -120,7 +120,7 @@ in {
         "<leader>fr" = "frecency";
         "<leader>fR" = "oldfiles";
         "<leader>fU" = "undo";
-        "<leader>fp" = "projects";
+        # "<leader>fp" = "projects";
         "<leader>fF" = "current_buffer_fuzzy_find";
         "<localleader>fh" = "help_tags";
         "<localleader>fr" = "registers";

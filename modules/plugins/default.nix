@@ -73,85 +73,6 @@
       options.expr = true;
     }
   ];
-  keymapsFsh = builtins.map mkKeyMap (lib.optionals config.plugins.flash.enable [
-      {
-        action.__raw = ''
-          function()
-            require("flash").jump()
-          end
-        '';
-        key = "s";
-        mode = [
-          "n"
-          "x"
-          "o"
-        ];
-        options.desc = "Flash";
-      }
-      {
-        action.__raw = ''
-          function()
-            require("flash").remote()
-          end
-        '';
-        key = "r";
-        mode = "o";
-        options.desc = "Remote Flash";
-      }
-      {
-        action.__raw = ''
-          function()
-            require("flash").toggle()
-          end
-        '';
-        key = "<C-s>";
-        mode = "c";
-        options.desc = "Toggle Flash Search";
-      }
-      {
-        action.__raw = ''
-          function()
-            require("flash").jump({
-              search = { mode = "search", max_length = 0 },
-              label = { after = { 0, 0 } },
-              pattern = "^"
-            })
-          end
-        '';
-        key = "<localleader>l";
-        mode = "n";
-        options.desc = "Hop to line";
-      }
-    ]
-    ++ (lib.optionals config.plugins.treesitter.enable [
-      {
-        action.__raw = ''
-          function()
-            require("flash").treesitter()
-          end
-        '';
-        key = "S";
-        mode = [
-          "n"
-          "x"
-          "o"
-        ];
-        options.desc = "Flash Tressiter";
-      }
-      {
-        action.__raw = ''
-          function()
-            require("flash").treesitter_search()
-          end
-        '';
-        key = "R";
-        mode = [
-          "x"
-          "o"
-        ];
-        options.desc = "Flash Tressiter Search";
-      }
-    ]));
   keymapsAS = builtins.map mkKeyMap (lib.optionals config.plugins.auto-session.enable [
     {
       action = "<cmd>SessionRestore<CR>";
@@ -198,6 +119,13 @@
       options.desc = "Duplicate and comment visual block";
     }
   ]);
+  keymapsPj = builtins.map mkKeyMap (lib.optionals (config.plugins.telescope.enable && config.plugins.project-nvim.enable) [
+    {
+      action = "<cmd>Telescope projects<CR>";
+      key = "<leader>fp";
+      options.desc = "Find projects";
+    }
+  ]);
 in {
   extraPlugins = with pkgs.vimPlugins; [
     dial-nvim
@@ -220,11 +148,11 @@ in {
   keymaps = keymapUnlazy (
     keymapsAS
     ++ keymapsCzr
-    ++ keymapsFsh
     ++ keymapsDial
     ++ keymapsMax
     ++ keymapsOil
     ++ keymapsCom
+    ++ keymapsPj
     ++ [
       {
         action = "<cmd>UndotreeToggle<CR>";
@@ -285,13 +213,6 @@ in {
         auto_restore = false;
       };
     };
-    comment = {
-      enable = true;
-      lazyLoad.settings.event = "BufReadPost";
-      settings.pre_hook = lib.optionalString config.plugins.ts-context-commentstring.enable ''
-        require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook()
-      '';
-    };
     colorizer = {
       enable = true;
       lazyLoad.settings.keys = keymap2Lazy keymapsCzr;
@@ -301,14 +222,6 @@ in {
       };
     };
     direnv.enable = true;
-    flash = {
-      enable = true;
-      lazyLoad.settings.keys = keymap2Lazy keymapsFsh;
-      settings = {
-        jump.autojump = true;
-        modes.char.multi_line = false;
-      };
-    };
     harpoon = {
       enable = true;
       enableTelescope = config.plugins.telescope.enable;
@@ -342,6 +255,12 @@ in {
     project-nvim = {
       enable = true;
       enableTelescope = config.plugins.telescope.enable;
+      lazyLoad.settings = {
+        keys = keymap2Lazy keymapsPj;
+        before.__raw = ''
+          require("lz.n").trigger_load("telescope")
+        '';
+      };
       settings = {
         detection_methods = ["pattern" "lsp"];
         scope_chdir = "win";

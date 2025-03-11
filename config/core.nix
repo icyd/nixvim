@@ -7,5 +7,6 @@
     ++ (with self.myModules; [
       utils
       general
+      completion
     ]);
 }
