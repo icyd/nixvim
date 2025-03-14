@@ -3,7 +3,7 @@
   config,
   ...
 }: let
-  inherit (config.my.mkKey) mkKeyMap keymapUnlazy keymap2Lazy wKeyObj;
+  inherit (config.my.mkKey) mkKeyMap wKeyObj;
   cfgGW = config.plugins.git-worktree;
   keymapsGW = lib.optionals (cfgGW.enable && cfgGW.enableTelescope) [
     {
@@ -222,7 +222,8 @@
     ]
     ++ keymapsGI
     ++ keymapsGL
-    ++ (keymapUnlazy (keymapsGW ++ keymapsGC));
+    ++ keymapsGC
+    ++ keymapsGW;
 in {
   inherit keymaps;
   autoGroups = {
@@ -254,12 +255,12 @@ in {
     gitlinker.enable = true;
     git-conflict = {
       enable = true;
-      lazyLoad.settings.keys = keymap2Lazy keymapsGC;
+      # lazyLoad.settings.keys = keymap2Lazy keymapsGC;
     };
     git-worktree = {
       enable = true;
       enableTelescope = config.plugins.telescope.enable;
-      lazyLoad.settings.keys = keymap2Lazy keymapsGW;
+      # lazyLoad.settings.keys = keymap2Lazy keymapsGW;
     };
   };
   my.wKeyList =
