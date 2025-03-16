@@ -145,23 +145,24 @@ in {
         fn != "default.nix"
       ))
       (attrNames (readDir ./.)));
-  keymaps = keymapUnlazy (
-    keymapsAS
-    ++ keymapsCzr
-    ++ keymapsDial
-    ++ keymapsMax
-    ++ keymapsOil
-    ++ keymapsCom
-    ++ keymapsPj
-    ++ [
-      {
-        action = "<cmd>UndotreeToggle<CR>";
-        key = "<leader>U";
-        mode = "n";
-        options.desc = "Toggle Undotree";
-      }
-    ]
-  );
+  keymaps =
+    keymapsPj
+    ++ (keymapUnlazy (
+      keymapsAS
+      ++ keymapsCzr
+      ++ keymapsDial
+      ++ keymapsMax
+      ++ keymapsOil
+      ++ keymapsCom
+      ++ [
+        {
+          action = "<cmd>UndotreeToggle<CR>";
+          key = "<leader>U";
+          mode = "n";
+          options.desc = "Toggle Undotree";
+        }
+      ]
+    ));
   plugins = {
     lz-n.plugins = [
       {
@@ -256,7 +257,8 @@ in {
       enable = true;
       enableTelescope = config.plugins.telescope.enable;
       lazyLoad.settings = {
-        keys = keymap2Lazy keymapsPj;
+        # keys = keymap2Lazy keymapsPj;
+        event = "DeferredUIEnter";
         before.__raw = ''
           require("lz.n").trigger_load("telescope")
         '';
