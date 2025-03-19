@@ -229,6 +229,14 @@ in {
             priority = 500;
           }
           {
+            name = "spell";
+            priority = 400;
+          }
+          {
+            name = "dictionary";
+            priority = 400;
+          }
+          {
             name = "path";
             priority = 300;
           }
@@ -246,11 +254,13 @@ in {
     cmp-buffer.enable = cfg.enable;
     cmp-cmdline.enable = cfg.enable;
     cmp-cmdline-history.enable = cfg.enable;
+    cmp-dictionary.enable = cfg.enable;
     cmp_luasnip.enable = cfg.enable && config.plugins.luasnip.enable;
     cmp-nvim-lsp.enable = cfg.enable && config.plugins.lsp.enable;
     cmp-nvim-lsp-document-symbol.enable = cfg.enable && config.plugins.lsp.enable;
     cmp-nvim-lsp-signature-help.enable = cfg.enable && config.plugins.lsp.enable;
     cmp-nvim-lua.enable = cfg.enable;
+    cmp-spell.enable = cfg.enable;
     cmp-treesitter.enable = cfg.enable && config.plugins.treesitter.enable;
     cmp-path.enable = cfg.enable;
     friendly-snippets.enable = config.plugins.luasnip.enable;
