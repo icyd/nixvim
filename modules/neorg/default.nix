@@ -27,6 +27,7 @@ in {
   plugins = {
     neorg = {
       enable = true;
+      lazyLoad.enable = false;
       lazyLoad.settings = {
         cmd = "Neorg";
         ft = "norg";
