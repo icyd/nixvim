@@ -133,7 +133,12 @@ in {
     mini-icons
     playground
     vim-gnupg
+    vim-indent-object
+    Navigator-nvim
   ];
+  extraConfigLua = ''
+    require("Navigator").setup()
+  '';
   globals = {
     GPGPreferArmor = 1;
     GPGPreferSign = 1;
@@ -147,6 +152,48 @@ in {
       (attrNames (readDir ./.)));
   keymaps =
     keymapsPj
+    ++ [
+      {
+        action.__raw = ''
+          function()
+            require("Navigator").left()
+          end
+        '';
+        key = "<M-h>";
+        mode = "n";
+        options.desc = "Move to left window";
+      }
+      {
+        action.__raw = ''
+          function()
+            require("Navigator").down()
+          end
+        '';
+        key = "<M-j>";
+        mode = "n";
+        options.desc = "Move to down window";
+      }
+      {
+        action.__raw = ''
+          function()
+            require("Navigator").up()
+          end
+        '';
+        key = "<M-k>";
+        mode = "n";
+        options.desc = "Move to up window";
+      }
+      {
+        action.__raw = ''
+          function()
+            require("Navigator").right()
+          end
+        '';
+        key = "<M-l>";
+        mode = "n";
+        options.desc = "Move to right window";
+      }
+    ]
     ++ (keymapUnlazy (
       keymapsAS
       ++ keymapsCzr
