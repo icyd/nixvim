@@ -66,6 +66,46 @@ in {
         mode = "n";
         options.desc = "Harpoon add file";
       }
+      {
+        action.__raw = ''
+          function()
+            require("harpoon"):list():select(1)
+          end
+        '';
+        key = "<leader>hh";
+        mode = "n";
+        options.desc = "Harpoon select 1";
+      }
+      {
+        action.__raw = ''
+          function()
+            require("harpoon"):list():select(2)
+          end
+        '';
+        key = "<leader>ht";
+        mode = "n";
+        options.desc = "Harpoon select 2";
+      }
+      {
+        action.__raw = ''
+          function()
+            require("harpoon"):list():select(3)
+          end
+        '';
+        key = "<leader>hn";
+        mode = "n";
+        options.desc = "Harpoon select 3";
+      }
+      {
+        action.__raw = ''
+          function()
+            require("harpoon"):list():select(4)
+          end
+        '';
+        key = "<leader>hs";
+        mode = "n";
+        options.desc = "Harpoon select 4";
+      }
     ]
     ++ (lib.optionals config.plugins.telescope.enable [
       {
