@@ -270,14 +270,6 @@ in {
       };
     };
     direnv.enable = true;
-    harpoon = {
-      enable = true;
-      enableTelescope = config.plugins.telescope.enable;
-      keymaps = {
-        addFile = "<leader>hm";
-        toggleQuickMenu = "<leader>hu";
-      };
-    };
     helm.enable = true;
     indent-blankline = {
       enable = true;

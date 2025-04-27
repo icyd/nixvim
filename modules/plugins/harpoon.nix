@@ -45,6 +45,27 @@ in {
         mode = "n";
         options.desc = "Harpoon goto terminal";
       }
+      {
+        action.__raw = ''
+          function()
+            local harpoon = require("harpoon")
+            hapoon.ui:toggle_quick_menu(harpoon:list())
+          end
+        '';
+        key = "<leader>hu";
+        mode = "n";
+        options.desc = "Harpoon quick menu";
+      }
+      {
+        action.__raw = ''
+          function()
+            require("harpoon"):list:add()
+          end
+        '';
+        key = "<leader>hm";
+        mode = "n";
+        options.desc = "Harpoon add file";
+      }
     ]
     ++ (lib.optionals config.plugins.telescope.enable [
       {
@@ -62,10 +83,6 @@ in {
     harpoon = {
       enable = true;
       enableTelescope = config.plugins.telescope.enable;
-      keymaps = {
-        addFile = "<leader>hm";
-        toggleQuickMenu = "<leader>hu";
-      };
     };
   };
   my.wKeyList = lib.optionals cfg.enable [
