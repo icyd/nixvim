@@ -33,7 +33,7 @@ in {
         ft = "norg";
       };
       luaConfig.pre = ''
-        local vimwiki_dir = os.getenv("VIMWIKI_HOME")
+        local vimwiki_dir = os.getenv("VIMWIKI_HOME") or os.getenv("HOME") .. "/org"
       '';
       telescopeIntegration.enable = config.plugins.telescope.enable;
       settings = {

@@ -59,7 +59,7 @@ in {
       {
         action.__raw = ''
           function()
-            require("harpoon"):list:add()
+            require("harpoon"):list():add()
           end
         '';
         key = "<leader>hm";
