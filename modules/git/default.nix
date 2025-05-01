@@ -61,6 +61,14 @@
     key = "<leader>gy";
     options.desc = "Generate git url";
   }) ["n" "v"]);
+  keymapsLG = lib.optionals config.plugins.lazygit.enable [
+    {
+      action = "<cmd>LazyGit<CR>";
+      mode = "n";
+      key = "<leader>gl";
+      options.desc = "Lazygit";
+    }
+  ];
   keymaps =
     builtins.map mkKeyMap [
       {
@@ -222,6 +230,7 @@
     ]
     ++ keymapsGI
     ++ keymapsGL
+    ++ keymapsLG
     ++ keymapsGC
     ++ keymapsGW;
 in {
