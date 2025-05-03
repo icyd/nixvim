@@ -76,9 +76,12 @@
       callback = {
         __raw = ''
           function(event)
+              if string.match(event.match, "^oil:.*") or string.match(event.match, "^fugitive:.*") then
+                return
+              end
               local file = vim.loop.fs_realpath(event.match) or event.match
-
-              vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
+              local dir = vim.fn.fnamemodify(file, ":p:h")
+              vim.fn.mkdir(dir, "p")
               local backup = vim.fn.fnamemodify(file, ":p:~:h")
               backup = backup:gsub("[/\\]", "%%")
               vim.go.backupext = backup
