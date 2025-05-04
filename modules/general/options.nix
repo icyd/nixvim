@@ -52,7 +52,7 @@
     smartcase = true;
     splitbelow = true;
     splitright = true;
-    # shell = "nu";
+    shell = "nu";
     softtabstop = indent;
     termguicolors = true;
     undofile = true;
