@@ -14,6 +14,15 @@
       hash = "sha256-rwnvX+Sul+bwESZtpqbvaDJuk49SV9tLUnvgiAH4VMs=";
     };
   };
+  age-secret = pkgs.vimUtils.buildVimPlugin {
+    name = "age-secret";
+    src = pkgs.fetchFromGitHub {
+      owner = "histrio";
+      repo = "/age-secret.nvim";
+      rev = "9be5fbdac534422dc7d03eccb9d5af96f242e16f";
+      hash = "sha256-3RMSaUfZyMq9aNwBrdVIP4Mh80HwIcO7I+YhFOw+NU8=";
+    };
+  };
   keymapsCzr = builtins.map mkKeyMap (lib.optionals config.plugins.colorizer.enable [
     {
       action.__raw = ''
@@ -128,6 +137,7 @@
   ]);
 in {
   extraPlugins = with pkgs.vimPlugins; [
+    age-secret
     dial-nvim
     maximize-nvim
     mini-icons
@@ -138,6 +148,7 @@ in {
   ];
   extraConfigLua = ''
     require("Navigator").setup()
+    require("age_secret").setup()
   '';
   globals = {
     GPGPreferArmor = 1;
@@ -324,22 +335,20 @@ in {
       };
       keymapsSilent = true;
     };
-    toggleterm = let
-      map = ''[[<C-\>]]'';
-    in {
+    toggleterm = {
       enable = true;
       lazyLoad.settings = {
-        cmd = "ToggleTerm";
-        keys = [
-          {
-            __unkeyed-1 = map;
-            __unkeyed-2 = "<cmd>ToggleTerm<CR>";
-            desc = "ToggleTerm";
-          }
+        keys = keymap2Lazy [
+          (mkKeyMap {
+            action = "<cmd>ToggleTerm<CR>";
+            key = ''<C-\>'';
+            mode = "n";
+            options.desc = "ToggleTerm";
+          })
         ];
       };
       settings = {
-        open_mapping = map;
+        open_mapping = "[[<C-\\>]]";
         hide_numbers = true;
       };
     };
