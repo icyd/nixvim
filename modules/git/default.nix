@@ -256,6 +256,7 @@ in {
   ];
   plugins = {
     fugitive.enable = true;
+    lazygit.enable = true;
     gitignore.enable = true;
     gitsigns = {
       enable = true;

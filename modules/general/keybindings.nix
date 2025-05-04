@@ -227,6 +227,12 @@ in {
         options.desc = "Escape terminal with ESC";
       }
       {
+        action = "<C-\\><C-N>";
+        key = "<C-[>";
+        mode = "t";
+        options.desc = "Escape terminal with <C-[>";
+      }
+      {
         action = "<C-\\><C-N><C-w>h";
         key = "<M-h>";
         mode = "t";
