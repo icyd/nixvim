@@ -132,7 +132,26 @@ in {
         };
         html.enable = true;
         lemminx.enable = true;
-        ltex.enable = true;
+        ltex = {
+          enable = true;
+          settings = {
+            additionalRules.languageModel = "~/.local/share/nvim/models/ngrams/";
+            enabled = [
+              "bibtex"
+              "context"
+              "context.tex"
+              "html"
+              "latex"
+              "markdown"
+              "neorg"
+              "norg"
+              "org"
+              "restructuredtext"
+              "rsweave"
+            ];
+            language = "en-GB";
+          };
+        };
         lua_ls.enable = true;
         nixd.enable = true;
         nushell.enable = true;
