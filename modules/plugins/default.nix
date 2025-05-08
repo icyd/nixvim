@@ -5,6 +5,15 @@
   ...
 }: let
   inherit (config.my.mkKey) mkKeyMap keymapUnlazy keymap2Lazy wKeyObj;
+  auto-pandoc = pkgs.vimUtils.buildVimPlugin {
+    name = "auto-pandoc";
+    src = pkgs.fetchFromGitHub {
+      owner = "jghauser";
+      repo = "/auto-pandoc.nvim";
+      rev = "11d007dcab1dd4587bfca175e18b6017ff4ad1dc";
+      hash = "sha256-VZV9xjq6S9M9eSCDE2nV8fv6kJsC4otYJ7ZGuZwpaXw=";
+    };
+  };
   maximize-nvim = pkgs.vimUtils.buildVimPlugin {
     name = "maximize-nvim";
     src = pkgs.fetchFromGitHub {
@@ -135,10 +144,71 @@
       options.desc = "Find projects";
     }
   ]);
+  keymapsUfo = builtins.map mkKeyMap (lib.optionals config.plugins.nvim-ufo.enable [
+    {
+      action.__raw = ''
+        function()
+          require("ufo").openAllFolds()
+        end
+      '';
+      key = "zR";
+      mode = "n";
+      options.desc = "Open all folds";
+    }
+    {
+      action.__raw = ''
+        function()
+          require("ufo").closeAllFolds()
+        end
+      '';
+      key = "zM";
+      mode = "n";
+      options.desc = "Open all folds";
+    }
+    {
+      action.__raw = ''
+        function()
+          require("ufo").openFoldsExceptKinds()
+        end
+      '';
+      key = "zr";
+      mode = "n";
+      options.desc = "Open folds";
+    }
+    {
+      action.__raw = ''
+        function()
+          require("ufo").closeFoldsWith()
+        end
+      '';
+      key = "zm";
+      mode = "n";
+      options.desc = "Close folds";
+    }
+    {
+      action.__raw = ''
+        function()
+          local winid = require("ufo").peekFoldedLinesUnderCursor()
+          if not winid then
+            vim.lsp.buf.hover()
+          end
+        end
+      '';
+      key = "K";
+      mode = "n";
+      options.desc = "Open all folds";
+    }
+  ]);
 in {
+  extraPackages = with pkgs;
+    lib.optionals pkgs.stdenv.isDarwin [
+      pngpaste
+    ];
   extraPlugins = with pkgs.vimPlugins; [
+    auto-pandoc
     age-secret
     dial-nvim
+    img-clip-nvim
     maximize-nvim
     mini-icons
     playground
@@ -163,6 +233,7 @@ in {
       (attrNames (readDir ./.)));
   keymaps =
     keymapsPj
+    ++ keymapsUfo
     ++ [
       {
         action.__raw = ''
@@ -245,6 +316,16 @@ in {
         ];
       }
       {
+        __unkeyed-1 = "img-clip.nvim";
+        after = ''
+          require("img-clip").setup({})
+        '';
+        ft = [
+          "markdown"
+          "norg"
+        ];
+      }
+      {
         __unkeyed-1 = "dial-nvim";
         event = "BufReadPre";
         keys = keymap2Lazy keymapsDial;
@@ -272,6 +353,29 @@ in {
         auto_restore = false;
       };
     };
+    bullets = {
+      enable = true;
+      settings = {
+        checkbox_markers = "✗○◐●✓";
+        custom_mappings = [
+          ["imap" "<CR>" "<Plug>(bullets-newline)"]
+          ["nmap" "o" "<Plug>(bullets-newline)"]
+          ["inoremap" "<C-CR>" "<CR>"]
+          ["nmap" "gN" "<Plug>(bullets-renumber)"]
+          ["vmap" "gN" "<Plug>(bullets-renumber)"]
+          ["nmap" "<leader>xk" "<Plug>(bullets-toggle-checkbox)"]
+          ["imap" "<C-t>" "<Plug>(bullets-demote)"]
+          ["nmap" ">>" "<Plug>(bullets-demote)"]
+          ["vmap" ">" "<Plug>(bullets-demote)"]
+          ["imap" "<C-d>" "<Plug>(bullets-promote)"]
+          ["nmap" "<<" "<Plug>(bullets-promote)"]
+          ["vmap" "<" "<Plug>(bullets-promote)"]
+        ];
+        enable_in_empty_buffers = 0;
+        pad_right = 0;
+        set_mappings = 0;
+      };
+    };
     colorizer = {
       enable = true;
       lazyLoad.settings.keys = keymap2Lazy keymapsCzr;
@@ -282,6 +386,17 @@ in {
     };
     direnv.enable = true;
     helm.enable = true;
+    image = {
+      enable = true;
+      lazyLoad.settings.ft = [
+        "markdown"
+        "norg"
+      ];
+      settings = {
+        backend = "kitty";
+        editor_only_render_when_focused = true;
+      };
+    };
     indent-blankline = {
       enable = true;
       lazyLoad.settings.event = "BufReadPre";
@@ -295,7 +410,15 @@ in {
         priority = 50;
       };
     };
+    markdown-preview = {
+      enable = true;
+      settings.auto_close = 0;
+    };
     nvim-bqf.enable = true;
+    nvim-ufo = {
+      enable = true;
+      lazyLoad.settings.event = "DeferredUIEnter";
+    };
     oil = {
       enable = true;
       lazyLoad.settings = {
@@ -319,6 +442,13 @@ in {
         show_hidden = true;
       };
     };
+    render-markdown = {
+      enable = true;
+      lazyLoad.settings.ft = "markdown";
+      settings = {
+        heading.sign = false;
+      };
+    };
     twilight = {
       enable = true;
       lazyLoad.settings.cmd = "Twilight";
@@ -334,6 +464,21 @@ in {
         bwipeout = "<localleader>Q";
       };
       keymapsSilent = true;
+    };
+    vimwiki = {
+      enable = true;
+      settings = {
+        global_ext = 0;
+        filetypes = ["markdown"];
+        map_prefix = "<leader>W";
+        list = [
+          {
+            path.__raw = ''(os.getenv("VIMWIKI_HOME") or os.getenv("HOME")) .. "/vimwiki"'';
+            syntax = "markdown";
+            ext = ".md";
+          }
+        ];
+      };
     };
     toggleterm = {
       enable = true;
@@ -351,6 +496,16 @@ in {
         open_mapping = "[[<C-\\>]]";
         hide_numbers = true;
       };
+    };
+  };
+  userCommands = {
+    AutoPandoc = {
+      command.__raw = ''
+        function()
+          require("auto-pandoc").run_pandoc()
+        end
+      '';
+      desc = "Run auto Pandoc";
     };
   };
   my.wKeyList = lib.optionals config.plugins.telescope.enable [

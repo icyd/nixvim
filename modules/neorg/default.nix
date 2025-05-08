@@ -32,13 +32,12 @@ in {
         cmd = "Neorg";
         ft = "norg";
       };
-      luaConfig.pre = ''
-        local vimwiki_dir = os.getenv("VIMWIKI_HOME") or os.getenv("HOME") .. "/org"
-      '';
       telescopeIntegration.enable = config.plugins.telescope.enable;
       settings = {
         lazy_loading = true;
-        load = {
+        load = let
+          vimwiki_dir = ''(os.getenv("VIMWIKI_HOME") or os.getenv("HOME"))'';
+        in {
           "core.defaults".__empty = null;
           "core.completion" = lib.mkIf config.plugins.cmp.enable {
             config.engine = "nvim-cmp";
@@ -58,12 +57,12 @@ in {
             config = {
               default_workspace = "notes";
               workspaces = {
-                notes.__raw = ''vimwiki_dir .. "/org"'';
-                work.__raw = ''vimwiki_dir .. "/org/work"'';
+                notes.__raw = ''${vimwiki_dir} .. "/org"'';
+                work.__raw = ''${vimwiki_dir} .. "/org/work"'';
               };
             };
           };
-          "core.journal".config.journal_folder.__raw = ''vimwiki_dir .. "/org/journal"'';
+          "core.journal".config.journal_folder.__raw = ''${vimwiki_dir} .. "/org/journal"'';
         };
       };
     };

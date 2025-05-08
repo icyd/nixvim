@@ -1,4 +1,5 @@
 {
+  lib,
   config,
   pkgs,
   ...
@@ -203,52 +204,59 @@ in {
             ls.lsp_expand(args.body)
           end
         '';
-        sources = [
-          {
-            name = "nvim_lsp";
-            priority = 1000;
-          }
-          {
-            name = "nvim_lsp_signature_help";
-            priority = 1000;
-          }
-          {
-            name = "nvim_lsp_document_symbol";
-            priority = 1000;
-          }
-          {
-            name = "treesitter";
-            priority = 850;
-          }
-          {
-            name = "luasnip";
-            priority = 750;
-          }
-          {
-            name = "buffer";
-            priority = 500;
-          }
-          {
-            name = "spell";
-            priority = 400;
-          }
-          {
-            name = "dictionary";
-            priority = 400;
-          }
-          {
-            name = "path";
-            priority = 300;
-          }
-          {
-            name = "nvim_lua";
-            priority = 300;
-          }
-          {
-            name = "neorg";
-            priority = 300;
-          }
-        ];
+        sources =
+          [
+            {
+              name = "nvim_lsp";
+              priority = 1000;
+            }
+            {
+              name = "nvim_lsp_signature_help";
+              priority = 1000;
+            }
+            {
+              name = "nvim_lsp_document_symbol";
+              priority = 1000;
+            }
+            {
+              name = "treesitter";
+              priority = 850;
+            }
+            {
+              name = "luasnip";
+              priority = 750;
+            }
+            {
+              name = "buffer";
+              priority = 500;
+            }
+            {
+              name = "spell";
+              priority = 400;
+            }
+            {
+              name = "dictionary";
+              priority = 400;
+            }
+            {
+              name = "path";
+              priority = 300;
+            }
+            {
+              name = "nvim_lua";
+              priority = 300;
+            }
+            {
+              name = "neorg";
+              priority = 300;
+            }
+          ]
+          ++ (lib.optionals config.plugins.render-markdown.enable [
+            {
+              name = "render-markdown";
+              priority = 300;
+            }
+          ]);
       };
     };
     cmp-buffer.enable = cfg.enable;

@@ -7,13 +7,13 @@
 }: let
   inherit (config.my.mkKey) mkKeyMap wKeyObj;
 in {
-  extraPlugins = with pkgs;
-    [
-      helm-ls
-    ]
-    ++ (with pkgs.vimPlugins; [
-      haskell-tools-nvim
-    ]);
+  extraPackages = with pkgs; [
+    cargo-nextest
+    #   helm-ls
+  ];
+  extraPlugins = with pkgs.vimPlugins; [
+    haskell-tools-nvim
+  ];
   globals = {
     haskell_tools.tools.repl.handler = lib.mkIf config.plugins.toggleterm.enable "toggleterm";
   };
@@ -125,34 +125,24 @@ in {
           extraOptions.settings = helpers.mkRaw ''            {
                         ["helm-ls"] = {
                           yamlls = {
-                            path = "yaml-language-server"
+                            enabled = false,
+                            path = "${lib.getExe pkgs.yaml-language-server}",
                           }
                         }
                       }'';
         };
         html.enable = true;
         lemminx.enable = true;
-        ltex = {
+        ltex_plus = {
           enable = true;
-          settings = {
+          package = pkgs.ltex-ls-plus;
+          extraOptions.settings = {
             additionalRules.languageModel = "~/.local/share/nvim/models/ngrams/";
-            enabled = [
-              "bibtex"
-              "context"
-              "context.tex"
-              "html"
-              "latex"
-              "markdown"
-              "neorg"
-              "norg"
-              "org"
-              "restructuredtext"
-              "rsweave"
-            ];
-            language = "en-GB";
+            language = "en";
           };
         };
         lua_ls.enable = true;
+        marksman.enable = true;
         nixd.enable = true;
         nushell.enable = true;
         pylsp.enable = true;
