@@ -214,6 +214,7 @@ in {
     playground
     vim-gnupg
     vim-indent-object
+    vim-table-mode
     Navigator-nvim
   ];
   extraConfigLua = ''
