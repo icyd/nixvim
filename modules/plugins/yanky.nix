@@ -33,73 +33,61 @@
     {
       action = "<Plug>(YankyPreviousEntry)";
       key = "<C-p>";
-      mode = "n";
       options.desc = "Select previous entry in yanky ring";
     }
     {
       action = "<Plug>(YankyNextEntry)";
       key = "<C-n>";
-      mode = "n";
       options.desc = "Select next entry in yanky ring";
     }
     {
       action = "<Plug>(YankyPutIndentAfterLinewise)";
       key = "]p";
-      mode = "n";
       options.desc = "Yanky put indented after cursor (linewise)";
     }
     {
       action = "<Plug>(YankyPutIndentBeforeLinewise)";
       key = "[p";
-      mode = "n";
       options.desc = "Yanky put indented before cursor (linewise)";
     }
     {
       action = "<Plug>(YankyPutIndentAfterLinewise)";
       key = "]P";
-      mode = "n";
       options.desc = "Yanky put indented after cursor (linewise)";
     }
     {
       action = "<Plug>(YankyPutIndentBeforeLinewise)";
       key = "[P";
-      mode = "n";
       options.desc = "Yanky put indented before cursor (linewise)";
     }
     {
       action = "<Plug>(YankyPutIndentAfterShiftRight)";
       key = ">p";
-      mode = "n";
       options.desc = "Yanky put and indent right";
     }
     {
       action = "<Plug>(YankyPutIndentAfterShiftLeft)";
       key = "<p";
-      mode = "n";
       options.desc = "Yanky put and indent right";
     }
     {
       action = "<Plug>(YankyPutIndentBeforeShiftRight)";
       key = ">P";
-      mode = "n";
       options.desc = "Yanky put before and indent right";
     }
     {
       action = "<Plug>(YankyPutIndentBeforeShiftLeft)";
       key = "<P";
-      mode = "n";
       options.desc = "Yanky put before and indent right";
     }
     {
       action = "<Plug>(YankyPutAfterFilter)";
       key = "=p";
-      mode = "n";
       options.desc = "Yanky put and indent";
     }
     {
       action = "<Plug>(YankyPutBeforeFilter)";
       key = "=P";
-      mode = "n";
       options.desc = "Yanky put before and indent";
     }
   ]);

@@ -6,7 +6,7 @@
   autoCmd = lib.optionals config.plugins.firenvim.enable [
     {
       event = "UIEnter";
-      callback.__raw = ''
+      callback = lib.nixvim.utils.mkRaw ''
         function(event)
             local client = vim.api.nvim_get_chan_info(vim.v.event.chan).client
             if client ~= nil and client.name == "Firenvim" then

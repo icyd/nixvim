@@ -6,6 +6,7 @@
   ...
 }: let
   inherit (config.my.mkKey) mkKeyMap wKeyObj;
+  inherit (lib.nixvim.utils) mkRaw;
 in {
   extraPackages = with pkgs; [
     cargo-nextest
@@ -21,17 +22,15 @@ in {
     {
       action = "<cmd>Navbuddy<CR>";
       key = "<leader>xn";
-      mode = "n";
       options.desc = "Navbuddy toggle";
     }
     {
-      action.__raw = ''
+      action = mkRaw ''
         function()
           require("otter").activate()
         end
       '';
       key = "<leader>lO";
-      mode = "n";
       options.desc = "Activate Otter";
     }
   ];
@@ -44,46 +43,41 @@ in {
       keymaps = {
         extra = [
           {
-            action.__raw = ''
+            action = mkRaw ''
               function()
                 vim.lsp.diagnostic.jump({ count = -1 })
               end
             '';
             key = "[d";
-            mode = "n";
             options.desc = "Lsp diagnostic goto previous";
           }
           {
-            action.__raw = ''
+            action = mkRaw ''
               function()
                 vim.lsp.diagnostic.jump({ count = 1 })
               end
             '';
             key = "]d";
-            mode = "n";
             options.desc = "Lsp diagnostic goto next";
           }
           {
-            action.__raw = "rename";
+            action = mkRaw "rename";
             key = "<leader>lr";
-            mode = "n";
             options.desc = "Lsp buf rename";
             options.expr = true;
           }
           {
             action = "<cmd>LspRestart<CR>";
             key = "<leader>lR";
-            mode = "n";
             options.desc = "Lsp restart";
           }
           {
-            action.__raw = ''
+            action = mkRaw ''
               function()
                 vim.lsp.buf.format({ async = true })
               end
             '';
             key = "<leader>lF";
-            mode = "n";
             options.desc = "Lsp buf async format";
           }
         ];

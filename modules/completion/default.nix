@@ -19,7 +19,7 @@ in {
       cmdline = let
         base_cfg = {
           completion.autocomplete = false;
-          mapping.__raw = ''cmp.mapping.preset.cmdline()'';
+          mapping = lib.nixvim.utils.mkRaw ''cmp.mapping.preset.cmdline()'';
         };
       in {
         ":" =

@@ -3,7 +3,26 @@
   pkgs,
   helpers,
   ...
-}: {
+}: let
+  inherit (lib.nixvim.utils) mkRaw;
+in {
+  extraPackages = with pkgs; [
+    alejandra
+    black
+    clang-tools
+    go
+    gotools
+    haskellPackages.fourmolu
+    isort
+    jq
+    texlivePackages.latexindent
+    stylua
+    rustfmt
+    shellcheck
+    opentofu
+    terragrunt
+    codespell
+  ];
   plugins = {
     conform-nvim = {
       enable = true;
@@ -13,7 +32,7 @@
       };
       settings = {
         default_format_opts.lsp_format = "fallback";
-        format_on_save.__raw = ''
+        format_on_save = mkRaw ''
           function(bufnr)
             if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
               return
@@ -99,7 +118,7 @@
     };
     FormatDisable = {
       bang = true;
-      command.__raw = ''
+      command = mkRaw ''
         function(args)
           if args.bang then
             vim.b.disable_autoformat = true
@@ -113,7 +132,7 @@
     };
     FormatEnable = {
       bang = true;
-      command.__raw = ''
+      command = mkRaw ''
         function(args)
           if args.bang then
             vim.b.disable_autoformat = false
@@ -127,7 +146,7 @@
     };
     FormatToggle = {
       bang = true;
-      command.__raw = ''
+      command = mkRaw ''
         function(args)
           if args.bang then
             vim.b.disable_autoformat = not vim.b.disable_autoformat

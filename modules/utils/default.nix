@@ -33,18 +33,18 @@
       key,
       action,
       options,
-    }: {
-      inherit mode;
-      __unkeyed-1 = key;
-      __unkeyed-2 = action;
-      desc = lib.mkIf (lib.hasAttr "desc" options) options.desc;
-    };
+    }:
+      (lib.nixvim.utils.listToUnkeyedAttrs [key action])
+      // {
+        inherit mode;
+        desc = lib.mkIf (lib.hasAttr "desc" options) options.desc;
+      };
     keymapUnlazy = list: lib.optionals (!config.plugins.lz-n.enable) list;
     keymap2Lazy = list: lib.optionals config.plugins.lz-n.enable (builtins.map lazyKeyMap list);
     wKeyObj = with builtins;
       list:
-        {
-          __unkeyed = elemAt list 0;
+        (lib.nixvim.utils.listToUnkeyedAttrs [(elemAt list 0)])
+        // {
           icon = elemAt list 1;
           group = elemAt list 2;
         }

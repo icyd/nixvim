@@ -4,10 +4,11 @@
   ...
 }: let
   inherit (config.my.mkKey) wKeyObj;
+  inherit (lib.nixvim.utils) mkRaw;
 in {
   keymaps = lib.mkIf config.plugins.telescope.enable [
     {
-      action.__raw = ''
+      action = mkRaw ''
         function()
           require("telescope.builtin").buffers({
               show_all_buffers = true,
@@ -18,11 +19,10 @@ in {
         end
       '';
       key = "<leader>b";
-      mode = "n";
       options.desc = "Buffers";
     }
     {
-      action.__raw = ''
+      action = mkRaw ''
         function()
           require("telescope.builtin").find_files({
               cwd = string.gsub(vim.fn.expand("%:p:h"), "oil://", ""),
@@ -30,11 +30,10 @@ in {
         end
       '';
       key = "<leader>fl";
-      mode = "n";
       options.desc = "Find files relative to current file";
     }
     {
-      action.__raw = ''
+      action = mkRaw ''
         function()
           require('telescope.builtin').find_files({
               prompt_title = "< Dotfiles >",
@@ -44,11 +43,10 @@ in {
         end
       '';
       key = "<leader>fv";
-      mode = "n";
       options.desc = "Find files relative to current file";
     }
     {
-      action.__raw = ''
+      action = mkRaw ''
         function()
           local orgmode_dir = os.getenv('ORGMODE_HOME')
           require('telescope.builtin').find_files({
@@ -58,27 +56,24 @@ in {
         end
       '';
       key = "<localleader>fn";
-      mode = "n";
       options.desc = "Find files relative to current file";
     }
     {
-      action.__raw = ''
+      action = mkRaw ''
         function()
                 require("telescope.builtin").grep_string({ search = vim.fn.input("Grep for: ") })
         end
       '';
       key = "<leader>fS";
-      mode = "n";
       options.desc = "Grep string";
     }
     {
-      action.__raw = ''
+      action = mkRaw ''
         function()
           require("telescope.builtin").grep_string({ search = vim.fn.expand([[<cword>]]) })
         end
       '';
       key = "<leader>fs";
-      mode = "n";
       options.desc = "Grep current string";
     }
   ];

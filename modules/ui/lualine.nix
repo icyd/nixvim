@@ -12,9 +12,9 @@
             return vim.t.maximized and "   " or ""
         end
       '';
-      settings = {
+      settings = with lib.nixvim.utils; {
         sections = {
-          lualine_x.__raw = ''
+          lualine_x = mkRaw ''
             {
               "encoding",
               "fileformat",
@@ -24,23 +24,17 @@
           '';
         };
         winbar = {
-          lualine_b = [
-            {
-              __unkeyed-0 = "diagnostics";
-            }
-          ];
+          lualine_b = [(listToUnkeyedAttrs ["diagnostics"])];
           lualine_c = lib.mkIf config.plugins.navic.enable [
-            {
-              __unkeyed-0 = "navic";
-            }
+            (listToUnkeyedAttrs ["navic"])
           ];
           lualine_x = [
-            {
-              __unkeyed-0 = "filename";
-              file_status = true;
-              newfile_status = true;
-              path = 3;
-            }
+            ((listToUnkeyedAttrs ["filename"])
+              // {
+                file_status = true;
+                newfile_status = true;
+                path = 3;
+              })
           ];
         };
       };

@@ -1,4 +1,4 @@
-{
+{lib, ...}: {
   autoGroups = {
     auto_create_dir.clear = true;
     auto_spell.clear = true;
@@ -6,7 +6,7 @@
     gitcommit.clear = true;
     term_conf.clear = true;
   };
-  autoCmd = [
+  autoCmd = with lib.nixvim.utils; [
     {
       command = "setlocal noundofile";
       desc = "Disable undofile for tmp files";
@@ -73,34 +73,30 @@
       pattern = "*";
     }
     {
-      callback = {
-        __raw = ''
-          function(event)
-              if string.match(event.match, "^oil:.*") or string.match(event.match, "^fugitive:.*") then
-                return
-              end
-              local file = vim.loop.fs_realpath(event.match) or event.match
-              local dir = vim.fn.fnamemodify(file, ":p:h")
-              vim.fn.mkdir(dir, "p")
-              local backup = vim.fn.fnamemodify(file, ":p:~:h")
-              backup = backup:gsub("[/\\]", "%%")
-              vim.go.backupext = backup
-          end
-        '';
-      };
+      callback = mkRaw ''
+        function(event)
+            if string.match(event.match, "^oil:.*") or string.match(event.match, "^fugitive:.*") then
+              return
+            end
+            local file = vim.loop.fs_realpath(event.match) or event.match
+            local dir = vim.fn.fnamemodify(file, ":p:h")
+            vim.fn.mkdir(dir, "p")
+            local backup = vim.fn.fnamemodify(file, ":p:~:h")
+            backup = backup:gsub("[/\\]", "%%")
+            vim.go.backupext = backup
+        end
+      '';
       desc = "Create directory if needed when saving a file";
       event = "BufWritePre";
       group = "auto_create_dir";
     }
     {
-      callback = {
-        __raw = ''
-          function()
-            vim.wo.spell = false
-            vim.wo.conceallevel = 0
-          end
-        '';
-      };
+      callback = mkRaw ''
+        function()
+          vim.wo.spell = false
+          vim.wo.conceallevel = 0
+        end
+      '';
       desc = "Set config for json files";
       event = "FileType";
       pattern = "json";

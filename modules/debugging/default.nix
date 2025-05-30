@@ -7,172 +7,154 @@
 }: let
   cfg = config.plugins.dap;
   inherit (config.my.mkKey) mkKeyMap keymap2Lazy wKeyObj;
+  inherit (lib.nixvim.utils) mkRaw;
   lazyLoadTrigDAP = helpers.mkRaw ''
     require("lz.n").trigger_load("nvim-dap")
   '';
   keymapDAPUI = lib.optionals config.plugins.dap-ui.enable [
     {
-      action.__raw = ''
+      action = mkRaw ''
         function()
           require("dapui").toggle()
         end
       '';
       key = "<leader>du";
-      mode = "n";
       options.desc = "Toggle UI";
     }
   ];
   keymaps = builtins.map mkKeyMap (lib.optionals cfg.enable [
       {
-        action.__raw = ''
+        action = mkRaw ''
           function()
             require("dap").set_breakpoint(vim.fn.input("[Breakpoint condition] > "))
           end
         '';
         key = "<leader>dB";
-        mode = "n";
         options.desc = "Breakpoint condition";
       }
       {
         action = "<cmd>DapToggleBreakpoint<CR>";
         key = "<leader>db";
-        mode = "n";
         options.desc = "Toggle breakpoint";
       }
       {
         action = "<cmd>DapContinue<CR>";
         key = "<leader>dc";
-        mode = "n";
         options.desc = "Continue";
       }
       {
-        action.__raw = ''
+        action = mkRaw ''
           function()
             require("dap").run_to_cursor()
           end
         '';
         key = "<leader>dC";
-        mode = "n";
         options.desc = "Run to cursor";
       }
       {
-        action.__raw = ''
+        action = mkRaw ''
           function()
             require("dap").goto_()
           end
         '';
         key = "<leader>dg";
-        mode = "n";
         options.desc = "Go to line (no execute)";
       }
       {
         action = "<cmd>DapStepInto<CR>";
         key = "<leader>di";
-        mode = "n";
         options.desc = "Step into";
       }
       {
         action = "<cmd>DapStepOut<CR>";
         key = "<leader>do";
-        mode = "n";
         options.desc = "Step out";
       }
       {
         action = "<cmd>DapStepOver<CR>";
         key = "<leader>dO";
-        mode = "n";
         options.desc = "Step over";
       }
       {
-        action.__raw = ''
+        action = mkRaw ''
           function()
             require("dap").up()
           end
         '';
         key = "<leader>dk";
-        mode = "n";
         options.desc = "Go up";
       }
       {
-        action.__raw = ''
+        action = mkRaw ''
           function()
             require("dap").down()
           end
         '';
         key = "<leader>dj";
-        mode = "n";
         options.desc = "Go down";
       }
       {
-        action.__raw = ''
+        action = mkRaw ''
           function()
             require("dap").run_last()
           end
         '';
         key = "<leader>dl";
-        mode = "n";
         options.desc = "Re-run last";
       }
       {
-        action.__raw = ''
+        action = mkRaw ''
           function()
             require("dap").pause()
           end
         '';
         key = "<leader>dp";
-        mode = "n";
         options.desc = "Pause";
       }
       {
         action = "<cmd>DapTerminate<CR>";
         key = "<leader>dq";
-        mode = "n";
         options.desc = "Terminate";
       }
       {
-        action.__raw = ''
+        action = mkRaw ''
           function()
             require("dap").session()
           end
         '';
         key = "<leader>ds";
-        mode = "n";
         options.desc = "Session";
       }
       {
         action = "<cmd>DapToggleRepl<CR>";
         key = "<leader>dr";
-        mode = "n";
         options.desc = "Toggle REPL";
       }
       {
-        action.__raw = ''
+        action = mkRaw ''
           function()
             require("dapui").eval()
           end
         '';
         key = "<leader>de";
-        mode = "n";
         options.desc = "Eval";
       }
       {
-        action.__raw = ''
+        action = mkRaw ''
           function()
             require("dapui").eval(vim.fn.input("[Expression] > "))
           end
         '';
         key = "<leader>dE";
-        mode = "n";
         options.desc = "Eval expression";
       }
       {
-        action.__raw = ''
+        action = mkRaw ''
           function()
             require("dap.ui.widgets").hover()
           end
         '';
         key = "<leader>dw";
-        mode = "n";
         options.desc = "Widgets";
       }
     ]
@@ -222,7 +204,7 @@ in {
         };
       };
       configurations = let
-        program.__raw = ''
+        program = mkRaw ''
           function()
             return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
           end
@@ -253,7 +235,7 @@ in {
           name = "Launch (Haskell)";
           workspace = "\${workspaceFolder}";
           stopOnEntry = true;
-          logFile.__raw = ''
+          logFile = mkRaw ''
             vim.fn.stdpath("data") .. "/haskell-dap.log"
           '';
           logLevel = "WARNING";

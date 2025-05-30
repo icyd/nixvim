@@ -36,7 +36,7 @@ in {
     compiler = {
       enable = true;
       lazyLoad.settings = {
-        before.__raw = ''
+        before = lib.nixvim.utils.mkRaw ''
           function()
             require("lz.n").trigger_load("overseer.nvim")
           end

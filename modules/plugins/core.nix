@@ -5,8 +5,9 @@
   ...
 }: let
   inherit (config.my.mkKey) mkKeyMap keymapUnlazy keymap2Lazy;
+  inherit (lib.nixvim.utils) mkRaw;
   age-nvim = pkgs.vimUtils.buildVimPlugin {
-    name = "maximize-nvim";
+    name = "age-nvim";
     src = pkgs.fetchFromGitHub {
       owner = "KingMichaelPark";
       repo = "/age.nvim";
@@ -16,7 +17,7 @@
   };
   keymapsFsh = builtins.map mkKeyMap (lib.optionals config.plugins.flash.enable [
       {
-        action.__raw = ''
+        action = mkRaw ''
           function()
             require("flash").jump()
           end
@@ -30,7 +31,7 @@
         options.desc = "Flash";
       }
       {
-        action.__raw = ''
+        action = mkRaw ''
           function()
             require("flash").remote()
           end
@@ -40,7 +41,7 @@
         options.desc = "Remote Flash";
       }
       {
-        action.__raw = ''
+        action = mkRaw ''
           function()
             require("flash").toggle()
           end
@@ -50,7 +51,7 @@
         options.desc = "Toggle Flash Search";
       }
       {
-        action.__raw = ''
+        action = mkRaw ''
           function()
             require("flash").jump({
               search = { mode = "search", max_length = 0 },
@@ -66,7 +67,7 @@
     ]
     ++ (lib.optionals config.plugins.treesitter.enable [
       {
-        action.__raw = ''
+        action = mkRaw ''
           function()
             require("flash").treesitter()
           end
@@ -80,7 +81,7 @@
         options.desc = "Flash Tressiter";
       }
       {
-        action.__raw = ''
+        action = mkRaw ''
           function()
             require("flash").treesitter_search()
           end

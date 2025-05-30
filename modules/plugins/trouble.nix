@@ -4,10 +4,10 @@
   ...
 }: let
   inherit (config.my.mkKey) mkKeyMap keymapUnlazy keymap2Lazy wKeyObj;
+  inherit (lib.nixvim.utils) mkRaw;
   cfg = config.plugins.trouble;
   keymaps = builtins.map mkKeyMap (lib.optionals cfg.enable [
     {
-      mode = "n";
       key = "<leader>xx";
       action = "<cmd>Trouble diagnostics toggle<cr>";
       options = {
@@ -15,7 +15,6 @@
       };
     }
     {
-      mode = "n";
       key = "<leader>xX";
       action = "<cmd>Trouble diagnostics toggle filter.buf=0<cr>";
       options = {
@@ -23,7 +22,6 @@
       };
     }
     {
-      mode = "n";
       key = "<leader>xs";
       action = "<cmd>Trouble symbols toggle focus=false<cr>";
       options = {
@@ -31,7 +29,6 @@
       };
     }
     {
-      mode = "n";
       key = "<leader>xl";
       action = "<cmd>Trouble lsp toggle focus=false win.position=right<cr>";
       options = {
@@ -39,7 +36,6 @@
       };
     }
     {
-      mode = "n";
       key = "<leader>xL";
       action = "<cmd>Trouble loclist toggle<cr>";
       options = {
@@ -47,7 +43,6 @@
       };
     }
     {
-      mode = "n";
       key = "<leader>xQ";
       action = "<cmd>Trouble qflist toggle<cr>";
       options = {
@@ -55,43 +50,39 @@
       };
     }
     {
-      action.__raw = ''
+      action = mkRaw ''
         function()
           require("trouble").first({ skip_groups = true, jump = true})
         end
       '';
       key = "[X";
-      mode = "n";
       options.desc = "Trouble go to first";
     }
     {
-      action.__raw = ''
+      action = mkRaw ''
         function()
           require("trouble").previous({ skip_groups = true, jump = true})
         end
       '';
       key = "[x";
-      mode = "n";
       options.desc = "Trouble go to previous";
     }
     {
-      action.__raw = ''
+      action = mkRaw ''
         function()
           require("trouble").next({ skip_groups = true, jump = true})
         end
       '';
       key = "]x";
-      mode = "n";
       options.desc = "Trouble go to next";
     }
     {
-      action.__raw = ''
+      action = mkRaw ''
         function()
           require("trouble").last({ skip_groups = true, jump = true})
         end
       '';
       key = "]X";
-      mode = "n";
       options.desc = "Trouble go to last";
     }
   ]);

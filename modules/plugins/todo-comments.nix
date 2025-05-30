@@ -12,7 +12,7 @@ in {
     todo-comments = {
       enable = true;
       lazyLoad.settings = {
-        before.__raw = ''
+        before = lib.nixvim.utils.mkRaw ''
           function()
             ${TelescopeLoad}
             ${TroubleLoad}

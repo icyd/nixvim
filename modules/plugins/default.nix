@@ -5,15 +5,7 @@
   ...
 }: let
   inherit (config.my.mkKey) mkKeyMap keymapUnlazy keymap2Lazy wKeyObj;
-  auto-pandoc = pkgs.vimUtils.buildVimPlugin {
-    name = "auto-pandoc";
-    src = pkgs.fetchFromGitHub {
-      owner = "jghauser";
-      repo = "/auto-pandoc.nvim";
-      rev = "11d007dcab1dd4587bfca175e18b6017ff4ad1dc";
-      hash = "sha256-VZV9xjq6S9M9eSCDE2nV8fv6kJsC4otYJ7ZGuZwpaXw=";
-    };
-  };
+  inherit (lib.nixvim.utils) mkRaw;
   maximize-nvim = pkgs.vimUtils.buildVimPlugin {
     name = "maximize-nvim";
     src = pkgs.fetchFromGitHub {
@@ -34,7 +26,7 @@
   };
   keymapsCzr = builtins.map mkKeyMap (lib.optionals config.plugins.colorizer.enable [
     {
-      action.__raw = ''
+      action = mkRaw ''
         function()
           vim.g.colorizing_enabled = not vim.g.colorizing_enabled
           vim.cmd('ColorizerToggle')
@@ -42,84 +34,80 @@
         end
       '';
       key = "<leader>uC";
-      mode = "n";
-      options.desc = "Colorizer toggle";
-      options.silent = true;
+      options = {
+        desc = "Colorizer toggle";
+        options.silent = true;
+      };
     }
   ]);
   keymapsOil = builtins.map mkKeyMap (lib.optionals config.plugins.oil.enable [
     {
       action = "<cmd>Oil<CR>";
       key = "<leader>o";
-      mode = "n";
       options.desc = "Open Oil file browser";
     }
   ]);
   keymapsMax = builtins.map mkKeyMap [
     {
-      action.__raw = ''
+      action = mkRaw ''
         function()
           require("maximize").toggle()
         end
       '';
       key = "<leader>z";
-      mode = "n";
       options.desc = "Maximize windows";
     }
   ];
   keymapsDial = [
     {
-      action.__raw = ''
+      action = mkRaw ''
         function()
           require("dial.map").inc_normal()
         end
       '';
       key = "<M-a>";
-      mode = "n";
-      options.desc = "Increment number";
-      options.expr = true;
+      options = {
+        desc = "Increment number";
+        expr = true;
+      };
     }
     {
-      action.__raw = ''
+      action = mkRaw ''
         function()
           require("dial.map").dec_normal()
         end
       '';
       key = "<M-x>";
-      mode = "n";
-      options.desc = "Decrement number";
-      options.expr = true;
+      options = {
+        desc = "Decrement number";
+        expr = true;
+      };
     }
   ];
   keymapsAS = builtins.map mkKeyMap (lib.optionals config.plugins.auto-session.enable [
     {
       action = "<cmd>SessionRestore<CR>";
       key = "<leader>q.";
-      mode = "n";
       options.desc = "Restore last session";
     }
     {
       action = "<cmd>Autosession search<CR>";
       key = "<leader>qs";
-      mode = "n";
       options.desc = "List session";
     }
     {
       action = "<cmd>Autosession delete<CR>";
       key = "<leader>qd";
-      mode = "n";
       options.desc = "Delete session";
     }
     {
       action = "<cmd>SessionSave<CR>";
       key = "<leader>qs";
-      mode = "n";
       options.desc = "Save session";
     }
     {
       action = "<cmd>SessionPurgeOrphaned<CR>";
       key = "<leader>qD";
-      mode = "n";
       options.desc = "Purge orphaned sessions";
     }
   ]);
@@ -127,7 +115,6 @@
     {
       action = "yy<Plug>(comment_toggle_linewise_current)p";
       key = "<localleader>cc";
-      mode = "n";
       options.desc = "Duplicate and comment line";
     }
     {
@@ -207,8 +194,6 @@ in {
   extraPlugins = with pkgs.vimPlugins; [
     auto-pandoc
     age-secret
-    dial-nvim
-    img-clip-nvim
     maximize-nvim
     mini-icons
     playground
@@ -237,43 +222,39 @@ in {
     ++ keymapsUfo
     ++ [
       {
-        action.__raw = ''
+        action = mkRaw ''
           function()
             require("Navigator").left()
           end
         '';
         key = "<M-h>";
-        mode = "n";
         options.desc = "Move to left window";
       }
       {
-        action.__raw = ''
+        action = mkRaw ''
           function()
             require("Navigator").down()
           end
         '';
         key = "<M-j>";
-        mode = "n";
         options.desc = "Move to down window";
       }
       {
-        action.__raw = ''
+        action = mkRaw ''
           function()
             require("Navigator").up()
           end
         '';
         key = "<M-k>";
-        mode = "n";
         options.desc = "Move to up window";
       }
       {
-        action.__raw = ''
+        action = mkRaw ''
           function()
             require("Navigator").right()
           end
         '';
         key = "<M-l>";
-        mode = "n";
         options.desc = "Move to right window";
       }
     ]
@@ -288,7 +269,6 @@ in {
         {
           action = "<cmd>UndotreeToggle<CR>";
           key = "<leader>U";
-          mode = "n";
           options.desc = "Toggle Undotree";
         }
       ]
@@ -297,6 +277,7 @@ in {
     lz-n.plugins = [
       {
         __unkeyed-1 = "maximize-nvim";
+        enabled = true;
         after = ''
           function()
             require("maximize").setup({})
@@ -315,35 +296,6 @@ in {
           "asc"
           "pgp"
         ];
-      }
-      {
-        __unkeyed-1 = "img-clip.nvim";
-        after = ''
-          require("img-clip").setup({})
-        '';
-        ft = [
-          "markdown"
-          "norg"
-        ];
-      }
-      {
-        __unkeyed-1 = "dial-nvim";
-        event = "BufReadPre";
-        keys = keymap2Lazy keymapsDial;
-        after = ''
-          function()
-            local augend = require('dial.augend')
-            require('dial.config').augends:register_group({
-              default = {
-                augend.integer.alias.decimal,
-                augend.integer.alias.hex,
-                augend.date.alias['%Y/%m/%d'],
-                augend.constant.alias.bool,
-                augend.semver.alias.semver,
-              },
-            })
-          end
-        '';
       }
     ];
     auto-session = {
@@ -384,6 +336,22 @@ in {
         mode = "virtualtext";
         names = false;
       };
+    };
+    dial = {
+      enable = true;
+      lazyLoad.settings.keys = keymap2Lazy keymapsDial;
+      luaConfig.content = ''
+        local augend = require('dial.augend')
+        require('dial.config').augends:register_group({
+          default = {
+            augend.integer.alias.decimal,
+            augend.integer.alias.hex,
+            augend.date.alias['%Y/%m/%d'],
+            augend.constant.alias.bool,
+            augend.semver.alias.semver,
+          },
+        })
+      '';
     };
     direnv.enable = true;
     helm.enable = true;
@@ -433,7 +401,7 @@ in {
       lazyLoad.settings = {
         # keys = keymap2Lazy keymapsPj;
         event = "DeferredUIEnter";
-        before.__raw = ''
+        before = mkRaw ''
           require("lz.n").trigger_load("telescope")
         '';
       };
@@ -488,7 +456,6 @@ in {
           (mkKeyMap {
             action = "<cmd>ToggleTerm<CR>";
             key = ''<C-\>'';
-            mode = "n";
             options.desc = "ToggleTerm";
           })
         ];
