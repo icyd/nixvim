@@ -6,15 +6,6 @@
 }: let
   inherit (config.my.mkKey) mkKeyMap keymapUnlazy keymap2Lazy wKeyObj;
   inherit (lib.nixvim.utils) mkRaw;
-  maximize-nvim = pkgs.vimUtils.buildVimPlugin {
-    name = "maximize-nvim";
-    src = pkgs.fetchFromGitHub {
-      owner = "declancm";
-      repo = "/maximize.nvim";
-      rev = "d688b66344b03ee6e5a32a0a40af85d174490af8";
-      hash = "sha256-rwnvX+Sul+bwESZtpqbvaDJuk49SV9tLUnvgiAH4VMs=";
-    };
-  };
   age-secret = pkgs.vimUtils.buildVimPlugin {
     name = "age-secret";
     src = pkgs.fetchFromGitHub {
@@ -22,6 +13,24 @@
       repo = "/age-secret.nvim";
       rev = "9be5fbdac534422dc7d03eccb9d5af96f242e16f";
       hash = "sha256-3RMSaUfZyMq9aNwBrdVIP4Mh80HwIcO7I+YhFOw+NU8=";
+    };
+  };
+  auto-pandoc = pkgs.vimUtils.buildVimPlugin {
+    name = "auto-pandoc";
+    src = pkgs.fetchFromGitHub {
+      owner = "jghauser";
+      repo = "/auto-pandoc.nvim";
+      rev = "11d007dcab1dd4587bfca175e18b6017ff4ad1dc";
+      hash = "sha256-VZV9xjq6S9M9eSCDE2nV8fv6kJsC4otYJ7ZGuZwpaXw=";
+    };
+  };
+  maximize-nvim = pkgs.vimUtils.buildVimPlugin {
+    name = "maximize-nvim";
+    src = pkgs.fetchFromGitHub {
+      owner = "declancm";
+      repo = "/maximize.nvim";
+      rev = "d688b66344b03ee6e5a32a0a40af85d174490af8";
+      hash = "sha256-rwnvX+Sul+bwESZtpqbvaDJuk49SV9tLUnvgiAH4VMs=";
     };
   };
   keymapsCzr = builtins.map mkKeyMap (lib.optionals config.plugins.colorizer.enable [
