@@ -451,7 +451,7 @@ in {
         map_prefix = "<leader>W";
         list = [
           {
-            path.__raw = ''(os.getenv("VIMWIKI_HOME") or os.getenv("HOME")) .. "/vimwiki"'';
+            path = mkRaw ''(os.getenv("VIMWIKI_HOME") or os.getenv("HOME")) .. "/vimwiki"'';
             syntax = "markdown";
             ext = ".md";
           }

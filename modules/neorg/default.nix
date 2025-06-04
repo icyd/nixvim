@@ -32,6 +32,9 @@ in {
         cmd = "Neorg";
         ft = "norg";
       };
+      luaConfig.pre = ''
+        norg_dir = (os.getenv("ORGMODE_DIR") or os.getenv("HOME")) .. "/org"
+      '';
       telescopeIntegration.enable = config.plugins.telescope.enable;
       settings = {
         lazy_loading = true;
@@ -55,12 +58,12 @@ in {
             config = {
               default_workspace = "notes";
               workspaces = {
-                notes = mkRaw ''vimwiki_dir .. "/org"'';
-                work = mkRaw ''vimwiki_dir .. "/org/work"'';
+                notes = mkRaw ''norg_dir'';
+                work = mkRaw ''norg_dir .. "/work"'';
               };
             };
           };
-          "core.journal".config.journal_folder = mkRaw ''vimwiki_dir .. "/org/journal"'';
+          "core.journal".config.journal_folder = mkRaw ''norg_dir .. "/journal"'';
         };
       };
     };
