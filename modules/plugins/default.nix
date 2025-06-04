@@ -71,25 +71,93 @@
     {
       action = mkRaw ''
         function()
-          require("dial.map").inc_normal()
+          require("dial.map").manipulate("increment", "normal")
         end
       '';
       key = "<M-a>";
       options = {
         desc = "Increment number";
-        expr = true;
       };
     }
     {
       action = mkRaw ''
         function()
-          require("dial.map").dec_normal()
+          require("dial.map").manipulate("decrement", "normal")
         end
       '';
       key = "<M-x>";
       options = {
         desc = "Decrement number";
-        expr = true;
+      };
+    }
+    {
+      action = mkRaw ''
+        function()
+          require("dial.map").manipulate("increment", "gnormal")
+        end
+      '';
+      key = "g<M-a>";
+      options = {
+        desc = "Increment number";
+      };
+    }
+    {
+      action = mkRaw ''
+        function()
+          require("dial.map").manipulate("decrement", "gnormal")
+        end
+      '';
+      key = "g<M-x>";
+      options = {
+        desc = "Decrement number";
+      };
+    }
+    {
+      action = mkRaw ''
+        function()
+          require("dial.map").manipulate("increment", "visual")
+        end
+      '';
+      key = "<M-a>";
+      mode = "v";
+      options = {
+        desc = "Increment number";
+      };
+    }
+    {
+      action = mkRaw ''
+        function()
+          require("dial.map").manipulate("decrement", "visual")
+        end
+      '';
+      key = "<M-x>";
+      mode = "v";
+      options = {
+        desc = "Decrement number";
+      };
+    }
+    {
+      action = mkRaw ''
+        function()
+          require("dial.map").manipulate("increment", "gvisual")
+        end
+      '';
+      key = "g<M-a>";
+      mode = "v";
+      options = {
+        desc = "Increment number";
+      };
+    }
+    {
+      action = mkRaw ''
+        function()
+          require("dial.map").manipulate("decrement", "gvisual")
+        end
+      '';
+      key = "g<M-x>";
+      mode = "v";
+      options = {
+        desc = "Decrement number";
       };
     }
   ];
