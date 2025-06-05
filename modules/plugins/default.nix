@@ -425,6 +425,11 @@ in {
             augend.integer.alias.hex,
             augend.date.alias['%Y/%m/%d'],
             augend.constant.alias.bool,
+            augend.constant.new{
+              elements = {"enabled", "disabled"},
+              word = true,
+              cyclic = true,
+            },
             augend.semver.alias.semver,
           },
         })
