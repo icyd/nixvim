@@ -6,11 +6,20 @@ on:
   workflow_dispatch:
 jobs:
   tests:
-    runs-on: ubuntu-latest
+    name: Tests on ${{ matrix.arch }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - system: x86_64-linux
+            os: ubuntu-latest
+          - system: aarch64-darwin
+            os: macos-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Check nix flake inputs
+        uses: DeterminateSystems/flake-checker-action@v10
       - uses: cachix/install-nix-action@v31
-        with:
-          github_access_token: ${{ secrets.GITHUB_TOKEN }}
-      - run: nix fmt
-      - run: nix flake check
+      - name: Run flake check
+        run: nix flake check --system ${{ matrix.arch }}

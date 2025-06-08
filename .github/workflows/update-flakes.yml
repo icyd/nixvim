@@ -1,0 +1,20 @@
+---
+name: Update flake inputs
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * 0"
+jobs:
+  lockfile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+      - name: Update flake.lock
+        uses: DeterminateSystems/update-flake-lock@v25
+        with:
+          pr-title: Update nix flake inputs
+          pr-labels: |
+            dependencies
+            automated
+            merge-queue
