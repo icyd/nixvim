@@ -11,11 +11,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - system: x86_64-linux
-            os: ubuntu-latest
-          - system: aarch64-darwin
-            os: macos-latest
+        os:
+          - aarch64-darwin
+          - x86_64-linux
     steps:
       - uses: actions/checkout@v4
       - name: Check nix flake inputs
