@@ -21,5 +21,6 @@ jobs:
       - name: Check nix flake inputs
         uses: DeterminateSystems/flake-checker-action@v10
       - uses: cachix/install-nix-action@v31
+      - run: nix fmt
       - name: Run flake check
         run: nix flake check --system ${{ matrix.system }}

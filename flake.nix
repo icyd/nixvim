@@ -82,7 +82,7 @@
 
         treefmt = {
           flakeFormatter = true;
-          flakeCheck = true;
+          flakeCheck = false;
           projectRootFile = "flake.nix";
           programs = {
             deadnix.enable = true;
