@@ -286,14 +286,14 @@ in {
       };
     };
     dap-ui = {
-      enable = cfg.enable;
+      inherit (cfg) enable;
       lazyLoad.settings = {
         before = lazyLoadTrigDAP;
         keys = keymap2Lazy keymapDAPUI;
       };
     };
     dap-virtual-text = {
-      enable = cfg.enable;
+      inherit (cfg) enable;
       lazyLoad.settings = {
         before = lazyLoadTrigDAP;
         cmd = [

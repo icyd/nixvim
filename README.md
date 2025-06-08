@@ -42,3 +42,8 @@ Provides two package:
 ```bash
   make build && ./result/bin/nixvim-print-init
 ```
+
+## Attributions
+
+- https://github.com/nix-community/nixvim
+- https://github.com/khaneliman/khanelivim

@@ -10,6 +10,8 @@ in {
     nnoremap <expr> "j" v:count ? (v:count > 5 ? "m'" . v:count : "") . "j" : "gj"
     nnoremap "^" "g^"
     nnoremap "$" "g$"
+    nnoremap "C" "\"_C"
+    nnoremap "c" "\"_c"
   '';
   keymaps =
     builtins.map mkKeyMap
@@ -73,16 +75,6 @@ in {
         action = "y$";
         key = "Y";
         options.desc = "Yank whole line";
-      }
-      {
-        action = ''"_c'';
-        key = "c";
-        options.desc = "Change to blackhole";
-      }
-      {
-        action = ''"_C'';
-        key = "C";
-        options.desc = "Change to end of line to blackhole";
       }
       {
         action = ''"_dP'';

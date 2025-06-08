@@ -3,25 +3,37 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixvim.url = "github:nix-community/nixvim";
-    flake-parts.url = "github:hercules-ci/flake-parts";
-    git-hooks-nix.url = "github:cachix/git-hooks.nix";
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs = {
+        flake-parts.follows = "flake-parts";
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
     neovim-nightly-overlay = {
       url = "github:nix-community/neovim-nightly-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    treefmt-nix = {
-      url = "github:numtide/treefmt-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = {
-    nixvim,
-    flake-parts,
-    ...
-  } @ inputs:
-    flake-parts.lib.mkFlake {inherit inputs;} ({self, ...}: {
+  nixConfig = {
+    extra-substituters = [
+      "https://icyd.cachix.org"
+      "https://nix-community.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "icyd.cachix.org-1:gndst9U1QOpne+Ib7Dx5W70MNHJy6bezdPhQHIJhy8I="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
+    allow-import-from-derivation = false;
+  };
+
+  outputs = inputs:
+    inputs.flake-parts.lib.mkFlake {inherit inputs;} ({self, ...}: {
       systems = [
         "x86_64-linux"
         "aarch64-linux"
@@ -30,13 +42,24 @@
       ];
 
       imports = [
-        inputs.git-hooks-nix.flakeModule
-        inputs.treefmt-nix.flakeModule
+        inputs.flake-parts.flakeModules.partitions
         ./modules
       ];
 
+      partitions = {
+        dev = {
+          module = ./dev;
+          extraInputsFlake = ./dev;
+        };
+      };
+
+      partitionedAttrs = {
+        checks = "dev";
+        devShells = "dev";
+        formatter = "dev";
+      };
+
       perSystem = {
-        config,
         pkgs,
         system,
         ...
@@ -49,11 +72,11 @@
           module = {inherit imports;};
         };
         nixvimCheck = attrs: description: let
-          output = nixvim.lib.${system}.check.mkTestDerivationFromNixvimModule attrs;
+          output = inputs.nixvim.lib.${system}.check.mkTestDerivationFromNixvimModule attrs;
         in
           output // {meta = output.meta // {inherit description;};};
         nixvimPkg = attrs: description: let
-          output = nixvim.legacyPackages.${system}.makeNixvimWithModule attrs;
+          output = inputs.nixvim.legacyPackages.${system}.makeNixvimWithModule attrs;
         in
           output // {meta = output.meta // {inherit description;};};
         fullAttrs = [./config/full.nix];
@@ -73,44 +96,6 @@
         packages = {
           nvimin = nixvimPkg (nixvimModule coreAttrs) "Minimal build for fast editing";
           default = nixvimPkg (nixvimModule fullAttrs) "Full utility set";
-        };
-
-        pre-commit = {
-          check.enable = false;
-          settings.hooks.treefmt.enable = true;
-        };
-
-        treefmt = {
-          flakeFormatter = true;
-          flakeCheck = false;
-          projectRootFile = "flake.nix";
-          programs = {
-            deadnix.enable = true;
-            jsonfmt.enable = true;
-            nixfmt = {
-              enable = true;
-              package = pkgs.alejandra;
-            };
-            stylua.enable = true;
-            typos.enable = true;
-          };
-          settings.global.excludes = [
-            ".envrc"
-            "Makefile"
-            "README.md"
-          ];
-        };
-
-        devShells.default = pkgs.mkShell {
-          name = "Development shell";
-          meta.description = "Shell environment for modifying configuration";
-          packages = with pkgs; [
-            nixd
-            gnumake
-          ];
-          shellHook = ''
-            ${config.pre-commit.installationScript}
-          '';
         };
       };
     });
