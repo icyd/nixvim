@@ -5,6 +5,12 @@ in {
     mapleader = " ";
     maplocalleader = "\\";
   };
+  extraConfigVim = ''
+    nnoremap <expr> "k" v:count ? (v:count > 5 ? "m'" . v:count : "") . "k" : "gk"
+    nnoremap <expr> "j" v:count ? (v:count > 5 ? "m'" . v:count : "") . "j" : "gj"
+    nnoremap "^" "g^"
+    nnoremap "$" "g$"
+  '';
   keymaps =
     builtins.map mkKeyMap
     [
@@ -63,30 +69,20 @@ in {
         key = "<leader><Space>";
         options.desc = "Remove search highlight";
       }
-      # {
-      #   action = "g^";
-      #   key = "^";
-      #   options.desc = "Linewrap go to init";
-      # }
-      # {
-      #   action = "g$";
-      #   key = "$";
-      #   options.desc = "Linewrap go to end";
-      # }
-      # {
-      #   action = "gj";
-      #   key = "j";
-      #   options.desc = "Linewrap down";
-      # }
-      # {
-      #   action = "gk";
-      #   key = "k";
-      #   options.desc = "Linewrap up";
-      # }
       {
         action = "y$";
         key = "Y";
         options.desc = "Yank whole line";
+      }
+      {
+        action = ''"_c'';
+        key = "c";
+        options.desc = "Change to blackhole";
+      }
+      {
+        action = ''"_C'';
+        key = "C";
+        options.desc = "Change to end of line to blackhole";
       }
       {
         action = ''"_dP'';
@@ -109,11 +105,21 @@ in {
         key = "N";
         options.desc = "Center on prev match";
       }
-      # {
-      #   action = "mzJ`z";
-      #   key = "J";
-      #   options.desc = "Center when wrapping lines";
-      # }
+      {
+        action = "mzJ`z";
+        key = "J";
+        options.desc = "Center when wrapping lines";
+      }
+      {
+        action = "{zz";
+        key = "{";
+        options.desc = "Center on next match";
+      }
+      {
+        action = "}zz";
+        key = "}";
+        options.desc = "Center on prev match";
+      }
       {
         action = "<cmd>split<CR>";
         key = "<leader>-";
@@ -311,22 +317,22 @@ in {
         key = "<leader>ew";
         options.desc = "Open relative to current file";
       }
-      {
-        action = ''(v:count > 5 ? "m'" . v:count : "") . "k"'';
-        key = "k";
-        options = {
-          expr = true;
-          desc = "Mutate jumplist with more than 5 lines up";
-        };
-      }
-      {
-        action = ''(v:count > 5 ? "m'" . v:count : "") . "j"'';
-        key = "j";
-        options = {
-          expr = true;
-          desc = "Mutate jumplist with more than 5 lines down";
-        };
-      }
+      # {
+      #   action = ''(v:count > 5 ? "m'" . v:count : "") . "k"'';
+      #   key = "k";
+      #   options = {
+      #     expr = true;
+      #     desc = "Mutate jumplist with more than 5 lines up";
+      #   };
+      # }
+      # {
+      #   action = ''v:count ? (v:count > 5 ? "m'" . v:count : "") . "j" : "gj"'';
+      #   key = "j";
+      #   options = {
+      #     expr = true;
+      #     desc = "Mutate jumplist with more than 5 lines down";
+      #   };
+      # }
       {
         action = ''getcmdtype() == ":" ? expand("%:h")."/" : "%%"'';
         key = "%%";

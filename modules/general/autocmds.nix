@@ -113,5 +113,11 @@
       event = "FileType";
       pattern = "ledger";
     }
+    {
+      command = "wincmd =";
+      desc = "Equalize splits on Vim resize";
+      event = "VimResized";
+      pattern = "*";
+    }
   ];
 }

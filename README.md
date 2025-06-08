@@ -1,17 +1,44 @@
-# Nixvim template
+# Nix powered configuration for Neovim
 
-This template gives you a good starting point for configuring nixvim standalone.
+[Neovim](https://neovim.io/) declarative configuration using [Nix](https://nixos.org/),
+and distributed as flake via [Nixvim](https://github.com/nix-community/nixvim).
 
-## Configuring
+Provides two package:
 
-To start configuring, just add or modify the nix files in `./config`.
-If you add a new configuration file, remember to add it to the
-[`config/default.nix`](./config/default.nix) file
+- default: full featured Neovim distribution.
+- nvimin: minimal editor for fast editing.
 
-## Testing your new configuration
+## Adding as Flake input in your nix configuration
 
-To test your configuration simply run the following command
+```nix
+{
+  inputs = {
+    nixvim.url = "github:icyd/nixvim";
+  }
+  outputs = {self, ...}@inputs: let
+    system = "x86_64-linux";
+  in {
+    # nixos
+    environments.systemPackages = [
+      inputs.nixvim.packages.${system}.default
+    ];
+    # home-manager
+    home.packages = [
+      inputs.nixvim.packages.${system}.default
+    ];
+  }
 
+}
 ```
-nix run .
+
+### Testing your new configuration locally
+
+```bash
+  make build && ./result/bin/nvim
+```
+
+### Reviewing Neovim's configuration
+
+```bash
+  make build && ./result/bin/nixvim-print-init
 ```

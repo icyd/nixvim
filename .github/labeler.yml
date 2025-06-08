@@ -1,0 +1,13 @@
+---
+Config:
+  - changed-files:
+      - any-glob-to-any-file: config/*
+GithubActions:
+  - changed-files:
+      - any-glob-to-any-file: .github/workflows/*
+LuaSnippets:
+  - changed-files:
+      - any-glob-to-any-file: lua/**/*
+Modules:
+  - changed-files:
+      - any-glob-to-any-file: modules/**/*

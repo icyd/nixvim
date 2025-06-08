@@ -12,5 +12,8 @@ check: lint
 dev:
 	nix develop
 
+build:
+	nix build .#$(target)
+
 run:
 	nix run .#$(target)
