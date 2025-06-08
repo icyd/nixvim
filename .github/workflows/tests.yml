@@ -6,18 +6,20 @@ on:
   workflow_dispatch:
 jobs:
   tests:
-    name: Tests on ${{ matrix.arch }}
+    name: Tests on ${{ matrix.system }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        arch:
-          - aarch64-darwin
-          - x86_64-linux
+        include:
+          - system: x86_64-linux
+            os: ubuntu-latest
+          - system: aarch64-darwin
+            os: macos-latest
     steps:
       - uses: actions/checkout@v4
       - name: Check nix flake inputs
         uses: DeterminateSystems/flake-checker-action@v10
       - uses: cachix/install-nix-action@v31
       - name: Run flake check
-        run: nix flake check --system ${{ matrix.arch }}
+        run: nix flake check --system ${{ matrix.system }}
