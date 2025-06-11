@@ -5,8 +5,8 @@ and distributed as flake via [Nixvim](https://github.com/nix-community/nixvim).
 
 Provides two package:
 
-- default: full featured Neovim distribution.
-- nvimin: minimal editor for fast editing.
+- Full-featured Neovim distribution: default.
+- Minimal editor for fast editing: nvimin.
 
 ## Adding as Flake input in your nix configuration
 
@@ -45,5 +45,6 @@ Provides two package:
 
 ## Attributions
 
-- https://github.com/nix-community/nixvim
-- https://github.com/khaneliman/khanelivim
+- <https://github.com/nix-community/nixvim>
+- <https://github.com/khaneliman/khanelivim>
+- <https://github.com/mightyiam/dendritic>
