@@ -1,7 +1,4 @@
 ---
-Config:
-  - changed-files:
-      - any-glob-to-any-file: config/*
 GithubActions:
   - changed-files:
       - any-glob-to-any-file: .github/workflows/*
