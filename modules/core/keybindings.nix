@@ -13,6 +13,9 @@
       nnoremap "$" "g$"
       nnoremap "C" "\"_C"
       nnoremap "c" "\"_c"
+      nnoremap "J" "mzJ`z"
+      nnoremap "n" "nzzzv"
+      nnoremap "N" "Nzzzv"
     '';
     keymaps =
       builtins.map mkKeyMap
@@ -87,21 +90,6 @@
           action = ''"_ddP'';
           key = "<localleader>P";
           options.desc = "Delete and paste";
-        }
-        {
-          action = "nzzzv";
-          key = "n";
-          options.desc = "Center on next match";
-        }
-        {
-          action = "Nzzzv";
-          key = "N";
-          options.desc = "Center on prev match";
-        }
-        {
-          action = "mzJ`z";
-          key = "J";
-          options.desc = "Center when wrapping lines";
         }
         {
           action = "{zz";
