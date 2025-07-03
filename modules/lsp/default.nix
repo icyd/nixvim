@@ -141,6 +141,7 @@
           pylsp.enable = true;
           rust_analyzer.enable = !config.plugins.rustaceanvim.enable;
           terraformls.enable = true;
+          ts_ls.enable = !config.plugins.typescript-tools.enable;
           yamlls.enable = true;
           zls.enable = true;
         };
@@ -156,6 +157,7 @@
         enable = true;
         lsp.autoAttach = true;
       };
+      typescript-tools.enable = true;
     };
     utils.wKeyList = lib.optionals config.plugins.telescope.enable [
       (wKeyObj ["<leader>l" "" "Lsp"])
