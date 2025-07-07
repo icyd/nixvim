@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Check nix flake inputs
-        uses: DeterminateSystems/flake-checker-action@v10
+        uses: DeterminateSystems/flake-checker-action@v11
       - uses: cachix/install-nix-action@v31
       - uses: cachix/cachix-action@v16
         with:
