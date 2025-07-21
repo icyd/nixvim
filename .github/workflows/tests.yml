@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Check nix flake inputs
-        uses: DeterminateSystems/flake-checker-action@v11
+        uses: DeterminateSystems/flake-checker-action@v12
       - uses: cachix/install-nix-action@v31
       - run: nix fmt
       - name: Run flake check
