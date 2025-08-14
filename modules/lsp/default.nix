@@ -41,24 +41,24 @@
         inlayHints = true;
         keymaps = {
           extra = [
-            {
-              action = mkRaw ''
-                function()
-                  vim.lsp.diagnostic.jump({ count = -1 })
-                end
-              '';
-              key = "[d";
-              options.desc = "Lsp diagnostic goto previous";
-            }
-            {
-              action = mkRaw ''
-                function()
-                  vim.lsp.diagnostic.jump({ count = 1 })
-                end
-              '';
-              key = "]d";
-              options.desc = "Lsp diagnostic goto next";
-            }
+            # {
+            #   action = mkRaw ''
+            #     function()
+            #       vim.lsp.diagnostic.jump({ count = -1 })
+            #     end
+            #   '';
+            #   key = "[d";
+            #   options.desc = "Lsp diagnostic goto previous";
+            # }
+            # {
+            #   action = mkRaw ''
+            #     function()
+            #       vim.lsp.diagnostic.jump({ count = 1 })
+            #     end
+            #   '';
+            #   key = "]d";
+            #   options.desc = "Lsp diagnostic goto next";
+            # }
             {
               action = mkRaw "rename";
               key = "<leader>lr";
