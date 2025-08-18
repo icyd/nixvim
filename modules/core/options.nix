@@ -2,6 +2,7 @@
   flake.modules.nixvim.core = {
     clipboard.register = "unnamedplus";
     extraConfigLua = ''
+      vim.uv.os_setenv("SHELL", "nu")
       vim.opt.diffopt = vim.opt.diffopt:append("vertical")
       vim.opt.shortmess = vim.opt.shortmess:append("aAWIc")
     '';

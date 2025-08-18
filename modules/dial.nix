@@ -1,10 +1,5 @@
 {
-  flake.modules.nixvim.dial = {
-    lib,
-    config,
-    ...
-  }: let
-    inherit (config.utils.mkKey) keymapUnlazy keymap2Lazy;
+  flake.modules.nixvim.dial = {lib, ...}: let
     inherit (lib.nixvim.utils) mkRaw;
     keymaps = [
       {
@@ -101,10 +96,11 @@
       }
     ];
   in {
-    keymaps = keymapUnlazy keymaps;
+    # keymaps = keymapUnlazy keymaps;
+    inherit keymaps;
     plugins.dial = {
       enable = true;
-      lazyLoad.settings.keys = keymap2Lazy keymaps;
+      # lazyLoad.settings.keys = keymap2Lazy keymaps;
       luaConfig.content = ''
         local augend = require('dial.augend')
         require('dial.config').augends:register_group({

@@ -7,6 +7,15 @@
   }: let
     inherit (config.utils.mkKey) mkKeyMap wKeyObj;
     inherit (lib.nixvim.utils) mkRaw;
+    rustAnalyzerSettings = {
+      check.command = "clippy";
+      files.exclude = [".git" ".cargo" ".direnv" "target"];
+      inlayHints = {
+        lifetimeElisionHints.enable = "always";
+        bindingModeHints.enable = true;
+        closureCaptureHints.enable = true;
+      };
+    };
   in {
     extraPackages = with pkgs; [
       cargo-nextest
@@ -41,24 +50,6 @@
         inlayHints = true;
         keymaps = {
           extra = [
-            # {
-            #   action = mkRaw ''
-            #     function()
-            #       vim.lsp.diagnostic.jump({ count = -1 })
-            #     end
-            #   '';
-            #   key = "[d";
-            #   options.desc = "Lsp diagnostic goto previous";
-            # }
-            # {
-            #   action = mkRaw ''
-            #     function()
-            #       vim.lsp.diagnostic.jump({ count = 1 })
-            #     end
-            #   '';
-            #   key = "]d";
-            #   options.desc = "Lsp diagnostic goto next";
-            # }
             {
               action = mkRaw "rename";
               key = "<leader>lr";
@@ -78,6 +69,15 @@
               '';
               key = "<leader>lF";
               options.desc = "Lsp buf async format";
+            }
+            {
+              action = mkRaw ''
+                function()
+                  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({0}),{0})
+                end
+              '';
+              key = "<leader>lh";
+              options.desc = "Toggle Lsp inlay hints";
             }
           ];
           diagnostic = {
@@ -115,14 +115,16 @@
           jsonls.enable = true;
           helm_ls = {
             enable = true;
-            extraOptions.settings = mkRaw ''              {
-                          ["helm-ls"] = {
-                            yamlls = {
-                              enabled = false,
-                              path = "${lib.getExe pkgs.yaml-language-server}",
-                            }
-                          }
-                        }'';
+            extraOptions.settings = mkRaw ''
+              {
+                ["helm-ls"] = {
+                  yamlls = {
+                    enabled = false,
+                    path = "${lib.getExe pkgs.yaml-language-server}",
+                  }
+                }
+              }
+            '';
           };
           html.enable = true;
           lemminx.enable = true;
@@ -139,7 +141,13 @@
           nixd.enable = true;
           nushell.enable = true;
           pylsp.enable = true;
-          rust_analyzer.enable = !config.plugins.rustaceanvim.enable;
+          rust_analyzer = {
+            enable = !config.plugins.rustaceanvim.enable;
+            settings = rustAnalyzerSettings;
+            installCargo = false;
+            installRustc = false;
+            installRustfmt = false;
+          };
           terraformls.enable = true;
           ts_ls.enable = !config.plugins.typescript-tools.enable;
           yamlls.enable = true;
@@ -147,7 +155,10 @@
         };
       };
       crates.enable = true;
-      rustaceanvim.enable = true;
+      rustaceanvim = {
+        enable = true;
+        settings.server.default_settings.rust-analyzer = rustAnalyzerSettings;
+      };
       navic = {
         enable = true;
         lazyLoad.settings.event = "DeferredUIEnter";

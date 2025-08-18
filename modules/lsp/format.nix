@@ -18,7 +18,7 @@
       jq
       texlivePackages.latexindent
       stylua
-      rustfmt
+      # rustfmt
       shellcheck
       opentofu
       terragrunt
@@ -82,7 +82,7 @@
               '';
             };
             prettier.command = getExe nodePackages.prettier;
-            rustfmt.command = getExe rustfmt;
+            # rustfmt.command = getExe rustfmt;
             shellcheck.command = getExe shellcheck;
             squeeze_blanks.command = getExe' coreutils "cat";
             stylua.command = getExe stylua;

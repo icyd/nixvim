@@ -5,6 +5,6 @@
 .direnv
 .envrc
 .pre-commit-config.yaml
-result
+result*
 
 # End of https://www.toptal.com/developers/gitignore/api/direnv
