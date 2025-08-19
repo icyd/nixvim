@@ -49,7 +49,7 @@
         enable = true;
         inlayHints = true;
         keymaps = {
-          extra = [
+          extra = builtins.map mkKeyMap [
             {
               action = mkRaw "rename";
               key = "<leader>lr";

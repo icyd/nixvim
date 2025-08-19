@@ -64,8 +64,7 @@
         options.desc = "Lazygit";
       }
     ];
-    keymaps =
-      builtins.map mkKeyMap [
+    keymaps = builtins.map mkKeyMap ([
         {
           action = mkRaw ''
             function()
@@ -209,7 +208,7 @@
       ++ keymapsGL
       ++ keymapsLG
       ++ keymapsGC
-      ++ keymapsGW;
+      ++ keymapsGW);
   in {
     inherit keymaps;
     autoGroups = {

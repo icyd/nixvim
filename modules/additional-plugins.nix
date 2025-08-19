@@ -6,7 +6,7 @@
     ...
   }: let
     inherit (config.utils.mkKey) mkKeyMap keymap2Lazy;
-    keymaps = [
+    keymaps = builtins.map mkKeyMap [
       {
         action = "<cmd>UndotreeToggle<CR>";
         key = "<leader>U";

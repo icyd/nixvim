@@ -1,7 +1,12 @@
 {
-  flake.modules.nixvim.dial = {lib, ...}: let
+  flake.modules.nixvim.dial = {
+    lib,
+    config,
+    ...
+  }: let
     inherit (lib.nixvim.utils) mkRaw;
-    keymaps = [
+    inherit (config.utils.mkKey) mkKeyMap;
+    keymaps = builtins.map mkKeyMap [
       {
         action = mkRaw ''
           function()

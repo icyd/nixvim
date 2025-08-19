@@ -4,10 +4,10 @@
     config,
     ...
   }: let
-    inherit (config.utils.mkKey) wKeyObj;
+    inherit (config.utils.mkKey) wKeyObj mkKeyMap;
     inherit (lib.nixvim.utils) mkRaw;
   in {
-    keymaps = lib.mkIf config.plugins.telescope.enable [
+    keymaps = lib.mkIf config.plugins.telescope.enable (builtins.map mkKeyMap [
       {
         action = mkRaw ''
           function()
@@ -77,7 +77,7 @@
         key = "<leader>fs";
         options.desc = "Grep current string";
       }
-    ];
+    ]);
     plugins = {
       telescope = {
         enable = true;

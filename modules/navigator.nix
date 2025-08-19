@@ -1,11 +1,13 @@
 {
   flake.modules.nixvim.navigator = {
     lib,
+    config,
     pkgs,
     ...
   }: let
+    inherit (config.utils.mkKey) mkKeyMap;
     inherit (lib.nixvim.utils) mkRaw;
-    keymaps = [
+    keymaps = builtins.map mkKeyMap [
       {
         action = mkRaw ''
           function()
