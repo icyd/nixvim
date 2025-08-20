@@ -5,15 +5,15 @@
     ...
   }: let
     inherit (lib.nixvim.utils) mkRaw;
-    inherit (config.utils.mkKey) mkKeyMap;
+    inherit (config.utils.mkKey) mkKeyMap keymap2Lazy keymapUnlazy;
     keymaps = builtins.map mkKeyMap [
       {
         action = mkRaw ''
           function()
-            require("dial.map").inc_normal()
+            require("dial.map").manipulate("increment", "normal")
           end
         '';
-        key = "<M-a>";
+        key = "<C-x>";
         options = {
           desc = "Increment number";
         };
@@ -21,7 +21,7 @@
       {
         action = mkRaw ''
           function()
-            require("dial.map").dec_normal()
+            require("dial.map").manipulate("decrement", "normal")
           end
         '';
         key = "<M-x>";
@@ -32,10 +32,10 @@
       {
         action = mkRaw ''
           function()
-            require("dial.map").inc_gnormal()
+            require("dial.map").manipulate("increment", "gnormal")
           end
         '';
-        key = "g<M-a>";
+        key = "g<C-x>";
         options = {
           desc = "Increment number";
         };
@@ -43,7 +43,7 @@
       {
         action = mkRaw ''
           function()
-            require("dial.map").dec_gnormal()
+            require("dial.map").manipulate("decrement", "gnormal")
           end
         '';
         key = "g<M-x>";
@@ -54,10 +54,10 @@
       {
         action = mkRaw ''
           function()
-            require("dial.map").inc_visual()
+            require("dial.map").manipulate("increment", "visual")
           end
         '';
-        key = "<M-a>";
+        key = "<C-x>";
         mode = "v";
         options = {
           desc = "Increment number";
@@ -66,7 +66,7 @@
       {
         action = mkRaw ''
           function()
-            require("dial.map").dec_visual()
+            require("dial.map").manipulate("decrement", "visual")
           end
         '';
         key = "<M-x>";
@@ -78,10 +78,10 @@
       {
         action = mkRaw ''
           function()
-            require("dial.map").inc_gvisual()
+            require("dial.map").manipulate("increment", "gvisual")
           end
         '';
-        key = "g<M-a>";
+        key = "g<C-x>";
         mode = "v";
         options = {
           desc = "Increment number";
@@ -90,7 +90,7 @@
       {
         action = mkRaw ''
           function()
-            require("dial.map").dec_gvisual()
+            require("dial.map").manipulate("decrement", "gvisual")
           end
         '';
         key = "g<M-x>";
@@ -101,11 +101,10 @@
       }
     ];
   in {
-    # keymaps = keymapUnlazy keymaps;
-    inherit keymaps;
+    keymaps = keymapUnlazy keymaps;
     plugins.dial = {
       enable = true;
-      # lazyLoad.settings.keys = keymap2Lazy keymaps;
+      lazyLoad.settings.keys = keymap2Lazy keymaps;
       luaConfig.content = ''
         local augend = require('dial.augend')
         require('dial.config').augends:register_group({
