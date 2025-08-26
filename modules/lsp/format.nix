@@ -61,13 +61,13 @@
           };
           formatters = with pkgs; {
             alejandra.command = getExe alejandra;
-            black.command = getExe black;
+            # black.command = getExe black;
             clang-format.command = getExe' clang-tools "clang-format";
             codespell.command = getExe codespell;
             fourmolu.command = getExe haskellPackages.fourmolu;
             gofmt.command = getExe' go "gofmt";
             goimports.command = getExe' gotools "goimports";
-            isort.command = getExe isort;
+            # isort.command = getExe isort;
             jq.command = getExe jq;
             latexindent.command = getExe' texlivePackages.latexindent "latexindent";
             markdownlint-cli2 = {

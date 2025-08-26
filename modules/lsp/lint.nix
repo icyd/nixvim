@@ -20,7 +20,7 @@
           cpp = c;
           css = ["stylelint"];
           dockerfile = ["hadolint"];
-          go = ["golangcilint"];
+          go = ["revive"];
           haskell = ["hlint"];
           json = ["jsonlint"];
           latex = ["chktex"];
@@ -34,14 +34,14 @@
         linters = with pkgs; {
           chktex.cmd = getExe' texlivePackages.chktex "chktex";
           clangtidy.cmd = getExe' clang-tools "clang-tidy";
-          flake8.cmd = getExe python312Packages.flake8;
-          golangcilint.cmd = getExe golangci-lint;
+          # flake8.cmd = getExe python312Packages.flake8;
           hadolint.cmd = getExe hadolint;
           hlint.cmd = getExe hlint;
           jsonlint.cmd = getExe nodePackages.jsonlint;
           luacheck.cmd = getExe luajitPackages.luacheck;
-          mypy.cmd = getExe mypy;
-          pylint.cmd = getExe pylint;
+          # mypy.cmd = getExe mypy;
+          # pylint.cmd = getExe pylint;
+          revive.cmd = getExe revive;
           shellcheck.cmd = getExe shellcheck;
           stylelint.cmd = getExe stylelint;
           yamllint.cmd = getExe yamllint;
