@@ -151,7 +151,10 @@
           terraformls.enable = true;
           ts_ls.enable = !config.plugins.typescript-tools.enable;
           yamlls.enable = true;
-          zls.enable = true;
+          zls = {
+            enable = true;
+            package = null;
+          };
         };
       };
       crates.enable = true;
