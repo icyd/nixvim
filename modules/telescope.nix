@@ -77,6 +77,27 @@
         key = "<leader>fs";
         options.desc = "Grep current string";
       }
+      {
+        action = mkRaw ''
+          function()
+            require('telescope').extensions.file_browser.file_browser()
+          end
+        '';
+        key = "<leader>fb";
+        options.desc = "File browser";
+      }
+      {
+        action = mkRaw ''
+          function()
+            require('telescope').extensions.file_browser.file_browser({
+              select_buffer = true,
+              path = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ':p:h'),
+            })
+          end
+        '';
+        key = "<leader>fB";
+        options.desc = "File browser relative to current file";
+      }
     ]);
     plugins = {
       telescope = {
