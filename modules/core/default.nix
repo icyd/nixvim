@@ -101,7 +101,7 @@
       ]));
   in {
     colorschemes.kanagawa.enable = true;
-    keymaps = keymapUnlazy (keymapsFsh ++ keymapsCom);
+    keymaps = (keymapUnlazy keymapsFsh) ++ keymapsCom;
     extraPackages = with pkgs; [
       ripgrep
     ];
@@ -134,7 +134,7 @@
       };
       comment = {
         enable = true;
-        lazyLoad.settings.keys = keymap2Lazy keymapsCom;
+        # lazyLoad.settings.keys = keymap2Lazy keymapsCom;
         settings.pre_hook = lib.optionalString config.plugins.ts-context-commentstring.enable ''
           require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook()
         '';

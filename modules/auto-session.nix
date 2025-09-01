@@ -27,6 +27,11 @@
         options.desc = "Save session";
       }
       {
+        action = "<cmd>SessionSearch<CR>";
+        key = "<leader>qS";
+        options.desc = "Save search";
+      }
+      {
         action = "<cmd>SessionPurgeOrphaned<CR>";
         key = "<leader>qD";
         options.desc = "Purge orphaned sessions";
