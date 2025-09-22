@@ -109,7 +109,11 @@
           bashls.enable = true;
           clangd.enable = true;
           cssls.enable = true;
-          dockerls.enable = true;
+          dockerls = {
+            enable = true;
+            # FIX: remove this when available <25-09-18>
+            package = pkgs.dockerfile-language-server-nodejs;
+          };
           gopls.enable = true;
           jdtls.enable = true;
           jsonls.enable = true;
