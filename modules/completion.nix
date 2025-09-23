@@ -252,12 +252,17 @@
                 priority = 300;
               }
             ]
-            ++ (lib.optionals config.plugins.render-markdown.enable [
-              {
-                name = "render-markdown";
-                priority = 300;
-              }
-            ]);
+            ++ (lib.optional config.plugins.render-markdown.enable {
+              name = "render-markdown";
+              priority = 300;
+            })
+            ++ (lib.optional config.plugins.minuet.enable {
+              name = "minuet";
+            });
+          performance.fetching_timeout =
+            if config.plugins.minuet.enable
+            then 2000
+            else 500;
         };
       };
       cmp-buffer.enable = cfg.enable;
