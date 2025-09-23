@@ -100,11 +100,11 @@
         if args.bang then
           type = "for buffer"
           if vim.b.disable_autoformat then
-            msg = "disabled"
+            status = "disabled"
           end
         else
           if vim.g.disable_autoformat then
-            msg = "disabled"
+            status = "disabled"
           end
         end
 
