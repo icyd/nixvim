@@ -21,6 +21,7 @@
       ];
     extraPlugins = with pkgs.vimPlugins;
       [
+        kmonad-vim
         mini-icons
         playground
         vim-gnupg
