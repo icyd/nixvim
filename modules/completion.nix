@@ -294,14 +294,20 @@
       };
       lspkind = {
         enable = cfg.enable && config.plugins.lsp.enable;
-        settings = {
-          mode = "symbol_text";
-          cmp = {
-            max_width = 50;
-            ellipsis_char = "...";
-          };
-          show_labelDetails = true;
+        cmp = {
+          ellipsisChar = "...";
+          maxWidth = 50;
         };
+        mode = "symbol_text";
+        extraOptions.show_labelDetails = true;
+        # settings = {
+        #   mode = "symbol_text";
+        #   cmp = {
+        #     max_width = 50;
+        #     ellipsis_char = "...";
+        #   };
+        #   show_labelDetails = true;
+        # };
       };
     };
   };
