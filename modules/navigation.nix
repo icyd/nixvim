@@ -1,5 +1,5 @@
 {
-  flake.modules.nixvim.navigator = {
+  flake.modules.nixvim.navigation = {
     lib,
     config,
     ...
