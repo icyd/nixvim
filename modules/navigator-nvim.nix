@@ -1,5 +1,5 @@
 {
-  flake.modules.nixvim.base = {
+  flake.modules.nixvim.core = {
     lib,
     config,
     pkgs,
