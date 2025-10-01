@@ -99,9 +99,50 @@
           options.desc = "Flash Tressiter Search";
         }
       ]));
+    keymapsSnk = let
+      cfg = config.plugins.snacks;
+    in
+      builtins.map mkKeyMap (lib.optionals (cfg.enable && cfg.settings.bufdelete.enable) [
+        {
+          action = mkRaw ''
+            function()
+              require("snacks").bufdelete.delete()
+            end
+          '';
+          key = "<localleader>bq";
+          options.desc = "BufDelete";
+        }
+        {
+          action = mkRaw ''
+            function()
+              require("snacks").bufdelete.delete({force=true})
+            end
+          '';
+          key = "<localleader>bQ";
+          options.desc = "BufDelete force";
+        }
+        {
+          action = mkRaw ''
+            function()
+              require("snacks").bufdelete.all()
+            end
+          '';
+          key = "<localleader>bA";
+          options.desc = "BufDelete all";
+        }
+        {
+          action = mkRaw ''
+            function()
+              require("snacks").bufdelete.other()
+            end
+          '';
+          key = "<localleader>bO";
+          options.desc = "BufDelete other";
+        }
+      ]);
   in {
     colorschemes.kanagawa.enable = true;
-    keymaps = (keymapUnlazy keymapsFsh) ++ keymapsCom;
+    keymaps = (keymapUnlazy keymapsFsh) ++ keymapsCom ++ keymapsSnk;
     extraPackages = with pkgs; [
       ripgrep
     ];
@@ -161,6 +202,17 @@
         lazyLoad.settings.event = "BufReadPre";
       };
       rainbow-delimiters.enable = true;
+      snacks = {
+        enable = true;
+        lazyLoad.settings.event = "DeferredUIEnter";
+        settings = {
+          bigfile.enable = true;
+          bufdelete.enable = true;
+          input.enable = true;
+          notifier.enable = true;
+          picker.enable = true;
+        };
+      };
       treesitter = {
         enable = true;
         grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [

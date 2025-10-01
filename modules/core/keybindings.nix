@@ -166,15 +166,15 @@
             key = "<leader>'";
             options.desc = "Open terminal";
           }
+          # {
+          #   action = "<C-\\><C-N>";
+          #   key = "<ESC><ESC>";
+          #   mode = "t";
+          #   options.desc = "Escape terminal with ESC";
+          # }
           {
             action = "<C-\\><C-N>";
-            key = "<ESC>";
-            mode = "t";
-            options.desc = "Escape terminal with ESC";
-          }
-          {
-            action = "<C-\\><C-N>";
-            key = "<C-[>";
+            key = "<C-[><C-[>";
             mode = "t";
             options.desc = "Escape terminal with <C-[>";
           }

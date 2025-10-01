@@ -6,11 +6,8 @@
     ...
   }: let
     cfg = config.plugins.dap;
-    inherit (config.utils.mkKey) mkKeyMap keymap2Lazy wKeyObj;
+    inherit (config.utils.mkKey) mkKeyMap wKeyObj;
     inherit (lib.nixvim.utils) mkRaw;
-    lazyLoadTrigDAP = mkRaw ''
-      require("lz.n").trigger_load("nvim-dap")
-    '';
     keymapDAPUI = lib.optionals config.plugins.dap-ui.enable [
       {
         action = mkRaw ''
@@ -160,11 +157,15 @@
       ]
       ++ keymapDAPUI);
   in {
+    extraPlugins = with pkgs.vimPlugins; [
+      nvim-dap-cortex-debug
+    ];
     extraPackages = with pkgs;
       [
         delve
         lldb
         python312Packages.debugpy
+        nodejs-slim
       ]
       ++ (with pkgs.haskellPackages; [
         fast-tags
@@ -189,6 +190,25 @@
         #   "DapNew"
         #   "DapContinue"
         # ];
+        luaConfig = {
+          pre = ''
+            local ok_dap_cortex_debug, dap_cortex_debug = pcall(require, "dap-cortex-debug")
+            local rtt_config = ok_dap_cortex_debug and dap_cortex_debug.rtt_config(0) or {}
+          '';
+          post = ''
+            require("dap.ext.vscode").load_launchjs()
+            if ok_dap_cortex_debug then
+              dap_cortex_debug.setup({
+                extension_path = "${pkgs.local.vscode-ext-cortex-debug}/share/vscode/extensions/marus25.cortex-debug",
+                dapui_rtt = true,
+                dap_vscode_filetypes = { "c", "cpp", "rust" },
+                rtt = {
+                  buftype = "Terminal"
+                },
+              })
+            end
+          '';
+        };
         adapters = {
           executables = {
             haskell.command = "haskell-debug-adapter";
@@ -206,9 +226,16 @@
         configurations = let
           program = mkRaw ''
             function()
-              return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+              local default = vim.b.dap_executable or "./"
+              local path = vim.fn.input({prompt = "Executable: ", default = default, completion = "file"})
+              if path and path ~= "" then
+                vim.b.dap_executable = path
+                return path
+              end
+              return require("dap").ABORT
             end
           '';
+          rttConfig = mkRaw ''rtt_config'';
           codelldb-config = {
             inherit program;
             type = "codelldb";
@@ -216,6 +243,50 @@
             name = "Launch (CodeLLDB)";
             cwd = "\${workspaceFolder}";
             stopOnEntry = true;
+          };
+          openocd-config = {
+            inherit rttConfig;
+            name = "OpenOCD Launch";
+            type = "cortex-debug";
+            request = "launch";
+            servertype = "openocd";
+            runToEntryPoint = "main";
+            cwd = "\${workspaceFolder}";
+            configFiles = [
+              "interface/stlink-v2-1.cfg"
+              "target/stm32f3x.cfg"
+            ];
+            executable = program;
+            gdbTarget = "localhost:3333";
+            showDevDebugOutput = false;
+            postLaunchCommands = [
+              "break DefaultHandler"
+              "break HardFault"
+            ];
+          };
+          stutil-config = {
+            inherit rttConfig;
+            name = "STUtil Launch";
+            type = "cortex-debug";
+            request = "launch";
+            servertype = "stutil";
+            cwd = "\${workspaceFolder}";
+            executable = program;
+            runToEntryPoint = "main";
+            gdbTarget = "localhost:4242";
+            showDevDebugOutput = false;
+          };
+          bmp-config = {
+            inherit rttConfig;
+            name = "BMP Launch";
+            type = "cortex-debug";
+            request = "launch";
+            servertype = "bmp";
+            runToEntryPoint = "main";
+            cwd = "\${workspaceFolder}";
+            interface = "swd";
+            executable = program;
+            BMPGDBSerialPort = "/dev/ttyBmpGdb";
           };
           lldb-config =
             codelldb-config
@@ -251,6 +322,9 @@
             ]
             ++ lib.optionals pkgs.stdenv.isLinux [
               gdb-config
+              bmp-config
+              openocd-config
+              stutil-config
             ];
           cpp =
             c
@@ -287,20 +361,56 @@
       };
       dap-ui = {
         inherit (cfg) enable;
-        lazyLoad.settings = {
-          before = lazyLoadTrigDAP;
-          keys = keymap2Lazy keymapDAPUI;
-        };
+        settings.layouts = [
+          {
+            elements = [
+              {
+                id = "scopes";
+                size = 0.20;
+              }
+              {
+                id = "breakpoints";
+                size = 0.20;
+              }
+              {
+                id = "stacks";
+                size = 0.20;
+              }
+              {
+                id = "watches";
+                size = 0.20;
+              }
+              {
+                id = "rtt";
+                size = 0.20;
+              }
+            ];
+            size = 40;
+            position = "left";
+          }
+          {
+            elements = [
+              "repl"
+              "console"
+            ];
+            size = 20;
+            position = "bottom";
+          }
+        ];
+        # lazyLoad.settings = {
+        #   before = lazyLoadTrigDAP;
+        #   keys = keymap2Lazy keymapDAPUI;
+        # };
       };
       dap-virtual-text = {
         inherit (cfg) enable;
-        lazyLoad.settings = {
-          before = lazyLoadTrigDAP;
-          cmd = [
-            "DapVirtualTextToggle"
-            "DapVirtualTextEnable"
-          ];
-        };
+        # lazyLoad.settings = {
+        #   before = lazyLoadTrigDAP;
+        #   cmd = [
+        #     "DapVirtualTextToggle"
+        #     "DapVirtualTextEnable"
+        #   ];
+        # };
       };
       dap-go.enable = true;
       dap-lldb.enable = true;

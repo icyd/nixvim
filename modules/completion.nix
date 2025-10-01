@@ -77,6 +77,12 @@
             // {
               sources = [
                 {
+                  name = "path";
+                }
+                {
+                  name = "cmdline";
+                }
+                {
                   name = "cmdline-history";
                 }
               ];

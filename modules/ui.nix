@@ -5,15 +5,6 @@
     ...
   }: {
     plugins = {
-      dressing = {
-        enable = true;
-        lazyLoad.settings.event = "DeferredUIEnter";
-        settings.input.mapping.n = {
-          "q" = "Close";
-          "k" = "HistoryPrev";
-          "j" = "HistoryNext";
-        };
-      };
       lualine = {
         enable = true;
         lazyLoad.settings.event = "DeferredUIEnter";
@@ -23,6 +14,14 @@
           end
         '';
         settings = with lib.nixvim.utils; {
+          options.disabled_filetypes.winbar = [
+            "dap-repl"
+            "dapui_console"
+            "dapui_watches"
+            "dapui_stacks"
+            "dapui_breakpoints"
+            "dapui_scopes"
+          ];
           sections = {
             lualine_x = mkRaw ''
               {
@@ -48,10 +47,6 @@
             ];
           };
         };
-      };
-      notify = {
-        enable = true;
-        lazyLoad.settings.event = "DeferredUIEnter";
       };
     };
   };
