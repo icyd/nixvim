@@ -143,7 +143,10 @@
           lua_ls.enable = true;
           marksman.enable = true;
           nixd.enable = true;
-          nushell.enable = true;
+          nushell = {
+            enable = true;
+            package = null;
+          };
           pylsp.enable = true;
           rust_analyzer = {
             enable = !config.plugins.rustaceanvim.enable;

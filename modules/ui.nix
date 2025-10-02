@@ -48,6 +48,13 @@
           };
         };
       };
+      snacks.settings = let
+        cfg = config.plugins.snacks;
+      in {
+        input.enable = cfg.enable;
+        notifier.enable = cfg.enable;
+        picker.enable = cfg.enable;
+      };
     };
   };
 }

@@ -163,7 +163,7 @@
           }
           {
             action = "<cmd>terminal<CR>";
-            key = "<leader>'";
+            key = ''<leader>"'';
             options.desc = "Open terminal";
           }
           # {

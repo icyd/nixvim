@@ -1,8 +1,9 @@
 {
-  flake.modules.nixvim.lsp = {config, ...}: {
+  flake.modules.nixvim.lsp = {
     plugins = {
       otter = {
-        inherit (config.plugins.telescope) enable;
+        # inherit (config.plugins.telescope) enable;
+        enable = false;
         lazyLoad.settings.event = "DeferredUIEnter";
         autoActivate = false;
         settings = {

@@ -57,13 +57,48 @@
       key = "<leader>gy";
       options.desc = "Generate git url";
     }) ["n" "v"]);
-    keymapsLG = lib.optionals config.plugins.lazygit.enable [
-      {
-        action = "<cmd>LazyGit<CR>";
-        key = "<leader>gl";
-        options.desc = "Lazygit";
-      }
-    ];
+    keymapsLG = let
+      snacks = config.plugins.snacks.enable && config.plugins.snacks.settings.lazygit.enable;
+    in
+      lib.optionals (config.plugins.lazygit.enable || snacks) (
+        if snacks
+        then [
+          {
+            action = mkRaw ''
+              function()
+                require("snacks").lazygit.open()
+              end
+            '';
+            key = "<leader>gl";
+            options.desc = "Lazygit";
+          }
+          {
+            action = mkRaw ''
+              function()
+                require("snacks").lazygit.log()
+              end
+            '';
+            key = "<leader>go";
+            options.desc = "Lazygit log";
+          }
+          {
+            action = mkRaw ''
+              function()
+                require("snacks").lazygit.log_file()
+              end
+            '';
+            key = "<leader>gO";
+            options.desc = "Lazygit log of current file";
+          }
+        ]
+        else [
+          {
+            action = "<cmd>LazyGit<CR>";
+            key = "<leader>gl";
+            options.desc = "Lazygit";
+          }
+        ]
+      );
     keymaps = builtins.map mkKeyMap ([
         {
           action = mkRaw ''
@@ -232,7 +267,8 @@
     ];
     plugins = {
       fugitive.enable = true;
-      lazygit.enable = true;
+      lazygit.enable = !(config.plugins.snacks.enable && config.plugins.snacks.settings.lazygit.enable);
+      snacks.settings.lazygit.enable = config.plugins.snacks.enable;
       gitignore.enable = true;
       gitsigns = {
         enable = true;
