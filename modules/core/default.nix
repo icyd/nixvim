@@ -166,6 +166,7 @@
         lazyLoad.settings.event = "DeferredUIEnter";
         settings = {
           bigfile.enable = true;
+          quickfile.enable = true;
         };
       };
       treesitter = {

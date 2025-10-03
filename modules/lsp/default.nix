@@ -17,9 +17,9 @@
       };
     };
   in {
-    extraPackages = with pkgs; [
-      cargo-nextest
-    ];
+    # extraPackages = with pkgs; [
+    #   cargo-nextest
+    # ];
     extraPlugins = with pkgs.vimPlugins; [
       haskell-tools-nvim
     ];
@@ -149,11 +149,13 @@
           };
           pylsp.enable = true;
           rust_analyzer = {
-            enable = !config.plugins.rustaceanvim.enable;
+            # enable = !config.plugins.rustaceanvim.enable;
+            enable = true;
             settings = rustAnalyzerSettings;
             installCargo = false;
             installRustc = false;
             installRustfmt = false;
+            package = null;
           };
           terraformls.enable = true;
           ts_ls.enable = !config.plugins.typescript-tools.enable;
@@ -166,7 +168,7 @@
       };
       crates.enable = true;
       rustaceanvim = {
-        enable = true;
+        enable = false;
         settings.server.default_settings.rust-analyzer = rustAnalyzerSettings;
       };
       navic = {
