@@ -82,6 +82,7 @@
         kmonad-vim
         mini-icons
         playground
+        term-edit-nvim
         vim-gnupg
         # vim-indent-object
         vim-table-mode
@@ -91,6 +92,9 @@
       ]);
     extraConfigLua = ''
       require("age_secret").setup()
+      require("term-edit").setup({
+        prompt_end = {"❯%s%s", "❯%s%s"}
+      })
     '';
     globals = {
       GPGPreferArmor = 1;

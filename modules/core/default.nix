@@ -181,7 +181,7 @@
       };
       ts-context-commentstring = {
         enable = true;
-        extraOptions = lib.mkIf config.plugins.comment.enable {
+        settings = lib.mkIf config.plugins.comment.enable {
           enable_autocmd = false;
         };
       };

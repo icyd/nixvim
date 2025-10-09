@@ -12,10 +12,10 @@
     };
     nixpkgs.url = "github:NixOs/nixpkgs/nixos-25.05";
     nixvim = {
-      url = "github:nix-community/nixvim/nixos-25.05";
+      url = "github:nix-community/nixvim";
       inputs = {
         flake-parts.follows = "flake-parts";
-        nixpkgs.follows = "nixpkgs";
+        # nixpkgs.follows = "nixpkgs";
         nuschtosSearch.follows = "";
       };
     };
