@@ -58,7 +58,7 @@
       options.desc = "Generate git url";
     }) ["n" "v"]);
     keymapsLG = let
-      snacks = config.plugins.snacks.enable && config.plugins.snacks.settings.lazygit.enable;
+      snacks = config.plugins.snacks.enable && config.plugins.snacks.settings.lazygit.enabled;
     in
       lib.optionals (config.plugins.lazygit.enable || snacks) (
         if snacks
@@ -267,8 +267,8 @@
     ];
     plugins = {
       fugitive.enable = true;
-      lazygit.enable = !(config.plugins.snacks.enable && config.plugins.snacks.settings.lazygit.enable);
-      snacks.settings.lazygit.enable = config.plugins.snacks.enable;
+      lazygit.enable = !(config.plugins.snacks.enable && config.plugins.snacks.settings.lazygit.enabled);
+      snacks.settings.lazygit.enabled = config.plugins.snacks.enable;
       gitignore.enable = true;
       gitsigns = {
         enable = true;

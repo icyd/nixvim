@@ -10,7 +10,7 @@
     keymapsTerm = let
       cfg = config.plugins.snacks;
     in
-      builtins.map mkKeyMap (lib.optionals (cfg.enable && cfg.settings.terminal.enable) [
+      builtins.map mkKeyMap (lib.optionals (cfg.enable && cfg.settings.terminal.enabled) [
         {
           action = mkRaw ''
             function()
@@ -24,7 +24,7 @@
     keymapsSnk = let
       cfg = config.plugins.snacks;
     in
-      builtins.map mkKeyMap (lib.optionals (cfg.enable && cfg.settings.bufdelete.enable) [
+      builtins.map mkKeyMap (lib.optionals (cfg.enable && cfg.settings.bufdelete.enabled) [
         {
           action = mkRaw ''
             function()
@@ -135,7 +135,7 @@
         cfg = config.plugins.snacks;
       in {
         luaConfig.post = lib.mkIf (cfg.enable
-          && cfg.settings.debug.enable) ''
+          && cfg.settings.debug.enabled) ''
           _G.dd = function(...)
             require("snacks").debug.inspect(...)
           end
@@ -144,13 +144,13 @@
           end
         '';
         settings = {
-          bufdelete.enable = cfg.enable;
-          debug.enable = cfg.enable;
-          indent.enable = cfg.enable;
-          scope.enable = cfg.enable;
-          scroll.enable = cfg.enable;
-          statuscolumn.enable = cfg.enable;
-          terminal.enable = true;
+          bufdelete.enabled = cfg.enable;
+          debug.enabled = cfg.enable;
+          indent.enabled = cfg.enable;
+          scope.enabled = cfg.enable;
+          scroll.enabled = cfg.enable;
+          statuscolumn.enabled = cfg.enable;
+          terminal.enabled = true;
         };
       };
       twilight = {
@@ -164,7 +164,7 @@
       vim-bbye = let
         cfg = config.plugins.snacks;
       in {
-        enable = !(cfg.enable && cfg.settings.bufdelete.enable);
+        enable = !(cfg.enable && cfg.settings.bufdelete.enabled);
         keymaps = {
           bdelete = "<localleader>q";
           bwipeout = "<localleader>Q";
@@ -172,7 +172,7 @@
         keymapsSilent = true;
       };
       toggleterm = {
-        enable = !(config.plugins.snacks.enable && config.plugins.snacks.settings.terminal.enable);
+        enable = !(config.plugins.snacks.enable && config.plugins.snacks.settings.terminal.enabled);
         lazyLoad.settings = {
           keys = keymap2Lazy [
             (mkKeyMap {
