@@ -178,7 +178,7 @@
       };
       navbuddy = {
         enable = true;
-        lsp.autoAttach = true;
+        settings.lsp.auto_attach = true;
       };
       typescript-tools.enable = true;
     };
