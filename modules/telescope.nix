@@ -2,11 +2,15 @@
   flake.modules.nixvim.telescope = {
     lib,
     config,
+    pkgs,
     ...
   }: let
     inherit (config.utils.mkKey) wKeyObj mkKeyMap;
     inherit (lib.nixvim.utils) mkRaw;
   in {
+    extraFiles = {
+      "lua/telescope-config.lua".source = ../lua/telescope-config.lua;
+    };
     keymaps = lib.mkIf config.plugins.telescope.enable (builtins.map mkKeyMap [
       {
         action = mkRaw ''
@@ -25,7 +29,17 @@
       {
         action = mkRaw ''
           function()
-            require("telescope.builtin").find_files({
+            require("telescope-config").project_files()
+          end
+        '';
+        key = "<leader>ff";
+        options.desc = "Find files relative to current path";
+      }
+      {
+        action = mkRaw ''
+          function()
+            require("telescope-config").project_files({
+                hidden = true,
                 cwd = string.gsub(vim.fn.expand("%:p:h"), "oil://", ""),
             })
           end
@@ -80,7 +94,9 @@
       {
         action = mkRaw ''
           function()
-            require('telescope').extensions.file_browser.file_browser()
+            require('telescope').extensions.file_browser.file_browser({
+              hidden = true,
+            })
           end
         '';
         key = "<leader>fb";
@@ -90,6 +106,7 @@
         action = mkRaw ''
           function()
             require('telescope').extensions.file_browser.file_browser({
+              hidden = true,
               select_buffer = true,
               path = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ':p:h'),
             })
@@ -130,7 +147,7 @@
           undo.enable = true;
         };
         keymaps = {
-          "<leader>ff" = "find_files";
+          # "<leader>ff" = "find_files";
           "<leader>fg" = "live_grep";
           "<leader>f/" = "search_history";
           "<leader>f:" = "command_history";
@@ -157,6 +174,16 @@
                 else "";
             };
             n = i;
+          };
+          pickers = let
+            find_command = ["${lib.getExe pkgs.fd}" "--type" "f" "--color" "never"];
+          in {
+            find_files = {
+              inherit find_command;
+            };
+            git_files = {
+              find_command = find_command ++ ["--hidden" "--exclude" ".git"];
+            };
           };
         };
       };

@@ -102,6 +102,7 @@
         }
       ])));
   in {
+    keymaps = keymapUnlazy keymaps;
     plugins = {
       neotest = {
         enable = true;
@@ -112,14 +113,13 @@
           ];
         };
         adapters = {
-          go.enable = cfg.enable;
-          python.enable = cfg.enable;
-          rust.enable = cfg.enable && !config.plugins.rustaceanvim.enable;
-          zig.enable = cfg.enable;
+          go.enable = true;
+          python.enable = true;
+          rust.enable = true;
+          zig.enable = true;
         };
       };
     };
-    keymaps = keymapUnlazy keymaps;
     utils.wKeyList = lib.optionals cfg.enable [
       (wKeyObj ["<localleader>t" "󰙨" "Neotest"])
     ];

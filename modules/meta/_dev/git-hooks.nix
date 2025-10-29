@@ -12,7 +12,10 @@
         settings.hooks = {
           actionlint.enable = true;
           deadnix.enable = true;
-          luacheck.enable = true;
+          luacheck = {
+            enable = true;
+            args = ["--globals" "vim" "--"];
+          };
           statix.enable = true;
           treefmt.enable = false;
           typos.enable = true;
