@@ -38,7 +38,7 @@
       {
         action = mkRaw ''
           function()
-            require("telescope-config").project_files({
+            require("telescope-config").find_files({
                 hidden = true,
                 cwd = string.gsub(vim.fn.expand("%:p:h"), "oil://", ""),
             })
