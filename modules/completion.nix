@@ -192,8 +192,8 @@
               })
             '';
             "<C-e>" = "cmp.mapping(cmp.mapping.close(), { 'i', 'c' })";
-            "<C-d>" = "cmp.mapping.scroll_docs(-4)";
-            "<C-u>" = "cmp.mapping.scroll_docs(4)";
+            "<C-d>" = "cmp.mapping.scroll_docs(4)";
+            "<C-u>" = "cmp.mapping.scroll_docs(-4)";
             "<C-n>" = "cmp.mapping(next_prev_func(true, { behavior = cmp.SelectBehavior.Select }))";
             "<C-p>" = "cmp.mapping(next_prev_func(false, { behavior = cmp.SelectBehavior.Select }))";
             "<C-l>" = ''
