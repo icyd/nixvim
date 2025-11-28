@@ -144,7 +144,13 @@
         lazyLoad.settings.keys = keymap2Lazy keymapsFsh;
         settings = {
           jump.autojump = true;
-          modes.char.multi_line = false;
+          modes = {
+            char = {
+              multi_line = true;
+              jump_labels = true;
+            };
+            search.enabled = true;
+          };
         };
       };
       nvim-autopairs = {

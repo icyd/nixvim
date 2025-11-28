@@ -5,14 +5,20 @@
     pkgs,
     ...
   }: let
+    inherit (lib.nixvim.utils) mkRaw;
     cfg = config.plugins.cmp;
   in {
     extraFiles = {
       "lua/snippets/utils.lua".source = ../lua/snippets_utils.lua;
     };
-    extraPlugins = with pkgs.vimPlugins; [
-      haskell-snippets-nvim
-    ];
+    extraConfigLua = ''
+      require("luasnip_snippets.common.snip_utils").setup()
+    '';
+    extraPlugins = with pkgs.vimPlugins;
+      [
+        haskell-snippets-nvim
+      ]
+      ++ [pkgs.local.luasnip-snippets];
     plugins = {
       cmp = {
         enable = true;
@@ -20,7 +26,7 @@
         cmdline = let
           base_cfg = {
             completion.autocomplete = false;
-            mapping = lib.nixvim.utils.mkRaw ''cmp.mapping.preset.cmdline()'';
+            mapping = mkRaw ''cmp.mapping.preset.cmdline()'';
           };
         in {
           ":" =
@@ -283,20 +289,25 @@
       cmp-spell.enable = cfg.enable;
       cmp-treesitter.enable = cfg.enable && config.plugins.treesitter.enable;
       cmp-path.enable = cfg.enable;
-      friendly-snippets.enable = config.plugins.luasnip.enable;
+      # friendly-snippets.enable = config.plugins.luasnip.enable;
       luasnip = {
         enable = true;
         filetypeExtend = {
           typescriptreact = ["typescript"];
         };
         fromLua = [{paths = ../lua/snippets;}];
-        fromVscode = [{}];
+        # fromVscode = [{}];
         luaConfig.post = ''
           local ok, haskell_snippets = pcall(require, "haskell_snippets")
           if ok then
               ls.add_snippets('haskell', haskell_snippets.all, { key = 'haskell' })
           end
         '';
+        settings = {
+          enable_autosnippets = true;
+          ft_func = mkRaw ''require('luasnip_snippets.common.snip_utils').ft_func'';
+          load_ft_func = mkRaw ''require('luasnip_snippets.common.snip_utils').load_ft_func'';
+        };
       };
       lspkind = {
         enable = cfg.enable && config.plugins.lsp.enable;

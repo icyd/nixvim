@@ -7,6 +7,7 @@
       vim.opt.shortmess = vim.opt.shortmess:append("aAWIc")
     '';
     globals = {
+      hlsearch = false;
       netrw_banner = 0;
       netrw_keepdir = 0;
       netrw_liststyle = 3;
@@ -14,6 +15,7 @@
       netrw_winsize = 30;
       netrw_localcopydircmd = "cp -r";
     };
+    globalOpts.hlsearch = false;
     opts = let
       indent = 4;
     in {

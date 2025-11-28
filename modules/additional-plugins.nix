@@ -151,6 +151,7 @@
           scroll.enabled = cfg.enable;
           statuscolumn.enabled = cfg.enable;
           terminal.enabled = true;
+          words.enabled = true;
         };
       };
       twilight = {
