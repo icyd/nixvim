@@ -36,7 +36,7 @@
         luaConfig.pre = ''
           norg_dir = (os.getenv("ORGMODE_DIR") or os.getenv("HOME")) .. "/org"
         '';
-        telescopeIntegration.enable = config.plugins.telescope.enable;
+        # telescopeIntegration.enable = config.plugins.telescope.enable;
         settings = {
           lazy_loading = true;
           load = with lib.nixvim.utils; {

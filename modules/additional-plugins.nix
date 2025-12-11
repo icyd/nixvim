@@ -31,7 +31,7 @@
               require("snacks").bufdelete.delete()
             end
           '';
-          key = "<localleader>bq";
+          key = "<localleader>q";
           options.desc = "BufDelete";
         }
         {
@@ -40,7 +40,7 @@
               require("snacks").bufdelete.delete({force=true})
             end
           '';
-          key = "<localleader>bQ";
+          key = "<localleader>Q";
           options.desc = "BufDelete force";
         }
         {
@@ -60,6 +60,87 @@
           '';
           key = "<localleader>bO";
           options.desc = "BufDelete other";
+        }
+        {
+          action = mkRaw ''
+            function()
+              require("snacks").picker.buffers()
+            end
+          '';
+          key = "<leader>b";
+          options.desc = "Buffers";
+        }
+        {
+          action = mkRaw ''
+            function()
+              require("snacks").picker.files()
+            end
+          '';
+          key = "<leader>ff";
+          options.desc = "Find git files";
+        }
+        {
+          action = mkRaw ''
+            function()
+              require("snacks").picker.files()
+            end
+          '';
+          key = "<leader>fF";
+          options.desc = "Find files";
+        }
+        {
+          action = mkRaw ''
+            function()
+              require("snacks").picker.files({ cwd = os.getenv("DOTFILES") })
+            end
+          '';
+          key = "<leader>fv";
+          options.desc = "Find files in DOTFILES";
+        }
+        {
+          action = mkRaw ''
+            function()
+              require("snacks").picker.grep()
+            end
+          '';
+          key = "<leader>fs";
+          options.desc = "Grep";
+        }
+        {
+          action = mkRaw ''
+            function()
+              require("snacks").picker.projects()
+            end
+          '';
+          key = "<leader>fp";
+          options.desc = "Projects";
+        }
+        {
+          action = mkRaw ''
+            function()
+              require("snacks").picker.recent()
+            end
+          '';
+          key = "<leader>fr";
+          options.desc = "Recent";
+        }
+        {
+          action = mkRaw ''
+            function()
+              require("snacks").picker.explorer()
+            end
+          '';
+          key = "<leader>fb";
+          options.desc = "File explorer";
+        }
+        {
+          action = mkRaw ''
+            function()
+              require("snacks").picker.git_branches()
+            end
+          '';
+          key = "<leader>gb";
+          options.desc = "Git branches";
         }
       ]);
     keymaps =
@@ -144,12 +225,13 @@
           end
         '';
         settings = {
-          bufdelete.enabled = cfg.enable;
-          debug.enabled = cfg.enable;
-          indent.enabled = cfg.enable;
-          scope.enabled = cfg.enable;
-          scroll.enabled = cfg.enable;
-          statuscolumn.enabled = cfg.enable;
+          bufdelete.enabled = true;
+          debug.enabled = true;
+          indent.enabled = true;
+          picker.enablad = true;
+          scope.enabled = true;
+          scroll.enabled = true;
+          statuscolumn.enabled = true;
           terminal.enabled = true;
           words.enabled = true;
         };

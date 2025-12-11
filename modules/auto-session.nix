@@ -4,7 +4,8 @@
     config,
     ...
   }: let
-    inherit (config.utils.mkKey) mkKeyMap keymapUnlazy keymap2Lazy wKeyObj;
+    # inherit (config.utils.mkKey) mkKeyMap keymapUnlazy keymap2Lazy wKeyObj;
+    inherit (config.utils.mkKey) mkKeyMap keymapUnlazy keymap2Lazy;
     keymaps = builtins.map mkKeyMap (lib.optionals config.plugins.auto-session.enable [
       {
         action = "<cmd>SessionRestore<CR>";
@@ -47,8 +48,8 @@
         auto_restore = false;
       };
     };
-    utils.wKeyList = lib.optionals config.plugins.telescope.enable [
-      (wKeyObj ["<leader>q" "" "Session"])
-    ];
+    # utils.wKeyList = lib.optionals config.plugins.telescope.enable [
+    #   (wKeyObj ["<leader>q" "" "Session"])
+    # ];
   };
 }

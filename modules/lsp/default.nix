@@ -5,7 +5,8 @@
     pkgs,
     ...
   }: let
-    inherit (config.utils.mkKey) mkKeyMap wKeyObj;
+    # inherit (config.utils.mkKey) mkKeyMap wKeyObj;
+    inherit (config.utils.mkKey) mkKeyMap;
     inherit (lib.nixvim.utils) mkRaw;
     rustAnalyzerSettings = {
       check.command = "clippy";
@@ -109,11 +110,7 @@
           bashls.enable = true;
           clangd.enable = true;
           cssls.enable = true;
-          dockerls = {
-            enable = true;
-            # FIX: remove this when available <25-09-18>
-            package = pkgs.dockerfile-language-server-nodejs;
-          };
+          dockerls.enable = true;
           gopls.enable = true;
           jdtls.enable = true;
           jsonls.enable = true;
@@ -182,8 +179,8 @@
       };
       typescript-tools.enable = true;
     };
-    utils.wKeyList = lib.optionals config.plugins.telescope.enable [
-      (wKeyObj ["<leader>l" "" "Lsp"])
-    ];
+    # utils.wKeyList = lib.optionals config.plugins.telescope.enable [
+    #   (wKeyObj ["<leader>l" "" "Lsp"])
+    # ];
   };
 }

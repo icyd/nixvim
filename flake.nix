@@ -10,9 +10,9 @@
       url = "github:nix-community/neovim-nightly-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixpkgs.url = "github:NixOs/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOs/nixpkgs/nixos-25.11";
     nixvim = {
-      url = "github:nix-community/nixvim";
+      url = "github:nix-community/nixvim/nixos-25.11";
       inputs = {
         flake-parts.follows = "flake-parts";
         nuschtosSearch.follows = "";

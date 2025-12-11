@@ -22,7 +22,7 @@
           dockerfile = ["hadolint"];
           go = ["revive"];
           haskell = ["hlint"];
-          json = ["jsonlint"];
+          # json = ["jsonlint"];
           latex = ["chktex"];
           lua = ["luacheck"];
           markdown = ["markdownlint-cli2"];
@@ -37,7 +37,7 @@
           # flake8.cmd = getExe python312Packages.flake8;
           hadolint.cmd = getExe hadolint;
           hlint.cmd = getExe hlint;
-          jsonlint.cmd = getExe nodePackages.jsonlint;
+          # jsonlint.cmd = getExe nodePackages.jsonlint;
           luacheck.cmd = getExe luajitPackages.luacheck;
           # mypy.cmd = getExe mypy;
           # pylint.cmd = getExe pylint;

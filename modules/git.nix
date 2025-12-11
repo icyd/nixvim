@@ -6,24 +6,24 @@
   }: let
     inherit (config.utils.mkKey) mkKeyMap wKeyObj;
     inherit (lib.nixvim.utils) mkRaw;
-    cfgGW = config.plugins.git-worktree;
-    keymapsGW = lib.optionals (cfgGW.enable && cfgGW.enableTelescope) [
-      {
-        action = "<cmd>Telescope git_worktree<CR>";
-        key = "<leader>gWg";
-        options.desc = "Git worktree";
-      }
-      {
-        action = "<cmd>Telescope git_worktree create_git_worktree<CR>";
-        key = "<leader>gWc";
-        options.desc = "Create git worktree";
-      }
-      {
-        action = "<cmd>Telescope git_worktree git_worktrees<CR>";
-        key = "<leader>gWs";
-        options.desc = "Switch / Delete git worktrees";
-      }
-    ];
+    # cfgGW = config.plugins.git-worktree;
+    # keymapsGW = lib.optionals (cfgGW.enable && cfgGW.enableTelescope) [
+    #   {
+    #     action = "<cmd>Telescope git_worktree<CR>";
+    #     key = "<leader>gWg";
+    #     options.desc = "Git worktree";
+    #   }
+    #   {
+    #     action = "<cmd>Telescope git_worktree create_git_worktree<CR>";
+    #     key = "<leader>gWc";
+    #     options.desc = "Create git worktree";
+    #   }
+    #   {
+    #     action = "<cmd>Telescope git_worktree git_worktrees<CR>";
+    #     key = "<leader>gWs";
+    #     options.desc = "Switch / Delete git worktrees";
+    #   }
+    # ];
     keymapsGC = lib.optionals config.plugins.git-conflict.enable [
       {
         action = "<cmd>GitConflictListQf<CR>";
@@ -242,8 +242,8 @@
       ++ keymapsGI
       ++ keymapsGL
       ++ keymapsLG
-      ++ keymapsGC
-      ++ keymapsGW);
+      ++ keymapsGC);
+    # ++ keymapsGW);
   in {
     inherit keymaps;
     autoGroups = {
@@ -279,19 +279,19 @@
         enable = true;
         # lazyLoad.settings.keys = keymap2Lazy keymapsGC;
       };
-      git-worktree = {
-        enable = true;
-        enableTelescope = config.plugins.telescope.enable;
-        # lazyLoad.settings.keys = keymap2Lazy keymapsGW;
-      };
+      # git-worktree = {
+      #   enable = true;
+      #   enableTelescope = config.plugins.telescope.enable;
+      #   # lazyLoad.settings.keys = keymap2Lazy keymapsGW;
+      # };
     };
     utils.wKeyList =
       [
         (wKeyObj ["<leader>g" "" "Git"])
       ]
-      ++ (lib.optionals (cfgGW.enable && cfgGW.enableTelescope) [
-        (wKeyObj ["<leader>gW" "󰙅 " "Git worktree"])
-      ])
+      # ++ (lib.optionals (cfgGW.enable && cfgGW.enableTelescope) [
+      #   (wKeyObj ["<leader>gW" "󰙅 " "Git worktree"])
+      # ])
       ++ (lib.optionals config.plugins.git-conflict.enable [
         (wKeyObj ["<leader>gc" "" "Git conflict"])
       ]);
