@@ -1,8 +1,10 @@
 {
-  flake.modules.nixvim.core = {
+  flake.modules.nixvim.core = let
+    shell = "dash";
+  in {
     clipboard.register = "unnamedplus";
     extraConfigLua = ''
-      vim.uv.os_setenv("SHELL", "nu")
+      vim.uv.os_setenv("SHELL", "${shell}")
       vim.opt.diffopt = vim.opt.diffopt:append("vertical")
       vim.opt.shortmess = vim.opt.shortmess:append("aAWIc")
     '';
@@ -19,6 +21,7 @@
     opts = let
       indent = 4;
     in {
+      inherit shell;
       background = "dark";
       colorcolumn = "79";
       conceallevel = 2;
@@ -56,7 +59,6 @@
       smartcase = true;
       splitbelow = true;
       splitright = true;
-      shell = "nu";
       softtabstop = indent;
       termguicolors = true;
       undofile = true;

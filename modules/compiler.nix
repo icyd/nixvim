@@ -2,10 +2,21 @@
   flake.modules.nixvim.compiler = {
     lib,
     config,
+    pkgs,
     ...
   }: let
     cfg = config.plugins.compiler;
     inherit (config.utils.mkKey) mkKeyMap keymapUnlazy keymap2Lazy wKeyObj;
+    # NOTE: override package <25-12-12>
+    package = pkgs.vimPlugins.compiler-nvim.overrideAttrs (_prev: {
+      version = "git";
+      src = pkgs.fetchFromGitHub {
+        owner = "ALameLlama";
+        repo = "compiler.nvim";
+        rev = "dba7c3765ea784a66e945a5be16a3cab8d5f5b6d";
+        hash = "sha256-/8554DiraSiZCZl4CSJuPAwMNI65ubnwBgu6Kqlz+pc=";
+      };
+    });
     keymaps = builtins.map mkKeyMap (lib.optionals cfg.enable [
       {
         action = "<cmd>CompilerOpen<CR>";
@@ -35,6 +46,7 @@
   in {
     plugins = {
       compiler = {
+        inherit package;
         enable = true;
         lazyLoad.settings = {
           before = lib.nixvim.utils.mkRaw ''

@@ -1,5 +1,5 @@
 {
-  flake.modules.nixvim.treesitter = {
+  flake.modules.nixvim.treesitter = {pkgs, ...}: {
     plugins = {
       ts-comments = {
         enable = true;
@@ -7,6 +7,17 @@
       };
       treesitter = {
         enable = true;
+        package = pkgs.vimUtils.buildVimPlugin rec {
+          pname = "nvim-treesitter";
+          version = "git";
+          src = pkgs.fetchFromGitHub {
+            owner = pname;
+            repo = pname;
+            rev = "42fc28ba918343ebfd5565147a42a26580579482";
+            hash = "sha256-CVs9FTdg3oKtRjz2YqwkMr0W5qYLGfVyxyhE3qnGYbI=";
+          };
+        };
+        nixGrammars = false;
         settings = {
           auto_install = true;
           highlight.enable = true;

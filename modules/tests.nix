@@ -5,8 +5,18 @@
     ...
   }: let
     cfg = config.plugins.neotest;
-    inherit (config.utils.mkKey) mkKeyMap keymapUnlazy keymap2Lazy wKeyObj;
+    inherit (config.utils.mkKey) mkKeyMap wKeyObj;
     inherit (lib.nixvim.utils) mkRaw;
+    # # NOTE: pinning version <25-12-11>
+    # package = pkgs.vimPlugins.neotest.overrideAttrs (prev: {
+    #   version = "git";
+    #   src = pkgs.fetchFromGitHub {
+    #     owner = "nvim-neotest";
+    #     repo = "neotest";
+    #     rev = "52fca6717ef972113ddd6ca223e30ad0abb2800c";
+    #     hash = "sha256-7CZ1BN9sxOQsn+6wPfdboMTYXeOf7Z98HjhQeqVMo0U=";
+    #   };
+    # });
     keymaps = builtins.map mkKeyMap (lib.optionals cfg.enable ([
         {
           action = mkRaw ''
@@ -102,20 +112,22 @@
         }
       ])));
   in {
-    keymaps = keymapUnlazy keymaps;
+    # keymaps = keymapUnlazy keymaps;
+    inherit keymaps;
     plugins = {
       neotest = {
+        # inherit package;
         enable = true;
-        lazyLoad.settings.keys = keymap2Lazy keymaps;
+        # lazyLoad.settings.keys = keymap2Lazy keymaps;
         settings = {
           adapters = lib.optionals config.plugins.rustaceanvim.enable [
             ''require("rustaceanvim.neotest")''
           ];
         };
         adapters = {
-          go.enable = true;
+          golang.enable = true;
           python.enable = true;
-          rust.enable = true;
+          rust.enable = !config.plugins.rustaceanvim.enable;
           zig.enable = true;
         };
       };

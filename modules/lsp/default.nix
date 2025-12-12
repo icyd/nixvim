@@ -129,14 +129,14 @@
           };
           html.enable = true;
           lemminx.enable = true;
-          ltex_plus = {
-            enable = true;
-            package = pkgs.ltex-ls-plus;
-            extraOptions.settings = {
-              additionalRules.languageModel = "~/.local/share/nvim/models/ngrams/";
-              language = "en";
-            };
-          };
+          # ltex_plus = {
+          #   enable = true;
+          #   package = pkgs.ltex-ls-plus;
+          #   extraOptions.settings = {
+          #     additionalRules.languageModel = "~/.local/share/nvim/models/ngrams/";
+          #     language = "en";
+          #   };
+          # };
           lua_ls.enable = true;
           marksman.enable = true;
           nixd.enable = true;
@@ -146,8 +146,7 @@
           };
           pylsp.enable = true;
           rust_analyzer = {
-            # enable = !config.plugins.rustaceanvim.enable;
-            enable = true;
+            enable = !config.plugins.rustaceanvim.enable;
             settings = rustAnalyzerSettings;
             installCargo = false;
             installRustc = false;
@@ -165,7 +164,7 @@
       };
       crates.enable = true;
       rustaceanvim = {
-        enable = false;
+        enable = true;
         settings.server.default_settings.rust-analyzer = rustAnalyzerSettings;
       };
       navic = {
