@@ -70,7 +70,7 @@
         {
           action = mkRaw ''
             function()
-              require("snacks").picker.files()
+              require("snacks").picker.git_files()
             end
           '';
           key = "<leader>ff";
@@ -79,11 +79,23 @@
         {
           action = mkRaw ''
             function()
-              require("snacks").picker.files()
+              require("snacks").picker.files({hidden = true, ignored = true})
             end
           '';
           key = "<leader>fF";
           options.desc = "Find files";
+        }
+        {
+          action = mkRaw ''
+            function()
+              require("snacks").picker.files({
+                hidden = true,
+                cwd = vim.fn.expand("%:p:h")
+              })
+            end
+          '';
+          key = "<leader>fl";
+          options.desc = "Find files relative to current file";
         }
         {
           action = mkRaw ''
