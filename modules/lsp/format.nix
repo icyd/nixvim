@@ -7,23 +7,23 @@
     inherit (lib) getExe getExe';
     inherit (lib.nixvim.utils) mkRaw;
   in {
-    extraPackages = with pkgs; [
-      alejandra
-      black
-      clang-tools
-      go
-      gotools
-      haskellPackages.fourmolu
-      isort
-      jq
-      texlivePackages.latexindent
-      stylua
-      # rustfmt
-      shellcheck
-      opentofu
-      terragrunt
-      codespell
-    ];
+    # extraPackages = with pkgs; [
+    # alejandra
+    # black
+    # clang-tools
+    # go
+    # gotools
+    # haskellPackages.fourmolu
+    # isort
+    # jq
+    # texlivePackages.latexindent
+    # stylua
+    # rustfmt
+    # shellcheck
+    # opentofu
+    # terragrunt
+    # codespell
+    # ];
     plugins = {
       conform-nvim = {
         enable = true;
@@ -45,13 +45,13 @@
             c = ["clang-format"];
             cpp = c;
             go = ["gofmt" "goimports"];
-            haskell = ["fourmolu"];
+            # haskell = ["fourmolu"];
             json = ["jq"];
             latex = ["latexindent"];
             lua = ["stylua"];
             nix = ["alejandra"];
             markdown = ["prettier" "markdownlint-cli2"];
-            python = ["black" "isort"];
+            python = ["ruff_fix" "ruff_format" "ruff_organize_imports"];
             rust = ["rustfmt"];
             sh = ["shellcheck"];
             terraform = ["tofu_fmt"];
@@ -64,7 +64,7 @@
             # black.command = getExe black;
             clang-format.command = getExe' clang-tools "clang-format";
             codespell.command = getExe codespell;
-            fourmolu.command = getExe haskellPackages.fourmolu;
+            # fourmolu.command = getExe haskellPackages.fourmolu;
             gofmt.command = getExe' go "gofmt";
             goimports.command = getExe' gotools "goimports";
             # isort.command = getExe isort;
@@ -83,6 +83,7 @@
             };
             prettier.command = getExe nodePackages.prettier;
             # rustfmt.command = getExe rustfmt;
+            ruff = getExe ruff;
             shellcheck.command = getExe shellcheck;
             squeeze_blanks.command = getExe' coreutils "cat";
             stylua.command = getExe stylua;

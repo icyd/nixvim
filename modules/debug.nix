@@ -164,16 +164,16 @@
       [
         delve
         lldb
-        python312Packages.debugpy
+        # python312Packages.debugpy
         nodejs-slim
       ]
-      ++ (with pkgs.haskellPackages; [
-        fast-tags
-        ghci-dap
-        haskell-language-server
-        haskell-debug-adapter
-        hoogle
-      ])
+      # ++ (with pkgs.haskellPackages; [
+      #   fast-tags
+      #   ghci-dap
+      #   haskell-language-server
+      #   haskell-debug-adapter
+      #   hoogle
+      # ])
       ++ (lib.optionals pkgs.stdenv.isLinux [
         gdb
       ]);
@@ -211,7 +211,7 @@
         };
         adapters = {
           executables = {
-            haskell.command = "haskell-debug-adapter";
+            # haskell.command = "haskell-debug-adapter";
             codelldb.command = "${pkgs.vscode-extensions.vadimcn.vscode-lldb}/share/vscode/extensions/vadimcn.vscode-lldb/adapter/codelldb";
             gdb = lib.mkIf pkgs.stdenv.isLinux {
               command = lib.getExe pkgs.gdb;
@@ -300,21 +300,21 @@
               type = "gdb";
               name = "Launch (GDB)";
             };
-          haskell-config = rec {
-            type = "haskell";
-            request = "launch";
-            name = "Launch (Haskell)";
-            workspace = "\${workspaceFolder}";
-            stopOnEntry = true;
-            logFile = mkRaw ''
-              vim.fn.stdpath("data") .. "/haskell-dap.log"
-            '';
-            logLevel = "WARNING";
-            ghciEnv = {};
-            ghciPrompt = "ghci> ";
-            ghciInitialPrompt = ghciPrompt;
-            ghciCmd = "ghci-dap --interactive -i -i\${workspaceFolder}";
-          };
+          # haskell-config = rec {
+          #   type = "haskell";
+          #   request = "launch";
+          #   name = "Launch (Haskell)";
+          #   workspace = "\${workspaceFolder}";
+          #   stopOnEntry = true;
+          #   logFile = mkRaw ''
+          #     vim.fn.stdpath("data") .. "/haskell-dap.log"
+          #   '';
+          #   logLevel = "WARNING";
+          #   ghciEnv = {};
+          #   ghciPrompt = "ghci> ";
+          #   ghciInitialPrompt = ghciPrompt;
+          #   ghciCmd = "ghci-dap --interactive -i -i\${workspaceFolder}";
+          # };
         in rec {
           c =
             [
@@ -332,9 +332,9 @@
               codelldb-config
             ];
           rust = cpp;
-          haskell = [
-            haskell-config
-          ];
+          # haskell = [
+          #   haskell-config
+          # ];
         };
         signs = {
           dapBreakpoint = {
@@ -414,7 +414,7 @@
       };
       dap-go.enable = true;
       dap-lldb.enable = true;
-      dap-python.enable = true;
+      # dap-python.enable = true;
     };
     utils.wKeyList = lib.optionals cfg.enable [
       (wKeyObj ["<leader>d" "󰃤" "Debug"])

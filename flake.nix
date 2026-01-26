@@ -10,15 +10,15 @@
       url = "github:nix-community/neovim-nightly-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixpkgs.url = "github:NixOs/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:NixOs/nixpkgs/nixpkgs-unstable";
     nixvim = {
-      url = "github:nix-community/nixvim/nixos-25.11";
+      url = "github:nix-community/nixvim";
       inputs = {
         flake-parts.follows = "flake-parts";
-        nuschtosSearch.follows = "";
       };
     };
     pkgs-by-name-for-flake-parts.url = "github:drupol/pkgs-by-name-for-flake-parts";
+    systems.url = "github:nix-systems/default";
   };
   nixConfig = {
     extra-substituters = [

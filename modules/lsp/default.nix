@@ -21,26 +21,17 @@
     # extraPackages = with pkgs; [
     #   cargo-nextest
     # ];
-    extraPlugins = with pkgs.vimPlugins; [
-      haskell-tools-nvim
-    ];
-    globals = {
-      haskell_tools.tools.repl.handler = lib.mkIf config.plugins.toggleterm.enable "toggleterm";
-    };
+    # extraPlugins = with pkgs.vimPlugins; [
+    #   haskell-tools-nvim
+    # ];
+    # globals = {
+    #   haskell_tools.tools.repl.handler = lib.mkIf config.plugins.toggleterm.enable "toggleterm";
+    # };
     keymaps = builtins.map mkKeyMap [
       {
         action = "<cmd>Navbuddy<CR>";
         key = "<leader>xn";
         options.desc = "Navbuddy toggle";
-      }
-      {
-        action = mkRaw ''
-          function()
-            require("otter").activate()
-          end
-        '';
-        key = "<leader>lO";
-        options.desc = "Activate Otter";
       }
     ];
     plugins = {
@@ -109,7 +100,7 @@
         servers = {
           bashls.enable = true;
           clangd.enable = true;
-          cssls.enable = true;
+          # cssls.enable = true;
           dockerls.enable = true;
           gopls.enable = true;
           jdtls.enable = true;
@@ -127,7 +118,7 @@
               }
             '';
           };
-          html.enable = true;
+          # html.enable = true;
           lemminx.enable = true;
           # ltex_plus = {
           #   enable = true;
@@ -145,6 +136,8 @@
             package = null;
           };
           pylsp.enable = true;
+          ruff.enable = true;
+          # pyrefly.enable = true;
           rust_analyzer = {
             enable = !config.plugins.rustaceanvim.enable;
             settings = rustAnalyzerSettings;
@@ -156,10 +149,10 @@
           terraformls.enable = true;
           ts_ls.enable = !config.plugins.typescript-tools.enable;
           yamlls.enable = true;
-          zls = {
-            enable = true;
-            package = null;
-          };
+          # zls = {
+          #   enable = true;
+          #   package = null;
+          # };
         };
       };
       crates.enable = true;

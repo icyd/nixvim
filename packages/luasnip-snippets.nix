@@ -5,7 +5,7 @@ pkgs.vimUtils.buildVimPlugin {
   src = pkgs.fetchFromGitHub {
     owner = "mireq";
     repo = "luasnip-snippets";
-    rev = "44b20b98c7cc8fc595407993f0bdc96def4215f7";
+    rev = "9bd2d21915eb9b27720fc92a9a8def49023cfa37";
     hash = "sha256-z4JCfrt5qZ9FBjkRtORmv2y8wCF0RIJQPpMGWdUHifA=";
   };
   meta.homepage = "https://github.com/mireq/luasnip-snippets.git";
@@ -16,5 +16,6 @@ pkgs.vimUtils.buildVimPlugin {
   ];
   nvimSkipModules = [
     "luasnip_snippets.all"
+    "luasnip_snippets.python_extra"
   ];
 }

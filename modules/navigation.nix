@@ -71,7 +71,7 @@
     plugins = {
       navigator-nvim.enable = true;
       zellij-nav = {
-        enable = true;
+        enable = false;
         lazyLoad.settings.event = "DeferredUIEnter";
       };
     };

@@ -40,7 +40,7 @@
       [
         kmonad-vim
         mini-icons
-        playground
+        # playground
         term-edit-nvim
         vim-gnupg
         # vim-indent-object

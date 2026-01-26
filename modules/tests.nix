@@ -128,7 +128,7 @@
           golang.enable = true;
           python.enable = true;
           rust.enable = !config.plugins.rustaceanvim.enable;
-          zig.enable = true;
+          # zig.enable = true;
         };
       };
     };

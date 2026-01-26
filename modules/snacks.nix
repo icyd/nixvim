@@ -264,10 +264,12 @@
       settings = {
         bufdelete.enabled = true;
         debug.enabled = true;
+        image.enabled = false;
         indent.enabled = true;
         notifier.enabled = true;
         picker.enabled = true;
         profiles.enabled = true;
+        quickfile.enabled = true;
         scope.enabled = true;
         scratch.enabled = true;
         scroll.enabled = true;
