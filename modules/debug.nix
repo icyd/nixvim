@@ -166,6 +166,7 @@
         lldb
         # python312Packages.debugpy
         nodejs-slim
+        local.vscode-ext-cortex-debug
       ]
       # ++ (with pkgs.haskellPackages; [
       #   fast-tags

@@ -18,10 +18,12 @@
         #   };
         # };
         nixGrammars = false;
-        settings = {
-          auto_install = true;
-          highlight.enable = true;
-        };
+        highlight.enable = true;
+        indent.enable = true;
+        # settings = {
+        #   # auto_install = true;
+        #   highlight.enable = true;
+        # };
       };
       treesitter-context.enable = true;
       # treesitter-refactor.enable = true;

@@ -27,7 +27,7 @@
     # globals = {
     #   haskell_tools.tools.repl.handler = lib.mkIf config.plugins.toggleterm.enable "toggleterm";
     # };
-    keymaps = builtins.map mkKeyMap [
+    keymaps = map mkKeyMap [
       {
         action = "<cmd>Navbuddy<CR>";
         key = "<leader>xn";
@@ -41,7 +41,7 @@
         enable = true;
         inlayHints = true;
         keymaps = {
-          extra = builtins.map mkKeyMap [
+          extra = map mkKeyMap [
             {
               action = mkRaw "rename";
               key = "<leader>lr";
@@ -98,15 +98,33 @@
           end
         '';
         servers = {
-          bashls.enable = true;
-          clangd.enable = true;
+          bashls = {
+            enable = true;
+            package = pkgs.bash-language-server;
+          };
+          clangd = {
+            enable = true;
+            package = pkgs.clang-tools;
+            packageFallback = true;
+          };
           # cssls.enable = true;
-          dockerls.enable = true;
-          gopls.enable = true;
-          jdtls.enable = true;
-          jsonls.enable = true;
+          dockerls = {
+            enable = true;
+            package = pkgs.dockerfile-language-server;
+          };
+          gopls = {
+            enable = true;
+            package = pkgs.gopls;
+            packageFallback = true;
+          };
+          # jdtls.enable = true;
+          jsonls = {
+            enable = true;
+            package = pkgs.vscode-langservers-extracted;
+          };
           helm_ls = {
             enable = true;
+            package = pkgs.helm-ls;
             extraOptions.settings = mkRaw ''
               {
                 ["helm-ls"] = {
@@ -119,7 +137,7 @@
             '';
           };
           # html.enable = true;
-          lemminx.enable = true;
+          # lemminx.enable = true;
           # ltex_plus = {
           #   enable = true;
           #   package = pkgs.ltex-ls-plus;
@@ -129,26 +147,45 @@
           #   };
           # };
           lua_ls.enable = true;
-          marksman.enable = true;
-          nixd.enable = true;
+          # marksman.enable = true;
+          nixd = {
+            enable = true;
+            package = pkgs.nixd;
+            packageFallback = true;
+          };
           nushell = {
             enable = true;
             package = null;
           };
-          pylsp.enable = true;
-          ruff.enable = true;
-          # pyrefly.enable = true;
+          pylsp = {
+            enable = true;
+            package = pkgs.python3Packages.python-lsp-server;
+            packageFallback = true;
+          };
+          ruff = {
+            enable = true;
+            package = pkgs.ruff;
+            packageFallback = true;
+          };
           rust_analyzer = {
             enable = !config.plugins.rustaceanvim.enable;
             settings = rustAnalyzerSettings;
             installCargo = false;
             installRustc = false;
             installRustfmt = false;
-            package = null;
+            package = pkgs.rust-analyzer;
+            packageFallback = true;
           };
-          terraformls.enable = true;
+          terraformls = {
+            enable = true;
+            package = pkgs.terraform-ls;
+            packageFallback = true;
+          };
           ts_ls.enable = !config.plugins.typescript-tools.enable;
-          yamlls.enable = true;
+          yamlls = {
+            enable = true;
+            package = pkgs.yaml-language-server;
+          };
           # zls = {
           #   enable = true;
           #   package = null;
