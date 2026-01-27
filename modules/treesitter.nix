@@ -1,5 +1,8 @@
 {
-  flake.modules.nixvim.treesitter = {
+  flake.modules.nixvim.treesitter = {pkgs, ...}: {
+    extraPackages = with pkgs; [
+      tree-sitter
+    ];
     plugins = {
       ts-comments = {
         enable = true;
