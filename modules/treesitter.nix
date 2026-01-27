@@ -17,7 +17,7 @@
         #     hash = "sha256-CVs9FTdg3oKtRjz2YqwkMr0W5qYLGfVyxyhE3qnGYbI=";
         #   };
         # };
-        nixGrammars = false;
+        nixGrammars = true;
         highlight.enable = true;
         indent.enable = true;
         # settings = {
