@@ -118,7 +118,10 @@
         {
           action = mkRaw ''
             function()
-              require("snacks").picker.projects()
+              require("snacks").picker.projects({
+              dev = { "~/Projects" },
+              max_depth = 3,
+            })
             end
           '';
           key = "<leader>fp";
