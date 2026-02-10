@@ -23,6 +23,12 @@
         nixGrammars = true;
         highlight.enable = true;
         indent.enable = true;
+        languageRegister = {
+          terraform = [
+            "terraform"
+            "terraform-vars"
+          ];
+        };
         # settings = {
         #   # auto_install = true;
         #   highlight.enable = true;
