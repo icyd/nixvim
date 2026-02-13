@@ -7,7 +7,7 @@
   }: let
     inherit (lib.nixvim.utils) mkRaw;
     inherit (config.utils.mkKey) mkKeyMap wKeyObj;
-    keymaps = builtins.map mkKeyMap [
+    keymaps = map mkKeyMap [
       {
         action = mkRaw ''
           function()

@@ -2,8 +2,10 @@
   flake.modules.nixvim.ui = {
     lib,
     config,
+    pkgs,
     ...
   }: {
+    extraPlugins = lib.optional config.plugins.copilot-lua.enable pkgs.local.copilot-lualine;
     plugins = {
       lualine = {
         enable = true;
@@ -37,14 +39,16 @@
             lualine_c = lib.mkIf config.plugins.navic.enable [
               (listToUnkeyedAttrs ["navic"])
             ];
-            lualine_x = [
-              ((listToUnkeyedAttrs ["filename"])
-                // {
-                  file_status = true;
-                  newfile_status = true;
-                  path = 3;
-                })
-            ];
+            lualine_x =
+              (lib.optional config.plugins.copilot-lua.enable (listToUnkeyedAttrs ["copilot"]))
+              ++ [
+                ((listToUnkeyedAttrs ["filename"])
+                  // {
+                    file_status = true;
+                    newfile_status = true;
+                    path = 3;
+                  })
+              ];
           };
         };
       };

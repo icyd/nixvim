@@ -265,6 +265,10 @@
                 name = "neorg";
                 priority = 300;
               }
+              {
+                name = "copilot";
+                group_index = 2;
+              }
             ]
             ++ (lib.optional config.plugins.render-markdown.enable {
               name = "render-markdown";
@@ -321,6 +325,10 @@
           };
           show_labelDetails = true;
         };
+      };
+      copilot-cmp = {
+        enable = true;
+        settings.fix_pairs = false;
       };
     };
   };
