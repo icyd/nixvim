@@ -228,7 +228,6 @@
       rainbow-delimiters.enable = true;
       snacks = {
         enable = true;
-        lazyLoad.settings.event = "DeferredUIEnter";
         settings = {
           bigfile.enable = true;
           quickfile.enable = true;

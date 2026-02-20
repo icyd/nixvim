@@ -1,7 +1,25 @@
 {
-  flake.modules.nixvim.treesitter = {pkgs, ...}: {
+  flake.modules.nixvim.treesitter = {
+    lib,
+    pkgs,
+    ...
+  }: {
     extraPackages = with pkgs; [
-      tree-sitter
+      (tree-sitter.overrideAttrs (prev: rec {
+        version = "git";
+        src = pkgs.fetchFromGitHub {
+          inherit (prev.src) owner repo;
+          tag = "v0.26.5";
+          hash = "sha256-tnZ8VllRRYPL8UhNmrda7IjKSeFmmOnW/2/VqgJFLgU=";
+        };
+        cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+          inherit src;
+          hash = "sha256-EU8kdG2NT3NvrZ1AqvaJPLpDQQwUhYG3Gj5TAjPYRsY=";
+        };
+        patches = [];
+        # doCheck = false;
+        # doInstallCheck = false;
+      }))
     ];
     plugins = {
       ts-comments = {

@@ -18,9 +18,9 @@
       };
     };
   in {
-    # extraPackages = with pkgs; [
-    #   cargo-nextest
-    # ];
+    extraPackages = with pkgs; [
+      nodejs-slim
+    ];
     # extraPlugins = with pkgs.vimPlugins; [
     #   haskell-tools-nvim
     # ];

@@ -197,7 +197,6 @@
             local rtt_config = ok_dap_cortex_debug and dap_cortex_debug.rtt_config(0) or {}
           '';
           post = ''
-            require("dap.ext.vscode").load_launchjs()
             if ok_dap_cortex_debug then
               dap_cortex_debug.setup({
                 extension_path = "${pkgs.local.vscode-ext-cortex-debug}/share/vscode/extensions/marus25.cortex-debug",

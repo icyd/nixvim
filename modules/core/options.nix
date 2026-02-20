@@ -16,6 +16,10 @@
       netrw_browse_split = 4;
       netrw_winsize = 30;
       netrw_localcopydircmd = "cp -r";
+      loaded_node_provider = 0;
+      loaded_perl_provider = 0;
+      loaded_python3_provider = 0;
+      loaded_ruby_provider = 0;
     };
     globalOpts.hlsearch = false;
     opts = let
