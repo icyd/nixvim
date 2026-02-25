@@ -206,6 +206,7 @@
         enable = true;
         settings.lsp.auto_attach = true;
       };
+      schemastore.enable = true;
       typescript-tools.enable = true;
     };
     # utils.wKeyList = lib.optionals config.plugins.telescope.enable [
