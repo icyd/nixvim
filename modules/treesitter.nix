@@ -17,6 +17,17 @@
           hash = "sha256-EU8kdG2NT3NvrZ1AqvaJPLpDQQwUhYG3Gj5TAjPYRsY=";
         };
         patches = [];
+        preBuild = with pkgs; ''
+          export BINDGEN_EXTRA_CLANG_ARGS="$(< ${stdenv.cc}/nix-support/libc-crt1-cflags) \
+            $(< ${stdenv.cc}/nix-support/libc-cflags) \
+            $(< ${stdenv.cc}/nix-support/cc-cflags) \
+            $(< ${stdenv.cc}/nix-support/libcxx-cxxflags) \
+            ${lib.optionalString stdenv.cc.isClang "-idirafter ${stdenv.cc.cc}/lib/clang/${lib.getVersion stdenv.cc.cc}/include"} \
+            ${lib.optionalString stdenv.cc.isGNU "-isystem ${stdenv.cc.cc}/include/c++/${lib.getVersion stdenv.cc.cc} -isystem ${stdenv.cc.cc}/include/c++/${lib.getVersion stdenv.cc.cc}/${stdenv.hostPlatform.config} -idirafter ${stdenv.cc.cc}/lib/gcc/${stdenv.hostPlatform.config}/${lib.getVersion stdenv.cc.cc}/include"} \
+          "
+        '';
+        LIBCLANG_PATH = "${pkgs.libclang.lib}/lib";
+        buildInputs = (prev.buildInputs or []) ++ (with pkgs; [clang llvmPackages.libcxxStdenv]);
         # doCheck = false;
         # doInstallCheck = false;
       }))
