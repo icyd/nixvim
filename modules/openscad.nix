@@ -78,7 +78,7 @@
       enable = true;
       lazyLoad.settings.ft = "openscad";
       settings = {
-        auto_open = true;
+        auto_open = false;
         default_mappings = false;
         load_snippets = true;
       };
