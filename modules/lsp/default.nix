@@ -157,10 +157,8 @@
             enable = true;
             package = null;
           };
-          openscad_ls = {
-            enable = config.plugins.openscad.enable;
-            package = pkgs.openscad-lsp;
-          };
+          # openscad_lsp.enable = config.plugins.openscad.enable;
+          openscad_lsp.enable = true;
           pylsp = {
             enable = true;
             package = pkgs.python3Packages.python-lsp-server;

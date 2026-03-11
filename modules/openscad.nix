@@ -75,10 +75,11 @@
       vim.g.openscad_fuzzy_finder = "snacks";
     '';
     plugins.openscad = {
-      enable = true;
+      enable = false;
       lazyLoad.settings.ft = "openscad";
       settings = {
         auto_open = false;
+        fuzzy_finder = null;
         default_mappings = false;
         load_snippets = true;
       };
