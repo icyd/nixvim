@@ -225,7 +225,17 @@
         enable = true;
         lazyLoad.settings.event = "BufReadPre";
       };
-      rainbow-delimiters.enable = true;
+      rainbow-delimiters = {
+        enable = true;
+        package = pkgs.vimPlugins.rainbow-delimiters-nvim.overrideAttrs (prev: {
+          version = "git";
+          src = pkgs.fetchFromGitHub {
+            inherit (prev.src) owner repo;
+            rev = "master";
+            hash = "sha256-nqZKbqUeVkwzZlUR+xAKe4cb65DahWgStreRtGUchXE=";
+          };
+        });
+      };
       snacks = {
         enable = true;
         settings = {
