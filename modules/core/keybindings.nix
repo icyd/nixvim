@@ -111,16 +111,6 @@
             key = "<leader>\\";
             options.desc = "Split vertical";
           }
-          # {
-          #   action = "<C-a>";
-          #   key = "<M-a>";
-          #   options.desc = "Increment number";
-          # }
-          # {
-          #   action = "<C-x>";
-          #   key = "<M-x>";
-          #   options.desc = "Decrement number";
-          # }
           {
             action = "<ESC>";
             key = "jk";

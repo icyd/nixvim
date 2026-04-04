@@ -17,8 +17,5 @@
         };
       };
     };
-    # utils.wKeyList = lib.optionals config.plugins.openscad.enable [
-    #   (wKeyObj ["<leader>p" "󰶓" "Copilot"])
-    # ];
   };
 }

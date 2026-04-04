@@ -98,7 +98,6 @@
       sqlite-lua.enable = cfg.enable;
       yanky = {
         enable = true;
-        # enableTelescope = config.plugins.telescope.enable;
         lazyLoad.settings.keys = keymap2Lazy keymaps;
         settings = {
           ring.storage = "sqlite";

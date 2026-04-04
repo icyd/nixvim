@@ -40,10 +40,8 @@
       [
         kmonad-vim
         mini-icons
-        # playground
         term-edit-nvim
         vim-gnupg
-        # vim-indent-object
         vim-table-mode
       ]
       ++ (with pkgs.local; [

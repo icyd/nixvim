@@ -1,5 +1,10 @@
 local extras = require("luasnip.extras")
 
+local vars = {
+    email = vim.g.snips_email or "email",
+    real_name = vim.g.snips_author or "realname",
+}
+
 return {
     s(
         "code",
@@ -26,9 +31,9 @@ return {
 ]],
             {
                 i(0),
-                t("Alberto Vázquez"),
+                i(1, vars.real_name),
                 extras.partial(os.date, "%Y-%m-%d"),
-                c(1, { t("beto.v25@gmail.com") }),
+                i(2, vars.email),
             }
         )
     ),

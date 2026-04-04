@@ -4,6 +4,7 @@
     config,
     ...
   }: let
+    a = 0;
     inherit (lib.nixvim.utils) mkRaw;
     inherit (config.utils.mkKey) mkKeyMap keymap2Lazy keymapUnlazy;
     keymaps = builtins.map mkKeyMap [
@@ -13,7 +14,7 @@
             require("dial.map").manipulate("increment", "normal")
           end
         '';
-        key = "<C-x>";
+        key = "<M-a>";
         options = {
           desc = "Increment number";
         };
@@ -35,7 +36,7 @@
             require("dial.map").manipulate("increment", "gnormal")
           end
         '';
-        key = "g<C-x>";
+        key = "g<M-a>";
         options = {
           desc = "Increment number";
         };
@@ -57,7 +58,7 @@
             require("dial.map").manipulate("increment", "visual")
           end
         '';
-        key = "<C-x>";
+        key = "<M-a>";
         mode = "v";
         options = {
           desc = "Increment number";
@@ -81,7 +82,7 @@
             require("dial.map").manipulate("increment", "gvisual")
           end
         '';
-        key = "g<C-x>";
+        key = "g<M-a>";
         mode = "v";
         options = {
           desc = "Increment number";

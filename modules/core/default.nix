@@ -133,8 +133,7 @@
         ];
       };
       comment = {
-        enable = true;
-        # lazyLoad.settings.keys = keymap2Lazy keymapsCom;
+        enable = false;
         settings.pre_hook = lib.optionalString config.plugins.ts-context-commentstring.enable ''
           require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook()
         '';
@@ -147,7 +146,7 @@
           modes = {
             char = {
               multi_line = true;
-              jump_labels = true;
+              jump_labels = false;
             };
             search.enabled = true;
           };
@@ -155,7 +154,6 @@
       };
       nvim-autopairs = {
         enable = true;
-        # lazyLoad.settings.event = "BufReadPre";
         luaConfig.post = ''
           local autopairs = require("nvim-autopairs")
           local rule = require("nvim-autopairs.rule")
@@ -183,7 +181,7 @@
             rule("<", ">"):with_pair(conds.before_regex('%a+:?:?$', 3)):with_move(function(opts)
               return opts.char == '>'
             end),
-            rule("= ", ";", "nix"):with_pair(is_not_ts_node_comment_one_back()):set_end_pair_length(1),
+            -- rule("=", ";", "nix"):with_pair(is_not_ts_node_comment_one_back()):set_end_pair_length(1),
             rule("{", "},", "lua"):with_pair(ts_conds.is_ts_node({"table_constructor"})),
             rule("'", "',", "lua"):with_pair(ts_conds.is_ts_node({"table_constructor"})),
             rule('"', '",', "lua"):with_pair(ts_conds.is_ts_node({"table_constructor"})),
@@ -225,17 +223,7 @@
         enable = true;
         lazyLoad.settings.event = "BufReadPre";
       };
-      rainbow-delimiters = {
-        enable = true;
-        package = pkgs.vimPlugins.rainbow-delimiters-nvim.overrideAttrs (prev: {
-          version = "git";
-          src = pkgs.fetchFromGitHub {
-            inherit (prev.src) owner repo;
-            rev = "master";
-            hash = "sha256-nqZKbqUeVkwzZlUR+xAKe4cb65DahWgStreRtGUchXE=";
-          };
-        });
-      };
+      rainbow-delimiters.enable = true;
       snacks = {
         enable = true;
         settings = {
@@ -252,11 +240,18 @@
         highlight.enable = true;
         indent.enable = true;
       };
+      ts-comments.enable = true;
       ts-context-commentstring = {
         enable = true;
-        settings = lib.mkIf config.plugins.comment.enable {
-          enable_autocmd = false;
-        };
+        settings.enable_autocmd = false;
+        luaConfig.post = ''
+          local get_option = vim.filetype.get_option
+          vim.filetype.get_option = function(filetype, option)
+            return option == "commentstring"
+            and require("ts_context_commentstring.internal").calculate_commentstring()
+            or get_option(filetype, option)
+          end
+        '';
       };
       which-key = {
         enable = true;

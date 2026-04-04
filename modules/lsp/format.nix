@@ -7,23 +7,6 @@
     inherit (lib) getExe getExe';
     inherit (lib.nixvim.utils) mkRaw;
   in {
-    # extraPackages = with pkgs; [
-    # alejandra
-    # black
-    # clang-tools
-    # go
-    # gotools
-    # haskellPackages.fourmolu
-    # isort
-    # jq
-    # texlivePackages.latexindent
-    # stylua
-    # rustfmt
-    # shellcheck
-    # opentofu
-    # terragrunt
-    # codespell
-    # ];
     plugins = {
       conform-nvim = {
         enable = true;
@@ -61,13 +44,10 @@
           };
           formatters = with pkgs; {
             alejandra.command = getExe alejandra;
-            # black.command = getExe black;
             clang-format.command = getExe' clang-tools "clang-format";
             codespell.command = getExe codespell;
-            # fourmolu.command = getExe haskellPackages.fourmolu;
             gofmt.command = getExe' go "gofmt";
             goimports.command = getExe' gotools "goimports";
-            # isort.command = getExe isort;
             jq.command = getExe jq;
             latexindent.command = getExe' texlivePackages.latexindent "latexindent";
             markdownlint-cli2 = {
@@ -81,8 +61,7 @@
                 end
               '';
             };
-            prettier.command = getExe nodePackages.prettier;
-            # rustfmt.command = getExe rustfmt;
+            prettier.command = getExe prettier;
             ruff = getExe ruff;
             shellcheck.command = getExe shellcheck;
             squeeze_blanks.command = getExe' coreutils "cat";

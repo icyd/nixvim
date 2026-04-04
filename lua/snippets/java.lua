@@ -1,11 +1,11 @@
 return {
     s(
         "inter",
-        fmt(
+        fmta(
             [[
-public interface {} {}{{
-	{}
-}}
+public interface <> <>{
+	<>
+}
 ]],
             {
                 l(l.TM_FILENAME:match("^(.+)%..+"), {}),
@@ -16,11 +16,11 @@ public interface {} {}{{
     ),
     s(
         "clas", -- typos:disable-line
-        fmt(
+        fmta(
             [[
-public class {} {}{{
-	{}
-}}
+public class <> <>{
+	<>
+}
 ]],
             {
                 l(l.TM_FILENAME:match("^(.+)%..+"), {}),

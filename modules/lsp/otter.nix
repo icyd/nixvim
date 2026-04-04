@@ -20,7 +20,6 @@
     ];
     plugins = {
       otter = {
-        # inherit (config.plugins.telescope) enable;
         enable = true;
         lazyLoad.settings.event = "DeferredUIEnter";
         autoActivate = false;

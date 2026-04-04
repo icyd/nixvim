@@ -164,7 +164,7 @@
       [
         delve
         lldb
-        # python312Packages.debugpy
+        python312Packages.debugpy
         nodejs-slim
         local.vscode-ext-cortex-debug
       ]
