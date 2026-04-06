@@ -32,6 +32,9 @@ local marks = {
     date_signature_with_username = function()
         return fmt("<{}{}>", { i(1, os.date("%d-%m-%y")), i(2, ", " .. vars.username) })
     end,
+    date_signature_with_name = function()
+        return fmt("<{}{}>", { i(1, os.date("%d-%m-%y")), i(2, ", " .. vars.real_name) })
+    end,
     date_signature_with_username_and_email = function()
         return fmt("<{}{}{}>", {
             i(1, os.date("%d-%m-%y")),

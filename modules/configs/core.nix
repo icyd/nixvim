@@ -6,6 +6,7 @@
       completion
       optimizations
       utils
+      (../metadata.nix)
       {
         wrapRc = true;
         impureRtp = false;
