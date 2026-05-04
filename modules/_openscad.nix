@@ -58,6 +58,7 @@
             require("openscad").topToggle()
           end
         '';
+        # typos:ignore-next-line
         key = "<leader>ot";
         options = {
           desc = "Toggle htop";

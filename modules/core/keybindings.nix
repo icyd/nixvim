@@ -18,7 +18,7 @@
       nnoremap "N" "Nzzzv"
     '';
     keymaps =
-      builtins.map mkKeyMap
+      mkKeyMap
       ([
           {
             action = "<Nop>";
@@ -300,7 +300,7 @@
             options.desc = "Move to right window";
           }
         ]));
-    utils.wKeyList = builtins.map wKeyObj [
+    utils.wKeyList = map wKeyObj [
       ["[" "" "next"]
       ["]" "" "prev"]
       ["<leader>a" "󰓩" "Tabs"]

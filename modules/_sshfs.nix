@@ -1,6 +1,5 @@
 {
-  flake.modules.nixvim.sshfs = {pkgs, ...}: let
-  in {
+  flake.modules.nixvim.sshfs = {pkgs, ...}: {
     extraPackages = with pkgs; [
       sshfs
     ];

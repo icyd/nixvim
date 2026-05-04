@@ -1,37 +1,47 @@
-{config, ...}: {
-  metadata = {
-    name = "Alberto Vázquez";
-    email = "beto.v25@gmail.com";
-  };
-  flake.modules.nixvim.core = let
-    shell = "bash";
+{
+  flake.modules.nixvim.core = {
+    lib,
+    config,
+    pkgs,
+    ...
+  }: let
+    disabledPlugins =
+      lib.listToAttrs
+      (map (p: {
+          name = "loaded_${p}";
+          value = 1;
+        })
+        config.disabledPlugins);
   in {
     clipboard.register = "unnamedplus";
+    extraPackages = with pkgs; [
+      ripgrep
+    ];
     extraConfigLua = ''
-      vim.uv.os_setenv("SHELL", "${shell}")
       vim.opt.diffopt = vim.opt.diffopt:append("vertical")
       vim.opt.shortmess = vim.opt.shortmess:append("aAWIc")
     '';
-    globals = {
-      hlsearch = false;
-      netrw_banner = 0;
-      netrw_keepdir = 0;
-      netrw_liststyle = 3;
-      netrw_browse_split = 4;
-      netrw_winsize = 30;
-      netrw_localcopydircmd = "cp -r";
-      loaded_node_provider = 0;
-      loaded_perl_provider = 0;
-      loaded_python3_provider = 0;
-      loaded_ruby_provider = 0;
-      snips_author = config.metadata.name;
-      snips_email = config.metadata.email;
-    };
+    globals =
+      disabledPlugins
+      // {
+        hlsearch = false;
+        netrw_banner = 0;
+        netrw_keepdir = 0;
+        netrw_liststyle = 3;
+        netrw_browse_split = 4;
+        netrw_winsize = 30;
+        netrw_localcopydircmd = "cp -r";
+        loaded_node_provider = 0;
+        loaded_perl_provider = 0;
+        loaded_python3_provider = 0;
+        loaded_ruby_provider = 0;
+        snips_author = config.userdata.name;
+        snips_email = config.userdata.email;
+      };
     globalOpts.hlsearch = false;
     opts = let
       indent = 4;
     in {
-      inherit shell;
       background = "dark";
       colorcolumn = "79";
       conceallevel = 2;

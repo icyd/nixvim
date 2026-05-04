@@ -2,7 +2,6 @@
   flake.modules.nixvim.completion = {
     lib,
     config,
-    pkgs,
     ...
   }: let
     cfg = config.plugins.cmp;

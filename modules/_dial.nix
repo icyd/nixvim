@@ -4,7 +4,6 @@
     config,
     ...
   }: let
-    a = 0;
     inherit (lib.nixvim.utils) mkRaw;
     inherit (config.utils.mkKey) mkKeyMap keymap2Lazy keymapUnlazy;
     keymaps = builtins.map mkKeyMap [

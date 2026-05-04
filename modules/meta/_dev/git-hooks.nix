@@ -18,7 +18,6 @@
           };
           statix.enable = true;
           treefmt.enable = false;
-          typos.enable = true;
         };
       };
     };

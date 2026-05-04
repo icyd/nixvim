@@ -26,7 +26,20 @@
           };
           statix.enable = true;
           stylua.enable = true;
-          typos.enable = true;
+          typos = let
+            configFile = pkgs.writeText "typos.toml" ''
+              [default]
+              extend-ignore-re = [
+                  # Ignore the line after `# typos:ignore-next-line`:
+                  "(#|--|//)\\s*typos:ignore-next-line\\n.*",
+                  # Ignore blocks between `# typos:disabled` and `# typos:enabled`
+                  "(?s)(#|--|//)\\s*typos:disabled.*?\\n\\s*(#|--|//)\\s*typos:enabled",
+              ]
+            '';
+          in {
+            enable = true;
+            configFile = "${configFile}";
+          };
           yamlfmt = {
             enable = true;
             settings.formatter = {

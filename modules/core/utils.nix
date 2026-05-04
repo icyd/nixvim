@@ -1,5 +1,5 @@
 {
-  flake.modules.nixvim.utils = {
+  flake.modules.nixvim.core = {
     lib,
     config,
     ...
@@ -15,7 +15,7 @@
       };
     };
     config.utils.mkKey = rec {
-      mkKeyMap = {
+      mkKey = {
         mode ? "n",
         key,
         action,
@@ -30,7 +30,9 @@
           }
           // options;
       };
-      lazyKeyMap = {
+      mkKeyMap = keys: map mkKey keys;
+      mkKeyMapIf = cond: keys: lib.optionals cond (mkKeyMap keys);
+      lazyKey = {
         mode ? "n",
         key,
         action,
@@ -41,18 +43,19 @@
           inherit mode;
           desc = lib.mkIf (lib.hasAttr "desc" options) options.desc;
         };
-      keymapUnlazy = list: lib.optionals (!config.plugins.lz-n.enable) list;
-      keymap2Lazy = list: lib.optionals config.plugins.lz-n.enable (builtins.map lazyKeyMap list);
+      keymapUnlazy = keys: lib.optionals (!config.plugins.lz-n.enable) keys;
+      keymap2Lazy = keys: lib.optionals config.plugins.lz-n.enable (map lazyKey keys);
       wKeyObj = with builtins;
-        list:
-          (lib.nixvim.utils.listToUnkeyedAttrs [(elemAt list 0)])
+        keys:
+          (lib.nixvim.utils.listToUnkeyedAttrs [(elemAt keys 0)])
           // {
-            icon = elemAt list 1;
-            group = elemAt list 2;
+            icon = elemAt keys 1;
+            group = elemAt keys 2;
           }
-          // lib.optionalAttrs (length list > 3) {
-            hidden = elemAt list 3;
+          // lib.optionalAttrs (length keys > 3) {
+            hidden = elemAt keys 3;
           };
+      wKeyObjIf = cond: keys: lib.optionals cond (wKeyObj keys);
     };
   };
 }

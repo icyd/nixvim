@@ -1,7 +1,6 @@
 {
   pkgs,
   vimUtils,
-  lib,
   ...
 }:
 vimUtils.buildVimPlugin {
