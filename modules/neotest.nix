@@ -5,11 +5,11 @@
     ...
   }: let
     cfg = config.plugins.neotest;
-    inherit (config.utils.mkKey) mkKeyMap wKeyObj;
-    inherit (lib.nixvim.utils) mkRaw;
-    keymaps = builtins.map mkKeyMap (lib.optionals cfg.enable ([
+    inherit (config.utils.mkKey) mkKeyMapIf wKeyObjMapIf;
+    keymaps =
+      mkKeyMapIf cfg.enable [
         {
-          action = mkRaw ''
+          action.__raw = ''
             function()
               require("neotest").run.run()
             end
@@ -18,7 +18,7 @@
           options.desc = "Run nearest test";
         }
         {
-          action = mkRaw ''
+          action.__raw = ''
             function()
               require("neotest").run.run(vim.fn.expand("%"))
             end
@@ -27,7 +27,7 @@
           options.desc = "Run test in current file";
         }
         {
-          action = mkRaw ''
+          action.__raw = ''
             function()
               require("neotest").run.run(vim.fn.getcwd())
             end
@@ -36,7 +36,7 @@
           options.desc = "Run test in current directory";
         }
         {
-          action = mkRaw ''
+          action.__raw = ''
             function()
               require("neotest").run.attach()
             end
@@ -45,7 +45,7 @@
           options.desc = "Attach to nearest test";
         }
         {
-          action = mkRaw ''
+          action.__raw = ''
             function()
               require("neotest").run.stop()
             end
@@ -54,7 +54,7 @@
           options.desc = "Stop the nearest test";
         }
         {
-          action = mkRaw ''
+          action.__raw = ''
             function()
               require("neotest").watch.toggle(vim.fn.expand("%"))
             end
@@ -63,7 +63,7 @@
           options.desc = "Toggle watch test in current file";
         }
         {
-          action = mkRaw ''
+          action.__raw = ''
             function()
               require("neotest").summary.toggle()
             end
@@ -72,7 +72,7 @@
           options.desc = "Toggle test summary window";
         }
         {
-          action = mkRaw ''
+          action.__raw = ''
             function()
               require("neotest").output.open({ enter = true })
             end
@@ -81,7 +81,7 @@
           options.desc = "Open output of a test result";
         }
         {
-          action = mkRaw ''
+          action.__raw = ''
             function()
               require("neotest").output_panel.toggle()
             end
@@ -92,7 +92,7 @@
       ]
       ++ (lib.optionals config.plugins.dap.enable [
         {
-          action = mkRaw ''
+          action.__raw = ''
             function()
               require("neotest").run.run({ strategy = "dap" })
             end
@@ -100,7 +100,7 @@
           key = "<localleader>tD";
           options.desc = "Debug the nearest test";
         }
-      ])));
+      ]);
   in {
     inherit keymaps;
     plugins = {
@@ -118,8 +118,8 @@
         };
       };
     };
-    utils.wKeyList = lib.optionals cfg.enable [
-      (wKeyObj ["<localleader>t" "󰙨" "Neotest"])
+    utils.wKeyList = wKeyObjMapIf cfg.enable [
+      ["<localleader>t" "󰙨" "Neotest"]
     ];
   };
 }

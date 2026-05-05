@@ -5,45 +5,70 @@
     pkgs,
     ...
   }: let
-    # inherit (config.utils.mkKey) mkKeyMap wKeyObj;
-    inherit (config.utils.mkKey) mkKeyMap;
-    inherit (lib.nixvim.utils) mkRaw;
+    inherit (config.utils.mkKey) mkKeyMap wKeyObjMapIf keymap2Lazy keymapUnlazy;
     rustAnalyzerSettings = {
-      check.command = "clippy";
-      files.exclude = [".git" ".cargo" ".direnv" "target"];
-      inlayHints = {
-        lifetimeElisionHints.enable = "always";
-        bindingModeHints.enable = true;
-        closureCaptureHints.enable = true;
+      cargo = {
+        buildScripts.enable = true;
+        features = "all";
       };
+      checkOnSave = true;
+      check = {
+        command = "clippy";
+        features = "all";
+      };
+      diagnostics = {
+        enable = true;
+        styleLints.enable = true;
+      };
+      files.excludeDirs = [".git" ".cargo" ".direnv" "target" "node_modules"];
+      inlayHints = {
+        bindingModeHints.enable = true;
+        closureStyle = "rust_analyzer";
+        closureReturnTypeHints.enable = true;
+        closureCaptureHints.enable = true;
+        lifetimeElisionHints.enable = "always";
+        discriminantHints.enable = "always";
+        expressionAdjustmentHints.enable = "always";
+        implicitDrops.enable = true;
+        rangeExclusiveHints.enable = true;
+      };
+      procMacro.enable = true;
+      rustc.source = "discover";
     };
-  in {
-    extraPackages = with pkgs; [
-      nodejs-slim
-    ];
-    # extraPlugins = with pkgs.vimPlugins; [
-    #   haskell-tools-nvim
-    # ];
-    # globals = {
-    #   haskell_tools.tools.repl.handler = lib.mkIf config.plugins.toggleterm.enable "toggleterm";
-    # };
-    keymaps = map mkKeyMap [
+    keysNavBuddy = mkKeyMap [
       {
         action = "<cmd>Navbuddy<CR>";
         key = "<leader>xn";
         options.desc = "Navbuddy toggle";
       }
     ];
+  in {
+    keymaps = keymapUnlazy keysNavBuddy;
     plugins = {
+      crates.enable = true;
       fidget.enable = true;
-      inc-rename.enable = true;
+      inc-rename = {
+        enable = true;
+        lazyLoad.settings.event = "DeferredUIEnter";
+        settings = {
+          input_buffer_type = lib.mkIf config.plugins.snacks.enable "snacks";
+        };
+      };
       lsp = {
         enable = true;
         inlayHints = true;
         keymaps = {
-          extra = map mkKeyMap [
+          extra = mkKeyMap [
             {
-              action = mkRaw "rename";
+              action.__raw = ''
+                function()
+                  if pcall(require, "inc_rename") then
+                    return ":IncRename " .. vim.fn.expand("<cword>")
+                  end
+
+                  vim.lsp.buf.rename()
+                end
+              '';
               key = "<leader>lr";
               options.desc = "Lsp buf rename";
               options.expr = true;
@@ -54,7 +79,7 @@
               options.desc = "Lsp restart";
             }
             {
-              action = mkRaw ''
+              action.__raw = ''
                 function()
                   vim.lsp.buf.format({ async = true })
                 end
@@ -63,7 +88,7 @@
               options.desc = "Lsp buf async format";
             }
             {
-              action = mkRaw ''
+              action.__raw = ''
                 function()
                   vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({0}),{0})
                 end
@@ -107,17 +132,19 @@
             package = pkgs.clang-tools;
             packageFallback = true;
           };
-          # cssls.enable = true;
           dockerls = {
             enable = true;
             package = pkgs.dockerfile-language-server;
+          };
+          gitlab_ci_ls = {
+            enable = true;
+            package = pkgs.gitlab-ci-ls;
           };
           gopls = {
             enable = true;
             package = pkgs.gopls;
             packageFallback = true;
           };
-          # jdtls.enable = true;
           jsonls = {
             enable = true;
             package = pkgs.vscode-langservers-extracted;
@@ -125,7 +152,7 @@
           helm_ls = {
             enable = true;
             package = pkgs.helm-ls;
-            extraOptions.settings = mkRaw ''
+            extraOptions.settings.__raw = ''
               {
                 ["helm-ls"] = {
                   yamlls = {
@@ -136,18 +163,7 @@
               }
             '';
           };
-          # html.enable = true;
-          # lemminx.enable = true;
-          # ltex_plus = {
-          #   enable = true;
-          #   package = pkgs.ltex-ls-plus;
-          #   extraOptions.settings = {
-          #     additionalRules.languageModel = "~/.local/share/nvim/models/ngrams/";
-          #     language = "en";
-          #   };
-          # };
-          lua_ls.enable = true;
-          # marksman.enable = true;
+          emmylua_ls.enable = true;
           nixd = {
             enable = true;
             package = pkgs.nixd;
@@ -157,8 +173,10 @@
             enable = true;
             package = null;
           };
-          # openscad_lsp.enable = config.plugins.openscad.enable;
-          openscad_lsp.enable = true;
+          openscad_lsp = {
+            enable = true;
+            package = pkgs.openscad-lsp;
+          };
           pylsp = {
             enable = true;
             package = pkgs.python3Packages.python-lsp-server;
@@ -175,8 +193,8 @@
             installCargo = false;
             installRustc = false;
             installRustfmt = false;
-            package = pkgs.rust-analyzer;
-            packageFallback = true;
+            package = null;
+            # packageFallback = true;
           };
           terraformls = {
             enable = true;
@@ -188,31 +206,43 @@
             enable = true;
             package = pkgs.yaml-language-server;
           };
-          # zls = {
-          #   enable = true;
-          #   package = null;
-          # };
         };
       };
-      crates.enable = true;
-      rustaceanvim = {
-        enable = true;
-        settings.server.default_settings.rust-analyzer = rustAnalyzerSettings;
-      };
-      navic = {
-        enable = true;
-        lazyLoad.settings.event = "DeferredUIEnter";
-        settings.lsp.auto_attach = true;
+      lspkind = {
+        enable = config.plugins.blink-cmp.enable && config.plugins.lsp.enable;
+        settings = {
+          mode = "symbol_text";
+          cmp = {
+            max_width = 50;
+            ellipsis_char = "...";
+          };
+          show_labelDetails = true;
+        };
       };
       navbuddy = {
         enable = true;
+        lazyLoad.settings.keys = keymap2Lazy keysNavBuddy;
         settings.lsp.auto_attach = true;
+      };
+      navic = {
+        enable = true;
+        lazyLoad.settings.event = [
+          "BufReadPost"
+          "BufNewFile"
+        ];
+        settings.lsp.auto_attach = true;
+      };
+      rustaceanvim = {
+        enable = true;
+        settings = {
+          server.default_settings.rust-analyzer = rustAnalyzerSettings;
+        };
       };
       schemastore.enable = true;
       typescript-tools.enable = true;
     };
-    # utils.wKeyList = lib.optionals config.plugins.telescope.enable [
-    #   (wKeyObj ["<leader>l" "" "Lsp"])
-    # ];
+    utils.wKeyList = wKeyObjMapIf config.plugins.telescope.enable [
+      ["<leader>l" "" "Lsp"]
+    ];
   };
 }

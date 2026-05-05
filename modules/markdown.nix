@@ -1,11 +1,5 @@
 {
-  flake.modules.nixvim.markdown = {
-    lib,
-    pkgs,
-    ...
-  }: let
-    inherit (lib.nixvim.utils) mkRaw;
-  in {
+  flake.modules.nixvim.markdown = {pkgs, ...}: {
     extraPlugins = with pkgs.local; [
       auto-pandoc-nvim
     ];
@@ -33,19 +27,8 @@
           set_mappings = 0;
         };
       };
-      image = {
-        enable = true;
-        lazyLoad.settings.ft = [
-          "markdown"
-          "norg"
-        ];
-        settings = {
-          backend = "kitty";
-          editor_only_render_when_focused = true;
-        };
-      };
       markdown-preview = {
-        enable = true;
+        enable = false;
         settings.auto_close = 0;
       };
       render-markdown = {
@@ -63,7 +46,7 @@
           map_prefix = "<leader>W";
           list = [
             {
-              path = mkRaw ''(os.getenv("VIMWIKI_HOME") or os.getenv("HOME")) .. "/vimwiki"'';
+              path.__raw = ''(os.getenv("VIMWIKI_HOME") or os.getenv("HOME")) .. "/vimwiki"'';
               syntax = "markdown";
               ext = ".md";
             }
@@ -73,7 +56,7 @@
     };
     userCommands = {
       AutoPandoc = {
-        command = mkRaw ''
+        command.__raw = ''
           function()
             require("auto-pandoc").run_pandoc()
           end

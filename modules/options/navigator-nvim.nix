@@ -12,11 +12,20 @@
       package = lib.mkPackageOption pkgs.vimPlugins "Navigator-nvim" {};
     };
     config = lib.mkIf cfg.enable {
-      extraConfigLua = ''
-        require("Navigator").setup()
-      '';
       extraPlugins = [
         cfg.package
+      ];
+      plugins.lz-n.plugins = [
+        {
+          __unkeyed-1 = "navigator-nvim";
+          enabled = true;
+          event = "DeferredUIEnter";
+          after.__raw = ''
+            function()
+              require("Navigator").setup({})
+            end
+          '';
+        }
       ];
     };
   };

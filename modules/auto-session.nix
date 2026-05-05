@@ -1,11 +1,7 @@
 {
-  flake.modules.nixvim.auto-session = {
-    lib,
-    config,
-    ...
-  }: let
-    inherit (config.utils.mkKey) mkKeyMap keymapUnlazy keymap2Lazy wKeyObj;
-    keymaps = builtins.map mkKeyMap (lib.optionals config.plugins.auto-session.enable [
+  flake.modules.nixvim.auto-session = {config, ...}: let
+    inherit (config.utils.mkKey) mkKeyMapIf keymapUnlazy keymap2Lazy wKeyObjMap;
+    keymaps = mkKeyMapIf config.plugins.auto-session.enable [
       {
         action = "<cmd>SessionRestore<CR>";
         key = "<leader>q.";
@@ -36,7 +32,7 @@
         key = "<leader>qD";
         options.desc = "Purge orphaned sessions";
       }
-    ]);
+    ];
   in {
     keymaps = keymapUnlazy keymaps;
     plugins.auto-session = {
@@ -47,8 +43,8 @@
         auto_restore = false;
       };
     };
-    utils.wKeyList = [
-      (wKeyObj ["<leader>q" "" "Session"])
+    utils.wKeyList = wKeyObjMap [
+      ["<leader>q" "" "Session"]
     ];
   };
 }

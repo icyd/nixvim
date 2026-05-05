@@ -1,6 +1,9 @@
 {
   flake.modules.nixvim.core = {pkgs, ...}: {
-    colorschemes.kanagawa.enable = true;
+    # colorschemes.catppuccin.enable = true;
+    # colorschemes.kanagawa.enable = true;
+    # colorschemes.monokai-pro.enable = true;
+    colorschemes.tokyonight.enable = true;
     extraPackages = with pkgs; [
       ripgrep
     ];
