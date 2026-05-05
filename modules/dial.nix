@@ -1,14 +1,9 @@
 {
-  flake.modules.nixvim.dial = {
-    lib,
-    config,
-    ...
-  }: let
-    inherit (lib.nixvim.utils) mkRaw;
+  flake.modules.nixvim.dial = {config, ...}: let
     inherit (config.utils.mkKey) mkKeyMap keymap2Lazy keymapUnlazy;
-    keymaps = builtins.map mkKeyMap [
+    keymaps = mkKeyMap [
       {
-        action = mkRaw ''
+        action.__raw = ''
           function()
             require("dial.map").manipulate("increment", "normal")
           end
@@ -19,7 +14,7 @@
         };
       }
       {
-        action = mkRaw ''
+        action.__raw = ''
           function()
             require("dial.map").manipulate("decrement", "normal")
           end
@@ -30,7 +25,7 @@
         };
       }
       {
-        action = mkRaw ''
+        action.__raw = ''
           function()
             require("dial.map").manipulate("increment", "gnormal")
           end
@@ -41,7 +36,7 @@
         };
       }
       {
-        action = mkRaw ''
+        action.__raw = ''
           function()
             require("dial.map").manipulate("decrement", "gnormal")
           end
@@ -52,7 +47,7 @@
         };
       }
       {
-        action = mkRaw ''
+        action.__raw = ''
           function()
             require("dial.map").manipulate("increment", "visual")
           end
@@ -64,7 +59,7 @@
         };
       }
       {
-        action = mkRaw ''
+        action.__raw = ''
           function()
             require("dial.map").manipulate("decrement", "visual")
           end
@@ -76,7 +71,7 @@
         };
       }
       {
-        action = mkRaw ''
+        action.__raw = ''
           function()
             require("dial.map").manipulate("increment", "gvisual")
           end
@@ -88,7 +83,7 @@
         };
       }
       {
-        action = mkRaw ''
+        action.__raw = ''
           function()
             require("dial.map").manipulate("decrement", "gvisual")
           end

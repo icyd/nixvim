@@ -3,17 +3,14 @@
     lib,
     config,
     ...
-  }: let
-    cfgTroubleEna = config.plugins.trouble.enable;
-    TroubleLoad = lib.optionalString cfgTroubleEna ''require("lz.n").trigger_load("trouble.nvim")'';
-  in {
+  }: {
     plugins = {
       todo-comments = {
         enable = true;
         lazyLoad.settings = {
-          before = lib.nixvim.utils.mkRaw ''
+          before.__raw = lib.mkIf config.plugins.trouble.enable ''
             function()
-              ${TroubleLoad}
+              require("lz.n").trigger_load("trouble.nvim")
             end
           '';
           cmd =
@@ -21,11 +18,11 @@
               "TodoQuickFix"
               "TodoLocList"
             ]
-            ++ lib.optionals cfgTroubleEna ["TodoTrouble"];
+            ++ lib.optional config.plugins.trouble.enable "TodoTrouble";
         };
         keymaps = {
           todoQuickFix.key = "<leader>tt";
-          todoTrouble.key = lib.mkIf cfgTroubleEna "<leader>xt";
+          todoTrouble.key = lib.mkIf config.plugins.trouble.enable "<leader>xt";
         };
       };
     };

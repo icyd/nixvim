@@ -2,7 +2,6 @@
   flake.modules.nixvim.core = {
     lib,
     config,
-    pkgs,
     ...
   }: let
     disabledPlugins =
@@ -14,9 +13,12 @@
         config.disabledPlugins);
   in {
     clipboard.register = "unnamedplus";
-    extraPackages = with pkgs; [
-      ripgrep
-    ];
+    diagnostic.settings = {
+      virtual_lines.current_line = true;
+    };
+    extraConfigLuaPre = ''
+      function bool2str(bool) return bool and "enabled" or "disabled" end
+    '';
     extraConfigLua = ''
       vim.opt.diffopt = vim.opt.diffopt:append("vertical")
       vim.opt.shortmess = vim.opt.shortmess:append("aAWIc")
@@ -53,7 +55,7 @@
       foldlevel = 99;
       foldlevelstart = 99;
       foldmethod = "expr";
-      foldexpr = "nvim_treesitter#foldexpr()";
+      foldexpr.__raw = "vim.treesitter.foldexpr()";
       foldnestmax = 8;
       grepprg = "rg --vimgrep --smart-case --follow --hidden";
       history = 2000;

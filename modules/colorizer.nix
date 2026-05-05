@@ -1,14 +1,9 @@
 {
-  flake.modules.nixvim.colorizer = {
-    lib,
-    config,
-    ...
-  }: let
-    inherit (config.utils.mkKey) mkKeyMap keymapUnlazy keymap2Lazy;
-    inherit (lib.nixvim.utils) mkRaw;
-    keymaps = builtins.map mkKeyMap (lib.optionals config.plugins.colorizer.enable [
+  flake.modules.nixvim.colorizer = {config, ...}: let
+    inherit (config.utils.mkKey) mkKeyMapIf keymapUnlazy keymap2Lazy;
+    keymaps = mkKeyMapIf config.plugins.colorizer.enable [
       {
-        action = mkRaw ''
+        action.__raw = ''
           function()
             vim.g.colorizing_enabled = not vim.g.colorizing_enabled
             vim.cmd('ColorizerToggle')
@@ -21,7 +16,7 @@
           options.silent = true;
         };
       }
-    ]);
+    ];
   in {
     keymaps = keymapUnlazy keymaps;
     plugins.colorizer = {

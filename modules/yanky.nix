@@ -1,12 +1,8 @@
 {
-  flake.modules.nixvim.yanky = {
-    lib,
-    config,
-    ...
-  }: let
-    inherit (config.utils.mkKey) mkKeyMap keymapUnlazy keymap2Lazy;
+  flake.modules.nixvim.yanky = {config, ...}: let
+    inherit (config.utils.mkKey) mkKeyMapIf keymapUnlazy keymap2Lazy;
     cfg = config.plugins.yanky;
-    keymaps = builtins.map mkKeyMap (lib.optionals cfg.enable [
+    keymaps = mkKeyMapIf cfg.enable [
       {
         action = "<Plug>(YankyPutAfter)<CR>";
         key = "p";
@@ -91,7 +87,7 @@
         key = "=P";
         options.desc = "Yanky put before and indent";
       }
-    ]);
+    ];
   in {
     keymaps = keymapUnlazy keymaps;
     plugins = {

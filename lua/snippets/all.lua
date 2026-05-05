@@ -5,6 +5,18 @@ local all_snippets = {
             return os.date("%D - %H:%M")
         end)
     ),
+    s("log", {
+        t('vim.notify("'),
+        i(1, "message"),
+        t('", vim.log.levels.'),
+        c(2, {
+            t("INFO"),
+            t("WARN"),
+            t("ERROR"),
+            t("DEBUG"),
+        }),
+        t(")"),
+    }),
 }
 
 local vars = {
@@ -81,17 +93,25 @@ end
 ---@param opts table merged with the snippet opts table
 local todo_snippet = function(context, aliases, opts)
     opts = opts or {}
-    aliases = type(aliases) == "string" and { aliases } or aliases -- if we do not have aliases, be smart about the function parameters
+    -- if we do not have aliases, be smart about the function parameters
+    aliases = type(aliases) == "string" and { aliases } or aliases
     context = context or {}
     if not context.trig then
-        return error("context doesn't include a `trig` key which is mandatory", 2) -- all we need from the context is the trigger
+        -- all we need from the context is the trigger
+        return error("context doesn't include a `trig` key which is mandatory", 2)
     end
-    local alias_string = table.concat(aliases, "|") -- `choice_node` documentation
-    context.name = context.name or (alias_string .. " comment") -- generate the `name` of the snippet if not defined
-    context.dscr = context.dscr or (alias_string .. " comment with a signature-mark") -- generate the `dscr` if not defined
-    context.docstring = context.docstring or (" {1:" .. alias_string .. "}: {3} <{2:mark}>{0} ") -- generate the `docstring` if not defined
-    local comment_node = todo_snippet_nodes(aliases) -- nodes from the previously defined function for their generation
-    return s(context, comment_node, opts) -- the final todo-snippet constructed from our parameters
+    -- `choice_node` documentation
+    local alias_string = table.concat(aliases, "|")
+    -- generate the `name` of the snippet if not defined
+    context.name = context.name or (alias_string .. " comment")
+    -- generate the `dscr` if not defined
+    context.dscr = context.dscr or (alias_string .. " comment with a signature-mark")
+    -- generate the `docstring` if not defined
+    context.docstring = context.docstring or (" {1:" .. alias_string .. "}: {3} <{2:mark}>{0} ")
+    -- nodes from the previously defined function for their generation
+    local comment_node = todo_snippet_nodes(aliases)
+    -- the final todo-snippet constructed from our parameters
+    return s(context, comment_node, opts)
 end
 
 local todo_snippet_specs = {

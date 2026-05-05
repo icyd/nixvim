@@ -46,16 +46,17 @@
       keymapUnlazy = keys: lib.optionals (!config.plugins.lz-n.enable) keys;
       keymap2Lazy = keys: lib.optionals config.plugins.lz-n.enable (map lazyKey keys);
       wKeyObj = with builtins;
-        keys:
-          (lib.nixvim.utils.listToUnkeyedAttrs [(elemAt keys 0)])
+        keyObj:
+          (lib.nixvim.utils.listToUnkeyedAttrs [(elemAt keyObj 0)])
           // {
-            icon = elemAt keys 1;
-            group = elemAt keys 2;
+            icon = elemAt keyObj 1;
+            group = elemAt keyObj 2;
           }
-          // lib.optionalAttrs (length keys > 3) {
-            hidden = elemAt keys 3;
+          // lib.optionalAttrs (length keyObj > 3) {
+            hidden = elemAt keyObj 3;
           };
-      wKeyObjIf = cond: keys: lib.optionals cond (wKeyObj keys);
+      wKeyObjMap = keys: map wKeyObj keys;
+      wKeyObjMapIf = cond: keys: lib.optionals cond (wKeyObjMap keys);
     };
   };
 }

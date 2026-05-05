@@ -1,15 +1,9 @@
 {
-  flake.modules.nixvim.openscad = {
-    lib,
-    config,
-    pkgs,
-    ...
-  }: let
-    inherit (lib.nixvim.utils) mkRaw;
-    inherit (config.utils.mkKey) mkKeyMap wKeyObj;
-    keymaps = map mkKeyMap [
+  flake.modules.nixvim.openscad = {config, ...}: let
+    inherit (config.utils.mkKey) mkKeyMap wKeyObjMapIf;
+    keymaps = mkKeyMap [
       {
-        action = mkRaw ''
+        action.__raw = ''
           function()
             require("openscad").toggle()
           end
@@ -20,7 +14,7 @@
         };
       }
       {
-        action = mkRaw ''
+        action.__raw = ''
           function()
             require("openscad").help()
           end
@@ -31,7 +25,7 @@
         };
       }
       {
-        action = mkRaw ''
+        action.__raw = ''
           function()
             require("openscad").manual()
           end
@@ -42,7 +36,7 @@
         };
       }
       {
-        action = mkRaw ''
+        action.__raw = ''
           function()
             require("openscad").exec_openscad()
           end
@@ -53,7 +47,7 @@
         };
       }
       {
-        action = mkRaw ''
+        action.__raw = ''
           function()
             require("openscad").topToggle()
           end
@@ -67,10 +61,6 @@
     ];
   in {
     inherit keymaps;
-    extraPackages = with pkgs; [
-      htop
-      zathura
-    ];
     extraConfigLua = ''
       vim.g.openscad_pdf_command = "zathura";
       vim.g.openscad_fuzzy_finder = "snacks";
@@ -85,8 +75,8 @@
         load_snippets = true;
       };
     };
-    utils.wKeyList = lib.optionals config.plugins.openscad.enable [
-      (wKeyObj ["<leader>o" "" "Openscad"])
+    utils.wKeyList = wKeyObjMapIf config.plugins.openscad.enable [
+      ["<leader>o" "" "Openscad"]
     ];
   };
 }

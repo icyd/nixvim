@@ -1,15 +1,10 @@
 {
-  flake.modules.nixvim.lsp = {
-    lib,
-    config,
-    ...
-  }: let
+  flake.modules.nixvim.lsp = {config, ...}: let
     inherit (config.utils.mkKey) mkKeyMap;
-    inherit (lib.nixvim.utils) mkRaw;
   in {
-    keymaps = builtins.map mkKeyMap [
+    keymaps = mkKeyMap [
       {
-        action = mkRaw ''
+        action.__raw = ''
           function()
             require("otter").activate()
           end

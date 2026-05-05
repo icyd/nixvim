@@ -1,20 +1,18 @@
 {
   flake.modules.nixvim.maximize = {
-    lib,
     config,
     pkgs,
     ...
   }: let
     inherit (config.utils.mkKey) mkKeyMap keymapUnlazy keymap2Lazy;
-    inherit (lib.nixvim.utils) mkRaw;
-    keymaps = builtins.map mkKeyMap [
+    keymaps = mkKeyMap [
       {
-        action = mkRaw ''
+        action.__raw = ''
           function()
             require("maximize").toggle()
           end
         '';
-        key = "<leader>z";
+        key = "<leader>az";
         options.desc = "Maximize windows";
       }
     ];

@@ -3,7 +3,7 @@ local pascalcase = require("luasnip.util.str").vscode_string_modifiers.pascalcas
 --}}}
 --
 
-local result_choices = function(args)
+local result_choices = function(_args)
     -- local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
     -- for _, line in ipairs(lines) do
     --     if line:match("^use.*Result") then
@@ -132,7 +132,7 @@ use super::*;
 }
 
 impl <> {
-    <>fn new(<><>) -> Self {
+    <>fn new(<><>) ->> Self {
         Self {
             <>
         }

@@ -2,6 +2,7 @@
   flake.modules.nixvim.neorg = {
     lib,
     config,
+    pkgs,
     ...
   }: let
     cfg = config.plugins.neorg;
@@ -25,24 +26,33 @@
         group = "neorg";
       }
     ];
+    extraPlugins = with pkgs.vimPlugins; [
+      {
+        plugin = neorg-interim-ls;
+        optional = true;
+      }
+    ];
     plugins = {
       neorg = {
         enable = true;
-        lazyLoad.enable = false;
         lazyLoad.settings = {
           cmd = "Neorg";
           ft = "norg";
+          before.__raw = ''
+            function()
+              vim.cmd("packadd neorg-interim-ls")
+            end
+          '';
         };
         luaConfig.pre = ''
           norg_dir = (os.getenv("ORGMODE_DIR") or os.getenv("HOME")) .. "/org"
         '';
-        # telescopeIntegration.enable = config.plugins.telescope.enable;
         settings = {
           lazy_loading = true;
           load = with lib.nixvim.utils; {
             "core.defaults" = emptyTable;
-            "core.completion" = lib.mkIf config.plugins.cmp.enable {
-              config.engine = "nvim-cmp";
+            "core.completion".config.engine = {
+              module_name = "external.lsp-completion";
             };
             "core.concealer" = emptyTable;
             "core.esupports.metagen" = {
@@ -59,12 +69,18 @@
               config = {
                 default_workspace = "notes";
                 workspaces = {
-                  notes = mkRaw ''norg_dir'';
-                  work = mkRaw ''norg_dir .. "/work"'';
+                  notes.__raw = ''norg_dir'';
+                  work.__raw = ''norg_dir .. "/work"'';
                 };
               };
             };
-            "core.journal".config.journal_folder = mkRaw ''norg_dir .. "/journal"'';
+            "core.journal".config.journal_folder.__raw = ''norg_dir .. "/journal"'';
+            "external.lsp-completion".config = {
+              completion_provider = {
+                enable = true;
+                documentation = true;
+              };
+            };
           };
         };
       };

@@ -5,7 +5,6 @@
     ...
   }: let
     inherit (lib) getExe getExe';
-    inherit (lib.nixvim.utils) mkRaw;
   in {
     plugins = {
       conform-nvim = {
@@ -16,7 +15,7 @@
         };
         settings = {
           default_format_opts.lsp_format = "fallback";
-          format_on_save = mkRaw ''
+          format_on_save.__raw = ''
             function(bufnr)
               if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
                 return
@@ -25,20 +24,23 @@
             end
           '';
           formatters_by_ft = rec {
+            bash = ["shellcheck" "shellharden" "shfmt"];
             c = ["clang-format"];
             cpp = c;
             go = ["gofmt" "goimports"];
-            # haskell = ["fourmolu"];
+            haskell = ["fourmolu"];
             json = ["jq"];
             latex = ["latexindent"];
             lua = ["stylua"];
             nix = ["alejandra"];
+            nu = ["nufmt"];
             markdown = ["prettier" "markdownlint-cli2"];
             python = ["ruff_fix" "ruff_format" "ruff_organize_imports"];
             rust = ["rustfmt"];
-            sh = ["shellcheck"];
+            sh = bash;
             terraform = ["tofu_fmt"];
             terragrunt = ["terragrunt_hclfmt"];
+            toml = ["taplo"];
             "*" = ["codespell"];
             "_" = ["trim_whitespace" "trim_newlines" "squeeze_blanks"];
           };
@@ -52,7 +54,7 @@
             latexindent.command = getExe' texlivePackages.latexindent "latexindent";
             markdownlint-cli2 = {
               command = getExe markdownlint-cli2;
-              condition = mkRaw ''
+              condition.__raw = ''
                 function(_, ctx)
                   local diag = vim.tbl_filter(function(d)
                     return d.source == "markdownlint"
@@ -64,8 +66,11 @@
             prettier.command = getExe prettier;
             ruff = getExe ruff;
             shellcheck.command = getExe shellcheck;
+            shellharden.command = getExe shellharden;
+            shfmt.command = getExe shfmt;
             squeeze_blanks.command = getExe' coreutils "cat";
             stylua.command = getExe stylua;
+            taplo.command = getExe taplo;
             terragrunt_hclfmt.command = getExe terragrunt;
             tofu_fmt.command = getExe opentofu;
           };
@@ -99,7 +104,7 @@
       };
       FormatDisable = {
         bang = true;
-        command = mkRaw ''
+        command.__raw = ''
           function(args)
             if args.bang then
               vim.b.disable_autoformat = true
@@ -113,7 +118,7 @@
       };
       FormatEnable = {
         bang = true;
-        command = mkRaw ''
+        command.__raw = ''
           function(args)
             if args.bang then
               vim.b.disable_autoformat = false
@@ -127,7 +132,7 @@
       };
       FormatToggle = {
         bang = true;
-        command = mkRaw ''
+        command.__raw = ''
           function(args)
             if args.bang then
               vim.b.disable_autoformat = not vim.b.disable_autoformat

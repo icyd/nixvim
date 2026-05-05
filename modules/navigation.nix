@@ -5,10 +5,9 @@
     ...
   }: let
     inherit (config.utils.mkKey) mkKeyMap;
-    inherit (lib.nixvim.utils) mkRaw;
-    keymaps = builtins.map mkKeyMap [
+    keymaps = mkKeyMap [
       {
-        action = mkRaw ''
+        action.__raw = ''
           function()
             if os.getenv("ZELLIJ") then
               require("zellij-nav").left()
@@ -21,7 +20,7 @@
         options.desc = "Move to left window";
       }
       {
-        action = mkRaw ''
+        action.__raw = ''
           function()
             if os.getenv("ZELLIJ") then
               require("zellij-nav").down()
@@ -34,7 +33,7 @@
         options.desc = "Move to down window";
       }
       {
-        action = mkRaw ''
+        action.__raw = ''
           function()
             if os.getenv("ZELLIJ") then
               require("zellij-nav").up()
@@ -47,7 +46,7 @@
         options.desc = "Move to up window";
       }
       {
-        action = mkRaw ''
+        action.__raw = ''
           function()
             if os.getenv("ZELLIJ") then
               require("zellij-nav").right()

@@ -14,7 +14,21 @@
           deadnix.enable = true;
           luacheck = {
             enable = true;
-            args = ["--globals" "vim" "--"];
+            args = [
+              "--globals"
+              "vim"
+              "s"
+              "t"
+              "c"
+              "i"
+              "f"
+              "d"
+              "sn"
+              "rep"
+              "fmt"
+              "fmta"
+              "--"
+            ];
           };
           statix.enable = true;
           treefmt.enable = false;

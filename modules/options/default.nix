@@ -19,7 +19,7 @@
       optimizationEnable =
         lib.mkEnableOption "Enable performance optimizations"
         // {
-          default = false;
+          default = true;
         };
       userdata = {
         name = lib.mkOption {

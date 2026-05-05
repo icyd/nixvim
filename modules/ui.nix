@@ -10,11 +10,6 @@
       lualine = {
         enable = true;
         lazyLoad.settings.event = "DeferredUIEnter";
-        luaConfig.pre = ''
-          local function maximize_status()
-              return vim.t.maximized and "   " or ""
-          end
-        '';
         settings = with lib.nixvim.utils; {
           options.disabled_filetypes.winbar = [
             "dap-repl"
@@ -25,14 +20,26 @@
             "dapui_scopes"
           ];
           sections = {
-            lualine_x = mkRaw ''
-              {
-                "encoding",
-                "fileformat",
-                "filetype",
-                maximize_status,
-              }
-            '';
+            lualine_x =
+              (lib.optional config.plugins.overseer.enable "overseer")
+              ++ [
+                {
+                  # typos:disabled
+                  __unkeyed-0.__raw = ''require("noice").api.statusline.mode.get'';
+                  cond.__raw = ''require("noice").api.statusline.mode.has'';
+                  # typos:enabled
+                }
+                "encoding"
+                "fileformat"
+                "filetype"
+                {
+                  __unkeyed-0.__raw = ''
+                    function()
+                      return vim.t.maximized and "   " or ""
+                    end
+                  '';
+                }
+              ];
           };
           winbar = {
             lualine_b = [(listToUnkeyedAttrs ["diagnostics"])];
@@ -52,13 +59,21 @@
           };
         };
       };
-      snacks.settings = let
-        cfg = config.plugins.snacks;
-      in {
-        input.enabled = cfg.enable;
-        notifier.enabled = cfg.enable;
-        picker.enabled = cfg.enable;
+      # typos:ignore-next-line
+      noice = {
+        enable = true;
+        settings = {
+          cmdline.view = "cmdline";
+          presets = {
+            bottom_search = true;
+            command_palette = false;
+            long_message_to_split = true;
+            inc_rename = config.plugins.inc-rename.enable;
+          };
+        };
       };
+      notify.enable = true;
+      nui.enable = true;
     };
   };
 }

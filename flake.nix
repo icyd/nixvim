@@ -18,6 +18,13 @@
       };
     };
     pkgs-by-name-for-flake-parts.url = "github:drupol/pkgs-by-name-for-flake-parts";
+    rustowl-flake = {
+      url = "github:nix-community/rustowl-flake";
+      inputs = {
+        flake-parts.follows = "flake-parts";
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
     systems.url = "github:nix-systems/default";
   };
   nixConfig = {

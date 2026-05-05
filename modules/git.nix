@@ -1,12 +1,14 @@
 {
+  nixpkgs.allowedUnfreePackages = [
+    "git-conflict.nvim"
+  ];
   flake.modules.nixvim.git = {
     lib,
     config,
     ...
   }: let
-    inherit (config.utils.mkKey) mkKeyMap wKeyObj;
-    inherit (lib.nixvim.utils) mkRaw;
-    keymapsGC = lib.optionals config.plugins.git-conflict.enable [
+    inherit (config.utils.mkKey) mkKeyMap mkKeyMapIf wKeyObjMap keymap2Lazy keymapUnlazy;
+    keysGitConflict = mkKeyMapIf config.plugins.git-conflict.enable [
       {
         action = "<cmd>GitConflictListQf<CR>";
         key = "<leader>gcl";
@@ -18,9 +20,9 @@
         options.desc = "Git conflict refresh";
       }
     ];
-    keymapsGI = lib.optionals config.plugins.gitignore.enable [
+    keysGitIgnore = mkKeyMapIf config.plugins.gitignore.enable [
       {
-        action = mkRaw ''
+        action.__raw = ''
           function()
             require("gitignore").generate()
           end
@@ -29,9 +31,9 @@
         options.desc = "Generate .gitignore file";
       }
     ];
-    keymapsGL = lib.optionals config.plugins.gitlinker.enable (builtins.map (mode: {
+    keysGitLinker = mkKeyMapIf config.plugins.gitlinker.enable (map (mode: {
       inherit mode;
-      action = mkRaw ''
+      action.__raw = ''
         function()
           require("gitlinker").get_buf_range_url("${mode}")
         end
@@ -39,14 +41,14 @@
       key = "<leader>gy";
       options.desc = "Generate git url";
     }) ["n" "v"]);
-    keymapsLG = let
+    keysLazyGit = let
       snacks = config.plugins.snacks.enable && config.plugins.snacks.settings.lazygit.enabled;
     in
       lib.optionals (config.plugins.lazygit.enable || snacks) (
         if snacks
         then [
           {
-            action = mkRaw ''
+            action.__raw = ''
               function()
                 require("snacks").lazygit.open()
               end
@@ -55,7 +57,7 @@
             options.desc = "Lazygit";
           }
           {
-            action = mkRaw ''
+            action.__raw = ''
               function()
                 require("snacks").lazygit.log()
               end
@@ -64,7 +66,7 @@
             options.desc = "Lazygit log";
           }
           {
-            action = mkRaw ''
+            action.__raw = ''
               function()
                 require("snacks").lazygit.log_file()
               end
@@ -81,9 +83,10 @@
           }
         ]
       );
-    keymaps = builtins.map mkKeyMap ([
+    keymaps =
+      mkKeyMap [
         {
-          action = mkRaw ''
+          action.__raw = ''
             function()
               require("gitsigns").next_hunk()
             end
@@ -92,7 +95,7 @@
           options.desc = "Next git hunk";
         }
         {
-          action = mkRaw ''
+          action.__raw = ''
             function()
               require("gitsigns").prev_hunk()
             end
@@ -101,7 +104,7 @@
           options.desc = "Previous git hunk";
         }
         {
-          action = mkRaw ''
+          action.__raw = ''
             function()
               require("gitsigns").preview_hunk()
             end
@@ -110,7 +113,7 @@
           options.desc = "Preview git hunk";
         }
         {
-          action = mkRaw ''
+          action.__raw = ''
             function()
               require("gitsigns").preview_hunk_inline()
             end
@@ -119,7 +122,7 @@
           options.desc = "Preview git hunk inline";
         }
         {
-          action = mkRaw ''
+          action.__raw = ''
             function()
               require("gitsigns").stage_buffer()
             end
@@ -128,7 +131,7 @@
           options.desc = "Stage buffer";
         }
         {
-          action = mkRaw ''
+          action.__raw = ''
             function()
               require("gitsigns").reset_buffer()
             end
@@ -137,7 +140,7 @@
           options.desc = "Reset buffer";
         }
         {
-          action = mkRaw ''
+          action.__raw = ''
             function()
               require("gitsigns").stage_hunk()
             end
@@ -146,7 +149,7 @@
           options.desc = "Stage git hunk";
         }
         {
-          action = mkRaw ''
+          action.__raw = ''
             function()
               require("gitsigns").undo_stage_hunk()
             end
@@ -155,7 +158,7 @@
           options.desc = "Undo stage git hunk";
         }
         {
-          action = mkRaw ''
+          action.__raw = ''
             function()
               require("gitsigns").diffthis()
             end
@@ -164,7 +167,7 @@
           options.desc = "Diff this git hunk";
         }
         {
-          action = mkRaw ''
+          action.__raw = ''
             function()
               require("gitsigns").diffthis("~")
             end
@@ -173,7 +176,7 @@
           options.desc = "Diff this git hunk against commit";
         }
         {
-          action = mkRaw ''
+          action.__raw = ''
             function()
               require("gitsigns").blame_line({full=true})
             end
@@ -182,7 +185,7 @@
           options.desc = "Git blame line";
         }
         {
-          action = mkRaw ''
+          action.__raw = ''
             function()
               require("gitsigns").blame()
             end
@@ -221,10 +224,8 @@
           options.desc = "Git diff get right";
         }
       ]
-      ++ keymapsGI
-      ++ keymapsGL
-      ++ keymapsLG
-      ++ keymapsGC);
+      ++ keysLazyGit
+      ++ (keymapUnlazy (keysGitIgnore ++ keysGitLinker ++ keysGitConflict));
   in {
     inherit keymaps;
     autoGroups = {
@@ -250,20 +251,27 @@
       fugitive.enable = true;
       lazygit.enable = !(config.plugins.snacks.enable && config.plugins.snacks.settings.lazygit.enabled);
       snacks.settings.lazygit.enabled = config.plugins.snacks.enable;
-      gitignore.enable = true;
+      gitignore = {
+        enable = true;
+        lazyLoad.settings.keys = keymap2Lazy keysGitIgnore;
+      };
       gitsigns = {
         enable = true;
         lazyLoad.settings.event = "BufReadPre";
       };
-      gitlinker.enable = true;
-      git-conflict.enable = true;
+      gitlinker = {
+        enable = true;
+        lazyLoad.settings.keys = keymap2Lazy keysGitLinker;
+      };
+      git-conflict = {
+        enable = true;
+        lazyLoad.settings.event = "BufReadPre";
+      };
     };
-    utils.wKeyList =
-      [
-        (wKeyObj ["<leader>g" "" "Git"])
+    utils.wKeyList = wKeyObjMap ([
+        ["<leader>g" "" "Git"]
       ]
-      ++ (lib.optionals config.plugins.git-conflict.enable [
-        (wKeyObj ["<leader>gc" "" "Git conflict"])
-      ]);
+      ++ (lib.optional config.plugins.git-conflict.enable
+        ["<leader>gc" "" "Git conflict"]));
   };
 }

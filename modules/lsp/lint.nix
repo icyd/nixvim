@@ -5,7 +5,6 @@
     ...
   }: let
     inherit (lib) getExe getExe';
-    inherit (lib.nixvim.utils) mkRaw;
   in {
     plugins = {
       lint = {
@@ -16,6 +15,7 @@
           "InsertLeave"
         ];
         lintersByFt = rec {
+          bash = ["shellcheck"];
           c = ["clangtidy"];
           cpp = c;
           dockerfile = ["hadolint"];
@@ -23,16 +23,18 @@
           latex = ["chktex"];
           lua = ["luacheck"];
           markdown = ["markdownlint-cli2"];
-          nix = ["nix"];
+          nix = ["deadnix" "nix"];
           python = ["ruff"];
-          sh = ["shellcheck"];
+          sh = bash;
           yaml = ["yamllint"];
         };
         linters = with pkgs; {
           chktex.cmd = getExe' texlivePackages.chktex "chktex";
           clangtidy.cmd = getExe' clang-tools "clang-tidy";
+          deadnix.cmd = getExe deadnix;
           hadolint.cmd = getExe hadolint;
           luacheck.cmd = getExe luajitPackages.luacheck;
+          markdownlint-cli2.cmd = getExe markdownlint-cli2;
           revive.cmd = getExe revive;
           ruff.cmd = getExe ruff;
           shellcheck.cmd = getExe shellcheck;
@@ -40,14 +42,14 @@
           yamllint.cmd = getExe yamllint;
         };
         # FIX: cannot use `markdownlint-cli2` with regular config <25-05-07>
-        luaConfig.post = ''
-          __lint.linters["markdownlint-cli2"].cmd = "${getExe pkgs.markdownlint-cli2}"
-        '';
+        # luaConfig.post = ''
+        #   __lint.linters["markdownlint-cli2"].cmd = "${getExe pkgs.markdownlint-cli2}"
+        # '';
       };
     };
     userCommands = {
       LintInfo = {
-        command = mkRaw ''
+        command.__raw = ''
           function()
             local filetype = vim.bo.filetype
             local linters = require("lint").linters_by_ft[filetype]
