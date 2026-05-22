@@ -202,6 +202,11 @@
             packageFallback = true;
           };
           ts_ls.enable = !config.plugins.typescript-tools.enable;
+          ty = {
+            enable = true;
+            package = pkgs.ty;
+            packageFallback = true;
+          };
           yamlls = {
             enable = true;
             package = pkgs.yaml-language-server;

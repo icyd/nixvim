@@ -360,7 +360,7 @@
       }
       {
         mode = ["x" "o"];
-        key = "l=";
+        key = ">=";
         options.desc = "Treesitter: Select left side of assignment";
         action.__raw = ''
           function()
@@ -370,7 +370,7 @@
       }
       {
         mode = ["x" "o"];
-        key = "r=";
+        key = "<=";
         options.desc = "Treesitter: Select right side of assignment";
         action.__raw = ''
           function()

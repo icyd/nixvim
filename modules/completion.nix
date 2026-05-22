@@ -56,6 +56,17 @@ in {
     plugins = {
       blink-cmp = lazyPlugin {
         enable = true;
+        lazyLoad.settings = {
+          event = [
+            "InsertEnter"
+            "CmdlineEnter"
+          ];
+          before.__raw = ''
+            function()
+              require("lz.n").trigger_load("luasnip")
+            end
+          '';
+        };
         settings = {
           cmdline.completion = {
             list.selection = {
@@ -80,13 +91,13 @@ in {
             menu = {
               auto_show = true;
               auto_show_delay_ms = 0;
-              draw.columns.__raw = ''
-                {
-                  { "label", "label_description", gap = 1 },
-                  { "kind_icon", "kind", gap = 1 },
-                  { "source_name", gap = 1 },
-                }
-              '';
+              # draw.columns.__raw = ''
+              #   {
+              #     { "label", "label_description", gap = 1 },
+              #     { "kind_icon", "kind", gap = 1 },
+              #     { "source_name", gap = 1 },
+              #   }
+              # '';
             };
           };
           keymap = {

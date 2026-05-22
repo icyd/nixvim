@@ -97,6 +97,26 @@
             options.desc = "Center on next match";
           }
           {
+            action = "<C-d>zz";
+            key = "<C-d>";
+            options.desc = "Go down half-page and center";
+          }
+          {
+            action = "<C-u>zz";
+            key = "<C-u>";
+            options.desc = "Go up half-page and center";
+          }
+          {
+            action = "<C-f>zz";
+            key = "<C-f>";
+            options.desc = "Go down a page and center";
+          }
+          {
+            action = "<C-b>zz";
+            key = "<C-b>";
+            options.desc = "Go up a page and center";
+          }
+          {
             action = "}zz";
             key = "}";
             options.desc = "Center on prev match";

@@ -94,7 +94,7 @@
                 })
               end
             '';
-            key = "<leader>fl";
+            key = "<leader>f.";
             options.desc = "Find files relative to current file";
           }
           {
@@ -114,6 +114,24 @@
             '';
             key = "<leader>fs";
             options.desc = "Grep";
+          }
+          {
+            action.__raw = ''
+              function()
+                require("snacks").picker.grep_buffers()
+              end
+            '';
+            key = "<leader>fS";
+            options.desc = "Grep in open buffers";
+          }
+          {
+            action.__raw = ''
+              function()
+                require("snacks").picker.lines()
+              end
+            '';
+            key = "<leader>fl";
+            options.desc = "Find lines";
           }
           {
             action.__raw = ''

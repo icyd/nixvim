@@ -36,12 +36,36 @@
         {
           action.__raw = ''
             function()
+              require("flash").jump()
+            end
+          '';
+          key = "S";
+          mode = [
+            "n"
+            "x"
+            "o"
+          ];
+          options.desc = "Flash treesitter";
+        }
+        {
+          action.__raw = ''
+            function()
+              require("flash").remote()
+            end
+          '';
+          key = "r";
+          mode = "o";
+          options.desc = "Flash remote";
+        }
+        {
+          action.__raw = ''
+            function()
               require("flash").remote()
             end
           '';
           key = "R";
-          mode = "o";
-          options.desc = "Remote Flash";
+          mode = ["o" "x"];
+          options.desc = "Flash remote treesitter";
         }
         {
           action.__raw = ''
@@ -128,12 +152,13 @@
         '';
       };
       flash = {
-        enable = false;
+        enable = true;
         lazyLoad.settings.keys = keymap2Lazy keysFlash;
         settings = {
           jump.autojump = true;
           modes = {
             char = {
+              enabled = false;
               multi_line = true;
               jump_labels = false;
             };
