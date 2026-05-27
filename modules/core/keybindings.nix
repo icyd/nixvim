@@ -92,6 +92,11 @@
             options.desc = "Delete and paste";
           }
           {
+            action = "yygccp";
+            key = "gyp";
+            options.desc = "Copy, comment and paste";
+          }
+          {
             action = "{zz";
             key = "{";
             options.desc = "Center on next match";

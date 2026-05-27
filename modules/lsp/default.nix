@@ -243,20 +243,6 @@
           server.default_settings.rust-analyzer = rustAnalyzerSettings;
         };
       };
-      navic = {
-        enable = true;
-        lazyLoad.settings.event = [
-          "BufReadPost"
-          "BufNewFile"
-        ];
-        settings.lsp.auto_attach = true;
-      };
-      rustaceanvim = {
-        enable = true;
-        settings = {
-          server.default_settings.rust-analyzer = rustAnalyzerSettings;
-        };
-      };
       schemastore.enable = true;
       typescript-tools.enable = true;
     };
