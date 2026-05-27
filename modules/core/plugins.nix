@@ -53,7 +53,7 @@
               require("flash").remote()
             end
           '';
-          key = "r";
+          key = "R";
           mode = "o";
           options.desc = "Flash remote";
         }
