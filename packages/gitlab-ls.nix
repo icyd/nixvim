@@ -10,7 +10,7 @@
     owner = "gitlab-org/editor-extensions";
     repo = "gitlab.vim";
     rev = "main";
-    hash = "sha256-rhYz3Z1Dcffvo8E3390gOBcqfFclWJ19wTKwp6L/874=";
+    hash = "sha256-yXVtP6SZ5H121VWUiFTDcWZ2l/xst1O38jI3iBav6VA=";
   };
   luaPlugin = vimUtils.buildVimPlugin {
     inherit version src;
