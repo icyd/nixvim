@@ -25,10 +25,22 @@
         options.desc = "CodeCompanion actions";
       }
       {
-        mode = ["n" "v"];
+        mode = ["v"];
         action = "<cmd>CodeCompanionAdd<CR>";
         key = "<leader>aip";
         options.desc = "CodeCompanion add to chat";
+      }
+      {
+        mode = ["v"];
+        action = "<cmd>CodeCompanion<CR>";
+        key = "<leader>aii";
+        options.desc = "CodeCompanion inline";
+      }
+      {
+        mode = ["n" "v"];
+        action.__raw = ''function() return require("codecompation").cli({prompt = true}) end'';
+        key = "<leader>aip";
+        options.desc = "CodeCompanion CLI prompt";
       }
       {
         action = "<cmd>CodeCompanion /commit<CR>";
@@ -45,6 +57,9 @@
     ];
   in {
     keymaps = keymapUnlazy (keysCodecompanion ++ keysGitlab);
+    extraPlugins = with pkgs; [
+      local.codecompanion-spinners
+    ];
     plugins = {
       codecompanion = {
         enable = true;
@@ -52,6 +67,8 @@
           cmd = [
             "CodeCompanion"
             "CodeCompanionChat"
+            "CodeCompanionCLI"
+            "CodeCompanionCmd"
             "CodeCompanionActions"
             "CodeCompanionAdd"
           ];
@@ -62,10 +79,64 @@
             language = "English";
             system_prompt = "";
           };
-          strategies = {
-            chat.adapter = "copilot";
-            inline.adapter = "copilot";
-            agent.adapter = "copilot";
+          # display.chat.show_settings = true;
+          extensions = {
+            spinner.opts.style =
+              if config.plugins.fidget.enable
+              then "fidget"
+              else "snacks";
+          };
+          adapters = let
+            copilot_gpt5_4.__raw = ''
+              function()
+                return require("codecompanion.adapters").extend("copilot", {
+                  schema = {
+                    model = { default = "gpt-5.4" },
+                    max_tokens = { default = 4096 },
+                  }
+                })
+              end
+            '';
+            copilot_sonnet4_6.__raw = ''
+              function()
+                return require("codecompanion.adapters").extend("copilot", {
+                  schema = {
+                    model = { default = "claude-sonnet-4.6" },
+                  }
+                })
+              end
+            '';
+            copilot_gpt5_mini.__raw = ''
+              function()
+                return require("codecompanion.adapters").extend("copilot", {
+                  schema = {
+                    model = { default = "gpt-5-mini" },
+                  }
+                })
+              end
+            '';
+          in {
+            http = {
+              inherit copilot_gpt5_4 copilot_sonnet4_6 copilot_gpt5_mini;
+            };
+          };
+          interactions = {
+            chat = {
+              adapter = "copilot_sonnet4_6";
+            };
+            cli = {
+              agent = "opencode";
+              agents = {
+                opencode = {
+                  cmd = "opencode";
+                  args = {};
+                  description = "Opencode interactive terminal";
+                  provider = "terminal";
+                };
+              };
+            };
+            cmd.adapter = "copilot_gpt5_mini";
+            inline.adapter = "copilot_gpt5_mini";
           };
         };
       };

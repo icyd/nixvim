@@ -140,6 +140,39 @@
             enable = true;
             package = pkgs.gitlab-ci-ls;
           };
+          gitlab_duo = {
+            enable = true;
+            package = null;
+            cmd = [(lib.getExe' pkgs.nodejs "node") "${pkgs.local.gitlab-ls}/node_modules/@gitlab-org/gitlab-lsp/out/main-bundle-node.js" "--stdio"];
+            # capabities.__raw = lib.mkIf config.plugins.blink-cmp.enable ''require("blink.cmp").get_lsp_capabilities()'';
+            settings = {
+              baseUrl.__raw = ''os.getenv("GITLAB_VIM_URL") or "https://gitlab.com"'';
+              codeSuggestions.enabled = true;
+              featureFlags.streamCodeGenerations = true;
+              fixNewlines = false;
+              redactSecrets = true;
+              token.__raw = ''os.getenv("GITLAB_TOKEN")'';
+            };
+            # onAttach.function = ''
+            #   if vim.lsp.inline_completion and
+            #     client:supports_method(vim.lsp.protocol.Methods.textDocument_inlineCompletion, bufnr) then
+            #     -- Tab to accept suggestion
+            #     vim.keymap.set('i', '<Tab>', function()
+            #       if not vim.lsp.inline_completion.get() then
+            #         return '<Tab>'
+            #       end
+            #     end, { expr = true, buffer = bufnr, desc = 'GitLab Duo: Accept suggestion' })
+            #
+            #     -- Alt/Option+[ for previous suggestion
+            #     vim.keymap.set('i', '<M-[>', function() vim.lsp.inline_completion.select({ count = -1 }) end,
+            #     { buffer = bufnr, desc = 'GitLab Duo: Previous suggestion' })
+            #
+            #     -- Alt/Option+] for next suggestion
+            #     vim.keymap.set('i', '<M-]>', function() vim.lsp.inline_completion.select({ count = 1 }) end,
+            #     { buffer = bufnr, desc = 'GitLab Duo: Next suggestion' })
+            #   end
+            # '';
+          };
           gopls = {
             enable = true;
             package = pkgs.gopls;

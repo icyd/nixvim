@@ -7,6 +7,7 @@
       {
         __unkeyed-1 = "nvim-rooter";
         event = ["BufReadPost" "BufNewFile"];
+        enabled = true;
         after = ''
           function()
             require("nvim-rooter").setup({})

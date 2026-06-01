@@ -79,25 +79,29 @@ in {
             implementation = "prefer_rust_with_warning";
             sorts = ["exact" "score" "sort_text"];
           };
-          completion = {
+          completion = let
+            border = "rounded";
+          in {
             documentation = {
               auto_show = true;
               auto_show_delay_ms = 200;
+              window = {
+                inherit border;
+                max_height = 25;
+                min_width = 30;
+                max_width = 80;
+              };
             };
             list.selection = {
               auto_insert = false;
               preselect = false;
             };
             menu = {
+              inherit border;
               auto_show = true;
               auto_show_delay_ms = 0;
-              # draw.columns.__raw = ''
-              #   {
-              #     { "label", "label_description", gap = 1 },
-              #     { "kind_icon", "kind", gap = 1 },
-              #     { "source_name", gap = 1 },
-              #   }
-              # '';
+              max_height = 10;
+              min_width = 15;
             };
           };
           keymap = {
@@ -269,6 +273,28 @@ in {
               };
               lsp = {
                 score_offset = 80;
+                transform_items.__raw = ''
+                  function(ctx, items)
+                    if not items then
+                      return
+                    end
+
+                    for _, item in ipairs(items) do
+                        if item.client_name == "gitlab_duo" and item.insertText then
+                          local cursor = ctx.get_cursor()
+                          local start = { line = cursor[1] - 1, character = cursor[2] }
+                          item.textEdit = {
+                            newText = item.insertText,
+                            range = {
+                              start = start,
+                              ["end"] = start
+                            }
+                          }
+                        end
+                    end
+
+                    return items
+                  end'';
               };
               path = {
                 score_offset = 55;

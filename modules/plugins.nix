@@ -90,15 +90,10 @@
         prompt_end = {"❯%s%s", "❯%s%s"}
       })
     '';
-    globals =
-      {
-        GPGPreferArmor = 1;
-        GPGPreferSign = 1;
-      }
-      // (lib.mkIf config.plugins.direnv.enable {
-        direnv_edit_mode = "split";
-        direnv_silent_load = 1;
-      });
+    globals = {
+      GPGPreferArmor = 1;
+      GPGPreferSign = 1;
+    };
     plugins = {
       blink-indent = {
         enable = true;
@@ -115,10 +110,12 @@
       lz-n.plugins = [
         {
           __unkeyed-1 = "age-nvim";
+          enabled = true;
           event = "DeferredUIEnter";
         }
         {
           __unkeyed-1 = "vim-gnupg";
+          enabled = true;
           ft = [
             "gpg"
             "asc"
@@ -128,6 +125,10 @@
       ];
       direnv = {
         enable = true;
+        settings = {
+          edit_mode = "split";
+          silent_load = 1;
+        };
       };
       helm.enable = true;
       nvim-bqf.enable = true;

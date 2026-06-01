@@ -66,6 +66,7 @@
     plugins.lz-n.plugins = [
       {
         __unkeyed-1 = "rustowl";
+        enabled = true;
         keys = keymap2Lazy keymaps;
         after.__raw = ''
           function()
