@@ -2,14 +2,14 @@
   flake.modules.nixvim.copilot = {
     plugins = {
       copilot-chat = {
-        enable = false;
+        enable = true;
         lazyLoad.settings.cmd = [
           "CopilotChat"
           "CopilotChatOpen"
         ];
       };
       copilot-lua = {
-        enable = false;
+        enable = true;
         lazyLoad.settings.event = "InsertEnter";
         settings = {
           panel.enabled = false;

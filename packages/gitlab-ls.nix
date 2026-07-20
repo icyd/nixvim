@@ -10,7 +10,7 @@
     owner = "gitlab-org/editor-extensions";
     repo = "gitlab.vim";
     rev = "main";
-    hash = "sha256-yXVtP6SZ5H121VWUiFTDcWZ2l/xst1O38jI3iBav6VA=";
+    hash = "sha256-i64MIJqWf3BVJPEf5dpzU5nvnTNXjqn4c8SuQ6Pkct4=";
   };
   luaPlugin = vimUtils.buildVimPlugin {
     inherit version src;
@@ -24,7 +24,7 @@
     '';
     npmFlags = ["--ignore-scripts"];
     # makeCacheWritable = true;
-    npmDepsHash = "sha256-K1peydqYdCH7MbzGS1JbYqokgGw4FXNGYMB4vL3GRJ0=";
+    npmDepsHash = "sha256-b75anfXeKDznavV5Xz4B/FepQGvgpI44cnbLBnU6+yU=";
     dontNpmBuild = true;
     dontNpmInstall = true;
     installPhase = ''

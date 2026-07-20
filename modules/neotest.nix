@@ -5,7 +5,7 @@
     ...
   }: let
     cfg = config.plugins.neotest;
-    inherit (config.utils.mkKey) mkKeyMapIf wKeyObjMapIf;
+    inherit (config.utils.mkKey) mkKeyMapIf wKeyObjMapIf keymapUnlazy keymap2Lazy;
     keymaps =
       mkKeyMapIf cfg.enable [
         {
@@ -90,8 +90,8 @@
           options.desc = "Toggle output panel";
         }
       ]
-      ++ (lib.optionals config.plugins.dap.enable [
-        {
+      ++ (
+        lib.optional config.plugins.dap.enable {
           action.__raw = ''
             function()
               require("neotest").run.run({ strategy = "dap" })
@@ -100,17 +100,50 @@
           key = "<localleader>tD";
           options.desc = "Debug the nearest test";
         }
-      ]);
+      )
+      ++ (lib.optional config.plugins.overseer.enable {
+        action.__raw = ''
+          function()
+            require("neotest").overseer.run()
+          end
+        '';
+        key = "<localleader>tv";
+        options.desc = "Run nearest test with Overseer";
+      });
   in {
-    inherit keymaps;
+    keymaps = keymapUnlazy keymaps;
     plugins = {
       neotest = {
         enable = true;
-        settings = {
-          adapters = lib.optionals config.plugins.rustaceanvim.enable [
-            ''require("rustaceanvim.neotest")''
+        lazyLoad.settings = {
+          before = lib.mkIf config.plugins.rustaceanvim.enable {
+            __raw = ''
+              function()
+                require("lz.n").trigger_load("overseer.nvim")
+              end
+            '';
+          };
+          cmd = [
+            "Neotest"
           ];
+
+          keys = keymap2Lazy keymaps;
         };
+        settings =
+          {
+            adapters = lib.optionals config.plugins.rustaceanvim.enable [
+              ''require("rustaceanvim.neotest")''
+            ];
+          }
+          // (lib.mkIf config.plugins.overseer.enable {
+            consumers.overseer.__raw = ''
+              require("neotest.consumers.overseer")
+            '';
+            overseer = {
+              enabled = true;
+              force_default = false;
+            };
+          });
         adapters = {
           golang.enable = true;
           python.enable = true;

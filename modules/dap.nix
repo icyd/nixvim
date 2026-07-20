@@ -193,6 +193,10 @@
           function()
             require("lz.n").trigger_load("nvim-dap-iu")
             require("lz.n").trigger_load("nvim-dap-virtual-text")
+            local overseer, overseer_ok = pcall(require, "overseer")
+            if overseer_ok then
+              overseer.enable_dap()
+            end
           end
         '';
         luaConfig = {

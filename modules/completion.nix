@@ -54,6 +54,7 @@ in {
       blink-cmp-conventional-commits
     ]);
     plugins = {
+      blink-copilot.enable = true;
       blink-cmp = lazyPlugin {
         enable = true;
         lazyLoad.settings = {
@@ -96,18 +97,27 @@ in {
               auto_insert = false;
               preselect = false;
             };
+            keyword.range = "full";
+            ghost_text.enabled = true;
             menu = {
               inherit border;
               auto_show = true;
               auto_show_delay_ms = 0;
               max_height = 10;
               min_width = 15;
+              draw.columns.__raw = ''
+                {
+                  { "label" },
+                  { "kind_icon", "kind", gap = 1 },
+                  { "source_name", gap = 1 },
+                }
+              '';
             };
           };
           keymap = {
             preset = "default";
             "<CR>" = [
-              "accept"
+              "accept_and_enter"
               "fallback"
             ];
           };
@@ -130,9 +140,9 @@ in {
               common_sources;
             per_filetype = {
               lua = lib.mkIf config.plugins.lazydev.enable (mkRaw ''
-                {
-                  inherit_defaults = true;
-                  "lazydev";
+                  {
+                    inherit_defaults = true;
+                    "lazydev";
                 }'');
               gitcommit =
                 (lib.remove "lsp" common_sources)
@@ -198,9 +208,7 @@ in {
     config,
     pkgs,
     ...
-  }: let
-    inherit (lib.nixvim.utils) mkRaw;
-  in {
+  }: {
     extraPackages = with pkgs; [wordnet];
     extraPlugins = lib.optionals config.plugins.blink-cmp.enable (with pkgs.vimPlugins;
       [
@@ -229,20 +237,16 @@ in {
           in {
             default =
               common_sources
-              ++ lib.optional (lib.elem pkgs.local.blink-cmp-luasnip-choice config.extraPlugins) "choice"
+              # ++ lib.optional (lib.elem pkgs.local.blink-cmp-luasnip-choice config.extraPlugins) "choice"
+              ++ lib.optional config.plugins.blink-copilot.enable "copilot"
               ++ lib.optional config.plugins.blink-emoji.enable "emoji"
               ++ lib.optional (lib.elem pkgs.vimPlugins.blink-cmp-env config.extraPlugins) "env"
-              ++ lib.optional config.plugins.blink-cmp-dictionary.enable "dictionary"
-              ++ lib.optional config.plugins.blink-ripgrep.enable "ripgrep"
+              # ++ lib.optional config.plugins.blink-cmp-dictionary.enable "dictionary"
+              # ++ lib.optional config.plugins.blink-ripgrep.enable "ripgrep"
               ++ lib.optional config.plugins.blink-cmp-spell.enable "spell"
-              ++ lib.optional (lib.elem pkgs.vimPlugins.blink-cmp-yanky config.extraPlugins) "yank"
-              ++ lib.optional (lib.elem pkgs.local.blink-cmp-wezterm config.extraPlugins) "wezterm";
+              ++ lib.optional (lib.elem pkgs.vimPlugins.blink-cmp-yanky config.extraPlugins) "yank";
+            # ++ lib.optional (lib.elem pkgs.local.blink-cmp-wezterm config.extraPlugins) "wezterm";
             per_filetype = {
-              lua = lib.mkIf config.plugins.lazydev.enable (mkRaw ''
-                {
-                  inherit_defaults = true;
-                  "lazydev";
-                }'');
               gitcommit =
                 (lib.remove "lsp" common_sources)
                 ++ (lib.optional (lib.elem pkgs.vimPlugins.blink-cmp-conventional-commits config.extraPlugins) "conventional_commits")
@@ -253,6 +257,17 @@ in {
                 name = "LuaSnip Choice Nodes";
                 module = "blink-cmp-luasnip-choice";
                 score_offset = 65;
+              };
+              codecompanion = lib.mkIf config.plugins.codecompanion.enable {
+                name = "CodeCompanion";
+                module = "codecompanion.providers.completion.blink";
+                score_offset = 100;
+              };
+              copilot = lib.mkIf config.plugins.blink-copilot.enable {
+                name = "Copilot";
+                module = "blink-copilot";
+                score_offset = 90;
+                async = true;
               };
               dictionary = lib.mkIf config.plugins.blink-cmp-dictionary.enable {
                 name = "Dict";

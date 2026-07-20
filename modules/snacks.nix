@@ -10,7 +10,8 @@
       {
         action.__raw = ''
           function()
-            require("snacks").terminal.toggle()
+            require("snacks").terminal.toggle("", {auto_insert=false})
+
           end
         '';
         key = "<leader>'";
@@ -333,7 +334,37 @@
         image.enabled = false;
         indent.enabled = false;
         notifier.enabled = true;
-        picker.enabled = true;
+        picker = {
+          enabled = true;
+          sources.select = lib.mkIf config.plugins.overseer.enable {
+            win.input.keys = {
+              "<C-e>" = {
+                __unkeyed-0 = "overseer_edit";
+                mode = ["i" "n"];
+              };
+            };
+            actions.overseer_edit.__raw = ''
+              function(picker, item)
+                picker:close()
+                local template_name = nil
+
+                if item and item.item then
+                  if type(item.item) == "table" and item.item.name then
+                    template_name = item.item.name
+                  elseif type(item.item) == "string" then
+                    template_name = item.item
+                  end
+                end
+
+                if template_name then
+                  require("overseer").run_task({ name = template_name, params = { additional_args = {} } })
+                else
+                  if item then picker:action("confirm") end
+                end
+              end
+            '';
+          };
+        };
         profiles.enabled = true;
         quickfile.enabled = true;
         scope.enabled = true;
@@ -342,7 +373,7 @@
         statuscolumn.enabled = true;
         terminal = {
           enabled = true;
-          shell = "nu";
+          inherit (config) shell;
         };
         toggle.enabled = true;
         words.enabled = true;

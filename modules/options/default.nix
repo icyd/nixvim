@@ -21,6 +21,10 @@
         // {
           default = true;
         };
+      shell = lib.mkOption {
+        type = lib.types.str;
+        default = "nu";
+      };
       userdata = {
         name = lib.mkOption {
           type = lib.types.str;

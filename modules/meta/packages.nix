@@ -26,6 +26,8 @@
         };
         overlays =
           [
+            inputs.mcp-companion.overlays.default
+            inputs.sharedserver.overlays.default
             inputs.neovim-nightly-overlay.overlays.default
             inputs.rustowl-flake.overlays.default
           ]

@@ -250,7 +250,10 @@
     plugins = {
       fugitive.enable = true;
       lazygit.enable = !(config.plugins.snacks.enable && config.plugins.snacks.settings.lazygit.enabled);
-      snacks.settings.lazygit.enabled = config.plugins.snacks.enable;
+      snacks.settings.lazygit = {
+        enabled = config.plugins.snacks.enable;
+        env.SHELL = config.shell;
+      };
       gitignore = {
         enable = true;
         lazyLoad.settings.keys = keymap2Lazy keysGitIgnore;

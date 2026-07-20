@@ -177,7 +177,7 @@
             options.desc = "Move line down";
           }
           {
-            action = "<cmd>terminal<CR>";
+            action = "<cmd>terminal ${config.shell}<CR>";
             key = ''<leader>"'';
             options.desc = "Open terminal";
           }

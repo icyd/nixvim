@@ -4,7 +4,7 @@
     inherit (config.utils.mkKey) mkKeyMapIf keymapUnlazy keymap2Lazy wKeyObjMapIf;
     keymaps = mkKeyMapIf cfg.enable [
       {
-        action = "<cmd>OveeseerRun<CR>";
+        action = "<cmd>OverseerRun<CR>";
         key = "<leader>RR";
         options.desc = "Run task";
       }
@@ -64,6 +64,92 @@
           ];
           keys = keymap2Lazy keymaps;
         };
+        luaConfig.post = ''
+          vim.cmd.cnoreabbrev("OS OverseerShell")
+          local overseer = require("overseer")
+          overseer.register_template({
+            name = "Nix build",
+            desc = "Run nix build in current flake or directory",
+            tags = { overseer.TAG.BUILD },
+            params = {
+              target = {
+                desc = "Build target",
+                type = "string",
+                default = ".#",
+              },
+              additional_args = {
+                desc = "Extra flags",
+                type = "string",
+                default = "--print-build-logs",
+              },
+            },
+            builder = function(params)
+              local cmd_args = { "build" }
+
+              if params.target ~= "" then
+                table.insert(cmd_args, params.target)
+              end
+
+              if params.additional_args ~= "" then
+                for arg in string.gmatch(params.additional_args, "%S+") do
+                  table.insert(cmd_args, arg)
+                end
+              end
+
+              return {
+                cmd = { "nix" },
+                args = cmd_args,
+                components = {
+                  {
+                    "on_output_parse",
+                    parser = {
+                      diagnostics = {
+                        {
+                          pattern = "error:([^\n]+)at%s+(.+):(%d+):(%d+)",
+                          groups = { "message", "filename", "lnum", "col" },
+                        },
+                      },
+                    },
+                  },
+                  "default",
+                },
+              }
+            end,
+            condition = {
+              callback = function(search)
+                return vim.fn.filereadable(vim.fn.getcwd() .. "/flake.nix") == 1
+                  or vim.fn.filereadable(vim.fn.getcwd() .. "/default.nix")
+              end,
+            },
+          })
+          -- overseer.register_template({
+          --   name = "Run via Nushell",
+          --   desc = "Execute a command or alias inside Nushell login context",
+          --   params = {
+          --     command = {
+          --       type = "string",
+          --       desc = "Command to execute",
+          --     },
+          --   },
+          --   builder = function(params)
+          --     local cmd_args = { "--login", "-c" }
+
+          --     if params.command ~= "" then
+          --       for arg in string.gmatch(params.command, "%S+") do
+          --         table.insert(cmd_args, arg)
+          --       end
+          --     end
+
+          --     return {
+          --       cmd = { "nu" },
+          --       args = cmd_args,
+          --       components = {
+          --         "default",
+          --       },
+          --     }
+          --   end,
+          -- })
+        '';
       };
     };
     userCommands.Make = {
