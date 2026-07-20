@@ -287,29 +287,29 @@ in {
                 score_offset = 50;
               };
               lsp = {
-                score_offset = 80;
-                transform_items.__raw = ''
-                  function(ctx, items)
-                    if not items then
-                      return
-                    end
-
-                    for _, item in ipairs(items) do
-                        if item.client_name == "gitlab_duo" and item.insertText then
-                          local cursor = ctx.get_cursor()
-                          local start = { line = cursor[1] - 1, character = cursor[2] }
-                          item.textEdit = {
-                            newText = item.insertText,
-                            range = {
-                              start = start,
-                              ["end"] = start
-                            }
-                          }
-                        end
-                    end
-
-                    return items
-                  end'';
+                score_offset = 95;
+                # transform_items.__raw = ''
+                #   function(ctx, items)
+                #     if not items then
+                #       return
+                #     end
+                #
+                #     for _, item in ipairs(items) do
+                #         if item.client_name == "gitlab_duo" and item.insertText then
+                #           local cursor = ctx.get_cursor()
+                #           local start = { line = cursor[1] - 1, character = cursor[2] }
+                #           item.textEdit = {
+                #             newText = item.insertText,
+                #             range = {
+                #               start = start,
+                #               ["end"] = start
+                #             }
+                #           }
+                #         end
+                #     end
+                #
+                #     return items
+                #   end'';
               };
               path = {
                 score_offset = 55;
