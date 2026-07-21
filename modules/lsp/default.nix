@@ -9,16 +9,16 @@
     rustAnalyzerSettings = {
       cargo = {
         buildScripts.enable = true;
-        features = "all";
+        # features = "all";
       };
       checkOnSave = true;
       check = {
         command = "clippy";
-        features = "all";
+        # features = "all";
       };
       diagnostics = {
         enable = true;
-        styleLints.enable = true;
+        # styleLints.enable = true;
       };
       files.excludeDirs = [".git" ".cargo" ".direnv" "target" "node_modules"];
       inlayHints = {
@@ -33,7 +33,7 @@
         rangeExclusiveHints.enable = true;
       };
       procMacro.enable = true;
-      rustc.source = "discover";
+      # rustc.source = "discover";
     };
     keysNavBuddy = mkKeyMap [
       {
@@ -141,7 +141,7 @@
             package = pkgs.gitlab-ci-ls;
           };
           gitlab_duo = {
-            enable = true;
+            enable = false;
             package = null;
             cmd = [(lib.getExe' pkgs.nodejs "node") "${pkgs.local.gitlab-ls}/node_modules/@gitlab-org/gitlab-lsp/out/main-bundle-node.js" "--stdio"];
             # capabities.__raw = lib.mkIf config.plugins.blink-cmp.enable ''require("blink.cmp").get_lsp_capabilities()'';

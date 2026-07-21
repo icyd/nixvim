@@ -152,10 +152,12 @@
         '';
       };
       flash = {
-        enable = true;
+        # NOTE: disabled due to bug <21-07-26>
+        enable = false;
         lazyLoad.settings.keys = keymap2Lazy keysFlash;
         settings = {
           jump.autojump = true;
+          search.multi_window = false;
           modes = {
             char = {
               enabled = false;

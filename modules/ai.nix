@@ -140,6 +140,7 @@
           before.__raw = ''
             function()
               require("lz.n").trigger_load("mcp-companion")
+              require("lz.n").trigger_load("codecompanion-history.nvim")
             end
           '';
           cmd = [
@@ -158,6 +159,12 @@
             system_prompt = "";
           };
           extensions = {
+            history = {
+              enable = true;
+              opts = {
+                picker = "snacks";
+              };
+            };
             mcp_companion = lib.mkIf (lib.elem pkgs.mcp-companion-nvim config.extraPlugins) {
               callback = "mcp_companion.cc";
             };
@@ -166,6 +173,12 @@
               then "fidget"
               else "snacks";
           };
+        };
+      };
+      codecompanion-history = {
+        enable = true;
+        lazyLoad.settings = {
+          lazy = true;
         };
       };
       gitlab = {
@@ -193,6 +206,9 @@
           minimal_message_level.__raw = "vim.lsp.log_levels.INFO";
           fix_newlines = false;
         };
+      };
+      vectorcode = {
+        enable = false;
       };
     };
     utils.wKeyList = wKeyObjMapIf cfg.enable [
