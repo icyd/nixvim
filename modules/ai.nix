@@ -99,9 +99,8 @@
                   combiner = {
                     command = "${lib.getExe pkgs.mcp-combiner-bin}",
                     port = 9741,
-                    config = vim.fn.expand("~/.config/mcp/servers.json"),
+                    config = vim.fn.expand("~/.config/mcp-combiner/servers.json"),
                   },
-                  log = { level = "info", notify = "error" },
                 })
               end
             '';
