@@ -101,6 +101,12 @@
                     port = 9741,
                     config = vim.fn.expand("~/.config/mcp-combiner/servers.json"),
                   },
+                  native_servers = {
+                    neovim = {
+                      enable = true,
+                      auto_approve = { "tier:read", "tier:navigate", "edit_buffer" },
+                    }
+                  }
                 })
               end
             '';
