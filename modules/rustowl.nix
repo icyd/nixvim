@@ -8,7 +8,6 @@
     settings = {
       auto_enable = false;
       idle_time = 300;
-      highlight_style = "underline";
       client = {
         root_dir.__raw = ''
           function()
