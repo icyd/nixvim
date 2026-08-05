@@ -98,6 +98,7 @@
                 require("mcp_companion").setup({
                   combiner = {
                     command = "${lib.getExe pkgs.mcp-combiner-bin}",
+                    host = "192.168.1.131",
                     port = 9741,
                     config = vim.fn.expand("~/.config/mcp-combiner/servers.json"),
                   },
