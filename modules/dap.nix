@@ -177,7 +177,7 @@
         [
           nodejs
           lldb
-          python312Packages.debugpy
+          python314Packages.debugpy
           # vscode-extensions.ms-vscode.cpptools
           cpptools-patched
           local.vscode-ext-cortex-debug

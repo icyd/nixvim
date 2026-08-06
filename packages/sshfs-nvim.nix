@@ -9,7 +9,7 @@ vimUtils.buildVimPlugin {
   src = pkgs.fetchFromGitHub {
     owner = "uhs-robert";
     repo = "/sshfs.nvim";
-    rev = "2ddf503bb32f0a0d0794aa582714dfeabfa2ac81";
-    hash = "sha256-BZdfoPEkeupBQr2BC4KA+QpHD9DIxqI+J9CJPR/ch+Q=";
+    rev = "57f586251d788dae38fd12998b9a208f7d54c1ef";
+    hash = "";
   };
 }

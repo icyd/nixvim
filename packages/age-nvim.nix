@@ -9,7 +9,7 @@ vimUtils.buildVimPlugin {
   src = pkgs.fetchFromGitHub {
     owner = "KingMichaelPark";
     repo = "/age.nvim";
-    rev = "92c058c1b8b0d52840088afb41a2c15f7cd0aeab";
-    hash = "sha256-NcO7ebDJfjdh3jv+yzyxkOLmnV2mgzy++ltkDJ2NY7s=";
+    rev = "b09aa597f8d421fa06825f726036a4fb0205437e";
+    hash = "sha256-4dcuw55akTKXGAU/+ydY2Sv9b6x8qdjfOsYw67A2JVY=";
   };
 }
