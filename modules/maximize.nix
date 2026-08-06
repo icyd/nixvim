@@ -1,9 +1,5 @@
 {
-  flake.modules.nixvim.maximize = {
-    config,
-    pkgs,
-    ...
-  }: let
+  flake.modules.nixvim.maximize = {config, ...}: let
     inherit (config.utils.mkKey) mkKeyMap keymapUnlazy keymap2Lazy;
     keymaps = mkKeyMap [
       {
@@ -17,21 +13,10 @@
       }
     ];
   in {
-    extraPlugins = with pkgs.local; [
-      maximize-nvim
-    ];
     keymaps = keymapUnlazy keymaps;
-    plugins.lz-n.plugins = [
-      {
-        __unkeyed-1 = "maximize-nvim";
-        enabled = true;
-        after = ''
-          function()
-            require("maximize").setup({})
-          end
-        '';
-        keys = keymap2Lazy keymaps;
-      }
-    ];
+    plugins.maximize-nvim = {
+      enable = true;
+      lazyLoad.settings.keys = keymap2Lazy keymaps;
+    };
   };
 }

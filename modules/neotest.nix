@@ -131,11 +131,11 @@
         };
         settings =
           {
-            adapters = lib.optionals config.plugins.rustaceanvim.enable [
-              ''require("rustaceanvim.neotest")''
-            ];
+            adapters = lib.optional config.plugins.rustaceanvim.enable {
+              __raw = ''require("rustaceanvim.neotest")'';
+            };
           }
-          // (lib.mkIf config.plugins.overseer.enable {
+          // (lib.optionalAttrs config.plugins.overseer.enable {
             consumers.overseer.__raw = ''
               require("neotest.consumers.overseer")
             '';

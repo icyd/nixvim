@@ -1,19 +1,10 @@
 {
-  flake.modules.nixvim.nvim-rooter = {pkgs, ...}: {
-    extraPlugins = with pkgs; [
-      local.nvim-rooter
-    ];
-    plugins.lz-n.plugins = [
-      {
-        __unkeyed-1 = "nvim-rooter";
+  flake.modules.nixvim.nvim-rooter = {
+    plugins.nvim-rooter = {
+      enable = true;
+      lazyLoad.settings = {
         event = ["BufReadPost" "BufNewFile"];
-        enabled = true;
-        after = ''
-          function()
-            require("nvim-rooter").setup({})
-          end
-        '';
-      }
-    ];
+      };
+    };
   };
 }

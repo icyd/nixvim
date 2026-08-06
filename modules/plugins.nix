@@ -77,12 +77,10 @@
         kmonad-vim
         mini-icons
         term-edit-nvim
-        vim-gnupg
         vim-table-mode
       ]
       ++ (with pkgs.local; [
         age-secret-nvim
-        age-nvim
       ]);
     extraConfigLua = ''
       require("age_secret").setup()
@@ -90,11 +88,11 @@
         prompt_end = {"❯%s%s", "❯%s%s"}
       })
     '';
-    globals = {
-      GPGPreferArmor = 1;
-      GPGPreferSign = 1;
-    };
     plugins = {
+      age-nvim = {
+        enable = true;
+        lazyLoad.settings.event = "DeferredUIEnter";
+      };
       blink-indent = {
         enable = true;
         lazyLoad.settings.events = ["BufReadPost" "BufNewFile"];
@@ -107,22 +105,18 @@
         enable = true;
         lazyLoad.settings.events = ["BufReadPost" "BufNewFile"];
       };
-      lz-n.plugins = [
-        {
-          __unkeyed-1 = "age-nvim";
-          enabled = true;
-          event = "DeferredUIEnter";
-        }
-        {
-          __unkeyed-1 = "vim-gnupg";
-          enabled = true;
-          ft = [
-            "gpg"
-            "asc"
-            "pgp"
-          ];
-        }
-      ];
+      vim-gnupg = {
+        enable = true;
+        lazyLoad.settings.ft = [
+          "gpg"
+          "asc"
+          "pgp"
+        ];
+        settings = {
+          PreferArmor = 1;
+          PreferSign = 1;
+        };
+      };
       direnv = {
         enable = true;
         settings = {

@@ -186,21 +186,43 @@ in {
       luasnip = {
         enable = true;
         lazyLoad.settings = {
-          event = "InsertEnter";
+          lazy = true;
+          before.__raw = ''
+            function()
+              require("lz.n").trigger_load("friendly-snippets")
+            end
+          '';
         };
         fromLua = [
           {paths = ../lua/snippets;}
         ];
-        settings =
-          {
-            enable_autosnippets = true;
-          }
-          // (lib.mkIf config.plugins.luasnip-snippets.enable {
-            ft_func.__raw = ''require("luasnip_snippets.common.snip_utils").ft_func'';
-            load_ft_func.__raw = ''require("luasnip_snippets.common.snip_utils").load_ft_func'';
-          });
+        settings = {
+          enable_autosnippets = true;
+        };
+        # fromVscode = [{}];
+        #   // (lib.optionalAttrs config.plugins.luasnip-snippets.enable {
+        #     ft_func.__raw = ''
+        #       function()
+        #         require("luasnip_snippets.common.snip_utils").ft_func()
+        #       end
+        #     '';
+        #     load_ft_func.__raw = ''
+        #       function(bufnr)
+        #         require("luasnip_snippets.common.snip_utils").load_ft_func(bufnr)
+        #       end
+        #     '';
+        #   });
       };
-      luasnip-snippets.enable = true;
+      friendly-snippets = {
+        enable = true;
+        lazyLoad.settings.lazy = true;
+      };
+      luasnip-snippets = {
+        enable = false;
+        lazyLoad.settings = {
+          lazy = true;
+        };
+      };
     };
   };
   flake.modules.nixvim.completion = {
@@ -364,9 +386,6 @@ in {
       blink-cmp-git = lazyPlugin {inherit (config.plugins.blink-cmp) enable;};
       # blink-cmp-spell = lazyPlugin {inherit (config.plugins.blink-cmp) enable;};
       # blink-ripgrep = lazyPlugin {inherit (config.plugins.blink-cmp) enable;};
-      luasnip = {
-        filetypeExtend.typescriptreact = ["typescript"];
-      };
       copilot-cmp = {
         inherit (config.plugins.cmp) enable;
         settings.fix_pairs = false;

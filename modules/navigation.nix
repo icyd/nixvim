@@ -68,7 +68,10 @@
       pattern = "*";
     };
     plugins = {
-      navigator-nvim.enable = true;
+      navigator-nvim = {
+        enable = true;
+        lazyLoad.settings.event = "DeferredUIEnter";
+      };
       zellij-nav = {
         enable = false;
         lazyLoad.settings.event = "DeferredUIEnter";

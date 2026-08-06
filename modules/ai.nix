@@ -57,95 +57,13 @@
     ];
   in {
     keymaps = keymapUnlazy (keysCodecompanion ++ keysGitlab);
-    extraPackages = with pkgs; [
-      sharedserver
-    ];
-    extraPlugins = with pkgs;
-      [
-        local.codecompanion-spinners
-        mcp-companion-nvim
-        sharedserver-nvim
-      ]
-      ++ (lib.optional (config.plugins.snacks.enable && config.plugins.snacks.settings.picker.enabled) local.codecompanion-picker);
     plugins = {
-      lz-n.plugins =
-        [
-          {
-            __unkeyed-1 = "sharedserver-nvim";
-            enabled = true;
-            after.__raw = ''
-              function()
-                require("sharedserver").setup({
-                  sharedserver_cmd = "${lib.getExe pkgs.sharedserver}"
-                })
-              end
-            '';
-          }
-          {
-            __unkeyed-1 = "mcp-companion";
-            enabled = true;
-            cmd = [
-              "MCPStatus"
-              "MCPLog"
-              "MCPReload"
-              "MCPRestart"
-              "MCPRestartServer"
-              "MCPToggleServer"
-              "MCPSaveProjectConfig"
-            ];
-            after.__raw = ''
-              function()
-                require("mcp_companion").setup({
-                  combiner = {
-                    command = "${lib.getExe pkgs.mcp-combiner-bin}",
-                    host = "192.168.1.131",
-                    port = 9741,
-                    config = vim.fn.expand("~/.config/mcp-combiner/servers.json"),
-                  },
-                  native_servers = {
-                    neovim = {
-                      enable = true,
-                      auto_approve = { "tier:read", "tier:navigate", "edit_buffer" },
-                    }
-                  }
-                })
-              end
-            '';
-            before.__raw = ''
-              function()
-                require("lz.n").trigger_load("sharedserver-nvim")
-              end
-            '';
-          }
-        ]
-        ++ (lib.optional (config.plugins.snacks.enable && config.plugins.snacks.settings.picker.enabled) {
-          __unkeyed-1 = "codecompanion-picker";
-          enabled = true;
-          cmd = [
-            "CodeCompanionPrompts"
-            "CodeCompanionSkills"
-          ];
-          keys = keymap2Lazy (mkKeyMap [
-            {
-              action = "<cmd>CodeCompanionPrompts<CR>";
-              key = "<leader>aiP";
-              options.desc = "CodeCompanion prompts picker";
-            }
-          ]);
-          after.__raw = ''
-            function()
-              require("code-companion-picker").setup({
-                picker = "snacks"
-              })
-            end
-          '';
-        });
       codecompanion = {
         enable = true;
         lazyLoad.settings = {
           before.__raw = ''
             function()
-              require("lz.n").trigger_load("mcp-companion")
+              require("lz.n").trigger_load("mcp-companion-nvim")
               require("lz.n").trigger_load("codecompanion-history.nvim")
             end
           '';
@@ -171,7 +89,7 @@
                 picker = "snacks";
               };
             };
-            mcp_companion = lib.mkIf (lib.elem pkgs.mcp-companion-nvim config.extraPlugins) {
+            mcp_companion = lib.mkIf config.plugins.mcp-companion.enable {
               callback = "mcp_companion.cc";
             };
             spinner.opts.style =
@@ -186,6 +104,64 @@
         lazyLoad.settings = {
           lazy = true;
         };
+      };
+      codecompanion-picker = {
+        enable = config.plugins.snacks.enable && config.plugins.snacks.settings.picker.enabled;
+        settings = {
+          picker = "snacks";
+        };
+        lazyLoad.settings = {
+          cmd = [
+            "CodeCompanionPrompts"
+            "CodeCompanionSkills"
+          ];
+          keys = keymap2Lazy (mkKeyMap [
+            {
+              action = "<cmd>CodeCompanionPrompts<CR>";
+              key = "<leader>aiP";
+              options.desc = "CodeCompanion prompts picker";
+            }
+          ]);
+        };
+      };
+      codecompanion-spinners.enable = true;
+      mcp-companion = {
+        enable = true;
+        lazyLoad.settings = {
+          cmd = [
+            "MCPStatus"
+            "MCPLog"
+            "MCPReload"
+            "MCPRestart"
+            "MCPRestartServer"
+            "MCPToggleServer"
+            "MCPSaveProjectConfig"
+          ];
+          before.__raw = ''
+            function()
+              require("lz.n").trigger_load("sharedserver-nvim")
+            end
+          '';
+        };
+        settings = {
+          combiner = {
+            command = "${lib.getExe pkgs.mcp-combiner-bin}";
+            host = "192.168.1.131";
+            port = 9741;
+            config.__raw = ''vim.fn.expand("~/.config/mcp-combiner/servers.json")'';
+          };
+          native_servers = {
+            neovim = {
+              enable = true;
+              auto_approve = ["tier:read" "tier:navigate" "edit_buffer"];
+            };
+          };
+        };
+      };
+      sharedserver = {
+        enable = true;
+        settings.sharedserver_cmd = "${lib.getExe pkgs.sharedserver}";
+        lazyLoad.settings.lazy = true;
       };
       gitlab = {
         enable = true;
