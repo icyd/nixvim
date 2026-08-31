@@ -68,7 +68,7 @@
   in {
     inherit keymaps;
     extraPackages = with pkgs;
-      (lib.optionals pkgs.stdenv.isDarwin [
+      (lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
         pngpaste
       ])
       ++ [age];

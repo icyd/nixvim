@@ -182,7 +182,7 @@
           cpptools-patched
           local.vscode-ext-cortex-debug
         ]
-        ++ (lib.optional pkgs.stdenv.isLinux gdb)
+        ++ (lib.optional pkgs.stdenv.hostPlatform.isLinux gdb)
       );
     keymaps = keymapUnlazy (keymaps ++ keysDapUi);
     plugins = {
@@ -219,7 +219,7 @@
         };
         adapters = {
           executables = {
-            gdb = lib.mkIf pkgs.stdenv.isLinux {
+            gdb = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
               command = lib.getExe pkgs.gdb;
               args = [
                 "-i"
@@ -323,7 +323,7 @@
           ];
           c =
             cpp
-            ++ lib.optionals pkgs.stdenv.isLinux [
+            ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
               gdb-config
               bmp-config
               openocd-config

@@ -1,4 +1,7 @@
 {
+  nixpkgs.allowedUnfreePackages = [
+    "copilot-language-server"
+  ];
   flake.modules.nixvim.codecompanion = {
     lib,
     config,
@@ -96,6 +99,17 @@
               if config.plugins.fidget.enable
               then "fidget"
               else "snacks";
+            # ui.enabled = true;
+          };
+          rules = {
+            agents_skills = {
+              description = "Skills loaded from .agents/skills directory";
+              files = [
+                "~/.agents/skills/**/SKILLS.md"
+                ".agents/skills/**/SKILLS.md"
+              ];
+            };
+            opts.chat.autoload = ["default" "agents_skills"];
           };
         };
       };
@@ -106,7 +120,8 @@
         };
       };
       codecompanion-picker = {
-        enable = config.plugins.snacks.enable && config.plugins.snacks.settings.picker.enabled;
+        enable = false;
+        # enable = config.plugins.snacks.enable && config.plugins.snacks.settings.picker.enabled;
         settings = {
           picker = "snacks";
         };
@@ -125,6 +140,10 @@
         };
       };
       codecompanion-spinners.enable = true;
+      codecompanion-ui = {
+        enable = true;
+        lazyLoad.settings.ft = ["codecompanion" "codecompanion_input"];
+      };
       mcp-companion = {
         enable = true;
         lazyLoad.settings = {
@@ -164,7 +183,7 @@
         lazyLoad.settings.lazy = true;
       };
       gitlab = {
-        enable = true;
+        enable = false;
         package = pkgs.local.gitlab-ls;
         lazyLoad.settings = {
           cmd = [
