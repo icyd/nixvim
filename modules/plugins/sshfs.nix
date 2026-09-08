@@ -9,6 +9,6 @@
       moduleName = "sshfs";
       package = ["local" name];
       maintainers = [];
-      extraPackages = pkgs.sshfs;
+      extraPackages = [pkgs.sshfs];
     };
 }
