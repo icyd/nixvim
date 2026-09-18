@@ -152,8 +152,7 @@
         '';
       };
       flash = {
-        # NOTE: disabled due to bug <21-07-26>
-        enable = false;
+        enable = true;
         lazyLoad.settings.keys = keymap2Lazy keysFlash;
         settings = {
           jump.autojump = true;

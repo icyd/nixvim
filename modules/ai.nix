@@ -99,7 +99,6 @@
               if config.plugins.fidget.enable
               then "fidget"
               else "snacks";
-            # ui.enabled = true;
           };
           rules = {
             agents_skills = {
@@ -141,7 +140,7 @@
       };
       codecompanion-spinners.enable = true;
       codecompanion-ui = {
-        enable = true;
+        enable = false;
         lazyLoad.settings.ft = ["codecompanion" "codecompanion_input"];
       };
       mcp-companion = {
@@ -165,7 +164,7 @@
         settings = {
           combiner = {
             command = "${lib.getExe pkgs.mcp-combiner-bin}";
-            host = "192.168.1.131";
+            host = "127.0.0.1";
             port = 9741;
             config.__raw = ''vim.fn.expand("~/.config/mcp-combiner/servers.json")'';
           };
