@@ -14,7 +14,8 @@
       };
     };
     sharedserver = {
-      url = "github:georgeharker/sharedserver";
+      # url = "github:georgeharker/sharedserver";
+      url = "github:icyd/sharedserver";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         flake-parts.follows = "flake-parts";
