@@ -9,7 +9,7 @@
     ...
   }: let
     cfg = config.plugins.codecompanion;
-    inherit (config.utils.mkKey) mkKeyMap mkKeyMapIf wKeyObjMapIf keymap2Lazy keymapUnlazy;
+    inherit (config.utils.mkKey) mkKeyMapIf wKeyObjMapIf keymap2Lazy keymapUnlazy;
     keysCodecompanion = mkKeyMapIf config.plugins.codecompanion.enable [
       {
         action = "<cmd>CodeCompanionChat Toggle<CR>";
@@ -51,15 +51,8 @@
         options.desc = "CodeCompanion quick commit";
       }
     ];
-    keysGitlab = mkKeyMapIf config.plugins.gitlab.enable [
-      {
-        action = "<Plug>(GitLabToggleCodeSuggestions)<CR>";
-        key = "<leader>aig";
-        options.desc = "GitLab toggle code suggestions";
-      }
-    ];
   in {
-    keymaps = keymapUnlazy (keysCodecompanion ++ keysGitlab);
+    keymaps = keymapUnlazy keysCodecompanion;
     plugins = {
       codecompanion = {
         enable = true;
@@ -118,31 +111,7 @@
           lazy = true;
         };
       };
-      codecompanion-picker = {
-        enable = false;
-        # enable = config.plugins.snacks.enable && config.plugins.snacks.settings.picker.enabled;
-        settings = {
-          picker = "snacks";
-        };
-        lazyLoad.settings = {
-          cmd = [
-            "CodeCompanionPrompts"
-            "CodeCompanionSkills"
-          ];
-          keys = keymap2Lazy (mkKeyMap [
-            {
-              action = "<cmd>CodeCompanionPrompts<CR>";
-              key = "<leader>aiP";
-              options.desc = "CodeCompanion prompts picker";
-            }
-          ]);
-        };
-      };
       codecompanion-spinners.enable = true;
-      codecompanion-ui = {
-        enable = false;
-        lazyLoad.settings.ft = ["codecompanion" "codecompanion_input"];
-      };
       mcp-companion = {
         enable = true;
         lazyLoad.settings = {
@@ -180,35 +149,6 @@
         enable = true;
         settings.sharedserver_cmd = "${lib.getExe pkgs.sharedserver}";
         lazyLoad.settings.lazy = true;
-      };
-      gitlab = {
-        enable = false;
-        package = pkgs.local.gitlab-ls;
-        lazyLoad.settings = {
-          cmd = [
-            "GitLabCodeSuggestionsStart"
-          ];
-          keys = keymap2Lazy keysGitlab;
-        };
-        settings = {
-          code_suggestions = {
-            # auto_filetypes = ["lua"];
-            ghost_text = {
-              enabled = true;
-              stream = true;
-              toggle_enabled = "<C-g>t";
-              accept_suggestion = "<C-g>y";
-              clear_suggestion = "<C-g>e";
-            };
-            lsp_binary_path = lib.getExe pkgs.nodejs;
-          };
-          statusline.enable = false;
-          minimal_message_level.__raw = "vim.lsp.log_levels.INFO";
-          fix_newlines = false;
-        };
-      };
-      vectorcode = {
-        enable = false;
       };
     };
     utils.wKeyList = wKeyObjMapIf cfg.enable [

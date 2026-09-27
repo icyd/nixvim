@@ -1,19 +1,11 @@
 {
-  flake.modules.nixvim.navigation = {
-    lib,
-    config,
-    ...
-  }: let
+  flake.modules.nixvim.navigation = {config, ...}: let
     inherit (config.utils.mkKey) mkKeyMap;
     keymaps = mkKeyMap [
       {
         action.__raw = ''
           function()
-            if os.getenv("ZELLIJ") then
-              require("zellij-nav").left()
-            else
-              require("Navigator").left()
-            end
+            require("Navigator").left()
           end
         '';
         key = "<M-h>";
@@ -22,11 +14,7 @@
       {
         action.__raw = ''
           function()
-            if os.getenv("ZELLIJ") then
-              require("zellij-nav").down()
-            else
-              require("Navigator").down()
-            end
+            require("Navigator").down()
           end
         '';
         key = "<M-j>";
@@ -35,11 +23,7 @@
       {
         action.__raw = ''
           function()
-            if os.getenv("ZELLIJ") then
-              require("zellij-nav").up()
-            else
-              require("Navigator").up()
-            end
+            require("Navigator").up()
           end
         '';
         key = "<M-k>";
@@ -48,11 +32,7 @@
       {
         action.__raw = ''
           function()
-            if os.getenv("ZELLIJ") then
-              require("zellij-nav").right()
-            else
-              require("Navigator").right()
-            end
+            require("Navigator").right()
           end
         '';
         key = "<M-l>";
@@ -61,19 +41,9 @@
     ];
   in {
     inherit keymaps;
-    autoCmd = lib.optional config.plugins.zellij-nav.enable {
-      command = "silent !zellij action switch-mode normal";
-      desc = "Switch Zellij mode to normal when leaving nvim";
-      event = "VimLeave";
-      pattern = "*";
-    };
     plugins = {
       navigator-nvim = {
         enable = true;
-        lazyLoad.settings.event = "DeferredUIEnter";
-      };
-      zellij-nav = {
-        enable = false;
         lazyLoad.settings.event = "DeferredUIEnter";
       };
     };

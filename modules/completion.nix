@@ -199,19 +199,6 @@ in {
         settings = {
           enable_autosnippets = true;
         };
-        # fromVscode = [{}];
-        #   // (lib.optionalAttrs config.plugins.luasnip-snippets.enable {
-        #     ft_func.__raw = ''
-        #       function()
-        #         require("luasnip_snippets.common.snip_utils").ft_func()
-        #       end
-        #     '';
-        #     load_ft_func.__raw = ''
-        #       function(bufnr)
-        #         require("luasnip_snippets.common.snip_utils").load_ft_func(bufnr)
-        #       end
-        #     '';
-        #   });
       };
       friendly-snippets = {
         enable = true;
@@ -233,13 +220,8 @@ in {
   }: {
     extraPackages = with pkgs; [wordnet];
     extraPlugins = lib.optionals config.plugins.blink-cmp.enable (with pkgs.vimPlugins; [
-      # blink-cmp-env
       blink-cmp-yanky
     ]);
-    # ++ (with pkgs.local; [
-    #   blink-cmp-luasnip-choice
-    #   blink-cmp-wezterm
-    # ]));
     plugins = {
       blink-cmp = lazyPlugin {
         settings = {
@@ -258,15 +240,8 @@ in {
           in {
             default =
               common_sources
-              # ++ lib.optional (lib.elem pkgs.local.blink-cmp-luasnip-choice config.extraPlugins) "choice"
               ++ lib.optional config.plugins.blink-copilot.enable "copilot"
-              # ++ lib.optional config.plugins.blink-emoji.enable "emoji"
-              # ++ lib.optional (lib.elem pkgs.vimPlugins.blink-cmp-env config.extraPlugins) "env"
-              # ++ lib.optional config.plugins.blink-cmp-dictionary.enable "dictionary"
-              # ++ lib.optional config.plugins.blink-ripgrep.enable "ripgrep"
-              # ++ lib.optional config.plugins.blink-cmp-spell.enable "spell"
               ++ lib.optional (lib.elem pkgs.vimPlugins.blink-cmp-yanky config.extraPlugins) "yank";
-            # ++ lib.optional (lib.elem pkgs.local.blink-cmp-wezterm config.extraPlugins) "wezterm";
             per_filetype = {
               gitcommit =
                 (lib.remove "lsp" common_sources)
@@ -274,11 +249,6 @@ in {
                 ++ (lib.optional config.plugins.blink-cmp-git.enable "git");
             };
             providers = {
-              # choice = {
-              #   name = "LuaSnip Choice Nodes";
-              #   module = "blink-cmp-luasnip-choice";
-              #   score_offset = 65;
-              # };
               codecompanion = lib.mkIf config.plugins.codecompanion.enable {
                 name = "CodeCompanion";
                 module = "codecompanion.providers.completion.blink";
@@ -290,72 +260,12 @@ in {
                 score_offset = 80;
                 async = true;
               };
-              # dictionary = lib.mkIf config.plugins.blink-cmp-dictionary.enable {
-              #   name = "Dict";
-              #   module = "blink-cmp-dictionary";
-              #   max_items = 8;
-              #   min_keyword_length = 3;
-              #   score_offset = 10;
-              # };
-              # emoji = lib.mkIf config.plugins.blink-emoji.enable {
-              #   name = "Emoji";
-              #   module = "blink-emoji";
-              #   score_offset = 3;
-              # };
-              # env = {
-              #   name = "Env";
-              #   module = "blink-cmp-env";
-              #   score_offset = 50;
-              # };
               lsp = {
                 score_offset = 95;
-                # transform_items.__raw = ''
-                #   function(ctx, items)
-                #     if not items then
-                #       return
-                #     end
-                #
-                #     for _, item in ipairs(items) do
-                #         if item.client_name == "gitlab_duo" and item.insertText then
-                #           local cursor = ctx.get_cursor()
-                #           local start = { line = cursor[1] - 1, character = cursor[2] }
-                #           item.textEdit = {
-                #             newText = item.insertText,
-                #             range = {
-                #               start = start,
-                #               ["end"] = start
-                #             }
-                #           }
-                #         end
-                #     end
-                #
-                #     return items
-                #   end'';
               };
               path = {
                 score_offset = 55;
               };
-              # ripgrep = lib.mkIf config.plugins.blink-ripgrep.enable {
-              #   name = "Ripgrep";
-              #   module = "blink-ripgrep";
-              #   async = true;
-              #   timeout_ms = 500;
-              #   max_items = 10;
-              #   min_keyword_length = 3;
-              #   score_offset = 5;
-              #   opts = {
-              #     prefix_min_len = 5;
-              #     backend.use = "gitgrep-or-ripgrep";
-              #     ripgrep.search_casing = "--smart-case";
-              #   };
-              # };
-              # spell = lib.mkIf config.plugins.blink-cmp-spell.enable {
-              #   name = "Spell";
-              #   module = "blink-cmp-spell";
-              #   max_items = 5;
-              #   min_keyword_length = 3;
-              #   score_offset = 15;
-              # };
               yank = lib.mkIf (lib.elem pkgs.vimPlugins.blink-cmp-yanky config.extraPlugins) {
                 name = "yank";
                 module = "blink-yanky";
@@ -366,30 +276,11 @@ in {
                   onlyCurrentFiletype = true;
                 };
               };
-              # wezterm = lib.mkIf (lib.elem pkgs.local.blink-cmp-wezterm config.extraPlugins) {
-              #   name = "wezterm";
-              #   module = "blink-cmp-wezterm";
-              #   max_items = 5;
-              #   score_offset = 50;
-              #   opts = {
-              #     all_panes = true;
-              #     triggered_only = true;
-              #     trigger_chars = ["."];
-              #   };
-              # };
             };
           };
         };
       };
-      # blink-cmp-dictionary = lazyPlugin {inherit (config.plugins.blink-cmp) enable;};
-      # blink-emoji = lazyPlugin {inherit (config.plugins.blink-cmp) enable;};
       blink-cmp-git = lazyPlugin {inherit (config.plugins.blink-cmp) enable;};
-      # blink-cmp-spell = lazyPlugin {inherit (config.plugins.blink-cmp) enable;};
-      # blink-ripgrep = lazyPlugin {inherit (config.plugins.blink-cmp) enable;};
-      copilot-cmp = {
-        inherit (config.plugins.cmp) enable;
-        settings.fix_pairs = false;
-      };
     };
   };
 }
