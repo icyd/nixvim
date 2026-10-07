@@ -331,7 +331,7 @@
       settings = {
         bufdelete.enabled = true;
         debug.enabled = true;
-        image.enabled = false;
+        image.enabled = true;
         indent.enabled = false;
         notifier.enabled = true;
         picker = {

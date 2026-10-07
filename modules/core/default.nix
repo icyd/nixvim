@@ -7,6 +7,8 @@
     extraPackages = with pkgs; [
       ripgrep
     ];
+    withNodeJs = false;
+    withPerl = false;
     withPython3 = false;
     withRuby = false;
   };

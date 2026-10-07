@@ -12,7 +12,10 @@
         packageFallback = true;
       };
       gh.enable = config.plugins.blink-cmp-git.enable;
-      nodejs.enable = true;
+      nodejs = {
+        enable = true;
+        packageFallback = true;
+      };
       ripgrep.enable = true;
       rust-analyzer = {
         enable = config.plugins.lsp.servers.rust_analyzer.enable || config.plugins.rustaceanvim.enable;
