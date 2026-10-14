@@ -129,12 +129,14 @@ in {
             then "luasnip"
             else "default";
           sources = let
-            common_sources = [
-              "lsp"
-              "snippets"
-              "path"
-              "buffer"
-            ];
+            common_sources =
+              [
+                "lsp"
+                "snippets"
+                "path"
+                "buffer"
+              ]
+              ++ (lib.optional config.plugins.blink-emoji.enable "emoji");
           in {
             default =
               common_sources;
@@ -160,6 +162,19 @@ in {
                 module = "blink-cmp-conventional-commits";
                 enabled.__raw = ''function() return vim.bo.filetype == "gitcommit" end'';
                 score_offset = 70;
+              };
+              emoji = lib.mkIf config.plugins.blink-emoji.enable {
+                name = "Emoji";
+                module = "blink-emoji";
+                score_offset = 15;
+                opts = {
+                  insert = true;
+                  trigger.__raw = ''
+                    function()
+                      return {":"}
+                    end
+                  '';
+                };
               };
               git = lib.mkIf config.plugins.blink-cmp-git.enable {
                 name = "Git";
@@ -281,6 +296,7 @@ in {
         };
       };
       blink-cmp-git = lazyPlugin {inherit (config.plugins.blink-cmp) enable;};
+      blink-emoji = lazyPlugin {inherit (config.plugins.blink-cmp) enable;};
     };
   };
 }
