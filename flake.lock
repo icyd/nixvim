@@ -145,11 +145,11 @@
         "uv2nix": "uv2nix"
       },
       "locked": {
-        "lastModified": 1789932306,
-        "narHash": "sha256-FLB6ovBmoyYM/FAkfgnmbsJowy+m61ywspJiR9uuJxU=",
+        "lastModified": 1791486286,
+        "narHash": "sha256-CNH0a58y2CJugPxSSvbMea0r1k7EtDnNbXhAlFgKdDM=",
         "owner": "georgeharker",
         "repo": "mcp-companion",
-        "rev": "97a3223ce8e57fd113eedc693da1f4d72ddce099",
+        "rev": "4086b69f2eac318b7abee5731c3b4a31af887348",
         "type": "github"
       },
       "original": {
@@ -417,11 +417,11 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1789688514,
-        "narHash": "sha256-/T1TvOeukLtCihN6/Tfp2cPtG6xe/s6L/N8uZcps2YI=",
+        "lastModified": 1791970016,
+        "narHash": "sha256-qotoEft0VZexBUpP3ti2ewG1wkW6wicqgQ2XgwX2osU=",
         "owner": "icyd",
         "repo": "sharedserver",
-        "rev": "8fd3aba8c9efa182e3bda33c0676797e1e137792",
+        "rev": "b67262f55efa0627fa04e8cef9f46e33e45e45c4",
         "type": "github"
       },
       "original": {
